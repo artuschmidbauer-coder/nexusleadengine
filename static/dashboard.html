@@ -64,7 +64,14 @@
         </div>
 
         <!-- KPI Grid -->
-        <div class="grid grid-cols-2 md:grid-cols-5 gap-4 mb-10">
+        <div class="grid grid-cols-2 md:grid-cols-6 gap-4 mb-10">
+            <!-- Metric 0: Visitantes Web -->
+            <div class="p-5 rounded-2xl bg-[#090d16] border border-white/5">
+                <div class="text-[11px] font-mono text-slate-400 uppercase tracking-wider mb-2">Visitantes Web</div>
+                <div id="statUniqueVisitors" class="text-2xl md:text-3xl font-extrabold text-blue-400 font-mono">-</div>
+                <div id="statTotalPageviews" class="text-[10px] text-slate-500 mt-1">0 vistas de página</div>
+            </div>
+
             <!-- Metric 1 -->
             <div class="p-5 rounded-2xl bg-[#090d16] border border-white/5">
                 <div class="text-[11px] font-mono text-slate-400 uppercase tracking-wider mb-2">Total Prospectos</div>
@@ -88,7 +95,7 @@
 
             <!-- Metric 4 -->
             <div class="p-5 rounded-2xl bg-[#090d16] border border-white/5">
-                <div class="text-[11px] font-mono text-slate-400 uppercase tracking-wider mb-2">Ingresos Estimados</div>
+                <div class="text-[11px] font-mono text-slate-400 uppercase tracking-wider mb-2">Ingresos Totales</div>
                 <div id="statTotalRevenue" class="text-2xl md:text-3xl font-extrabold text-amber-400 font-mono">$0 USD</div>
                 <div class="text-[10px] text-slate-500 mt-1">Cobros vía PayPal/API</div>
             </div>
@@ -190,6 +197,8 @@
                 if (!res.ok) return;
                 const data = await res.json();
 
+                document.getElementById('statUniqueVisitors').innerText = data.unique_visitors_count || 0;
+                document.getElementById('statTotalPageviews').innerText = `${data.total_pageviews || 0} vistas de página`;
                 document.getElementById('statTotalScanned').innerText = data.total_prospects_scanned || 0;
                 document.getElementById('statTotalQualified').innerText = data.total_qualified_leads || 0;
                 document.getElementById('statQualRate').innerText = (data.qualification_rate_percent || 0) + '%';

@@ -7,10 +7,12 @@ from models.schema import EnrichedLead
 ANALYTICS_FILE = os.path.join(os.path.dirname(os.path.dirname(__file__)), "analytics_data.json")
 
 class AnalyticsTracker:
-    """Tracks live metrics, conversion rates, revenues, and pipeline throughput."""
+    """Tracks live metrics, conversion rates, revenues, visitors and pipeline throughput."""
 
     def __init__(self, file_path: str = ANALYTICS_FILE):
         self.file_path = file_path
+        self.total_pageviews: int = 0
+        self.unique_visitors: List[str] = []
         self.total_scans: int = 0
         self.total_scanned: int = 0
         self.total_qualified: int = 0
@@ -25,6 +27,8 @@ class AnalyticsTracker:
             try:
                 with open(self.file_path, "r", encoding="utf-8") as f:
                     data = json.load(f)
+                    self.total_pageviews = data.get("total_pageviews", 0)
+                    self.unique_visitors = data.get("unique_visitors", [])
                     self.total_scans = data.get("total_scans", 0)
                     self.total_scanned = data.get("total_scanned", 0)
                     self.total_qualified = data.get("total_qualified", 0)
@@ -39,6 +43,8 @@ class AnalyticsTracker:
         try:
             with open(self.file_path, "w", encoding="utf-8") as f:
                 data = {
+                    "total_pageviews": self.total_pageviews,
+                    "unique_visitors": self.unique_visitors[-500:],
                     "total_scans": self.total_scans,
                     "total_scanned": self.total_scanned,
                     "total_qualified": self.total_qualified,
@@ -50,6 +56,12 @@ class AnalyticsTracker:
                 json.dump(data, f, indent=2)
         except Exception as e:
             print(f"Error saving analytics: {e}")
+
+    def record_visit(self, ip_hash: str, path: str = "/"):
+        self.total_pageviews += 1
+        if ip_hash not in self.unique_visitors:
+            self.unique_visitors.append(ip_hash)
+        self._save()
 
     def record_scan_event(self, niche: str, location: str, total_found: int):
         self.total_scans += 1
@@ -103,6 +115,8 @@ class AnalyticsTracker:
             if self.total_scanned > 0 else 0.0
         )
         return {
+            "total_pageviews": self.total_pageviews,
+            "unique_visitors_count": len(self.unique_visitors),
             "total_scans": self.total_scans,
             "total_prospects_scanned": self.total_scanned,
             "total_qualified_leads": self.total_qualified,

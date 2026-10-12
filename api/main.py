@@ -45,16 +45,20 @@ tracker = AnalyticsTracker()
 processed_leads: List[EnrichedLead] = []
 
 @app.get("/", include_in_schema=False)
-def serve_landing_page():
-    """Serves the modern SaaS Landing Page."""
+def serve_landing_page(request: Request):
+    """Serves the modern SaaS Landing Page and records visitor telemetry."""
+    client_ip = request.headers.get("x-forwarded-for", request.client.host if request.client else "unknown").split(",")[0].strip()
+    tracker.record_visit(ip_hash=client_ip, path="/")
     index_file = os.path.join(STATIC_DIR, "index.html")
     if os.path.exists(index_file):
         return FileResponse(index_file)
     return {"message": "NexusLeadEngine API is running. Visit /docs for Swagger UI."}
 
 @app.get("/dashboard", include_in_schema=False)
-def serve_telemetry_dashboard():
+def serve_telemetry_dashboard(request: Request):
     """Serves the Real-Time Telemetry and Measurement Dashboard."""
+    client_ip = request.headers.get("x-forwarded-for", request.client.host if request.client else "unknown").split(",")[0].strip()
+    tracker.record_visit(ip_hash=client_ip, path="/dashboard")
     dashboard_file = os.path.join(STATIC_DIR, "dashboard.html")
     if os.path.exists(dashboard_file):
         return FileResponse(dashboard_file)
