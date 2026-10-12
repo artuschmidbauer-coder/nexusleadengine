@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex">
+    <title>Pago recibido | NexusLeadEngine.io</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-[#05070e] text-slate-200 min-h-screen flex items-center justify-center p-6">
+    <div class="max-w-lg w-full bg-[#0b0f19] border border-white/10 rounded-2xl p-8 shadow-2xl text-sm">
+        <h1 class="text-2xl font-extrabold text-white mb-2">Gracias por tu compra</h1>
+        <div id="state" class="text-slate-400">Confirmando tu pago con Stripe...</div>
+        <div id="result" class="hidden mt-6 space-y-4"></div>
+        <a href="/" class="inline-block mt-8 text-xs text-slate-500 hover:text-white">← Volver al inicio</a>
+    </div>
+
+    <script>
+        const sessionId = new URLSearchParams(location.search).get('session_id');
+        const stateEl = document.getElementById('state');
+        const resultEl = document.getElementById('result');
+
+        function esc(s) {
+            const d = document.createElement('div');
+            d.textContent = String(s);
+            return d.innerHTML;
+        }
+
+        async function check(attempt) {
+            if (!sessionId) {
+                stateEl.textContent = 'Falta el identificador de pago. Si ya pagaste, escríbenos a hola@nexusleadengine.io.';
+                return;
+            }
+            try {
+                const res = await fetch('/v1/billing/session/' + encodeURIComponent(sessionId));
+                const data = await res.json();
+                if (res.ok && data.status === 'PAID') {
+                    stateEl.textContent = 'Pago confirmado. Estos son tus datos de acceso:';
+                    resultEl.classList.remove('hidden');
+                    resultEl.innerHTML = `
+                        <div>
+                            <div class="text-xs font-mono text-slate-400 mb-1">Tu API key (guárdala, no la compartas)</div>
+                            <div class="flex gap-2">
+                                <input id="key" readonly value="${esc(data.api_key)}" class="flex-1 bg-white/5 border border-white/10 rounded-xl px-3 py-2 font-mono text-xs text-emerald-300">
+                                <button onclick="navigator.clipboard.writeText(document.getElementById('key').value); this.textContent='Copiada'" class="bg-emerald-500 text-black font-bold px-4 rounded-xl text-xs">Copiar</button>
+                            </div>
+                        </div>
+                        <div class="text-slate-300">Saldo actual: <strong>${esc(data.new_balance)}</strong> leads</div>
+                        <div class="text-xs text-slate-400">Siguiente paso: suscribe tu webhook en <a class="text-emerald-400 underline" href="/docs#/M2M%20Delivery/subscribe_webhook_v1_webhooks_subscribe_post">/docs</a> o descarga la <a class="text-emerald-400 underline" href="/templates/n8n">plantilla de n8n</a>. Soporte: hola@nexusleadengine.io</div>`;
+                    return;
+                }
+                if (res.ok && data.status === 'PENDING' && attempt < 10) {
+                    stateEl.textContent = 'Esperando la confirmación del pago...';
+                    setTimeout(() => check(attempt + 1), 3000);
+                    return;
+                }
+                stateEl.textContent = 'No pudimos confirmar el pago todavía. Si te cobraron, escríbenos a hola@nexusleadengine.io con tu email de compra y lo resolvemos.';
+            } catch (e) {
+                stateEl.textContent = 'Error de conexión. Recarga esta página; tu pago no se pierde.';
+            }
+        }
+        check(0);
+    </script>
+</body>
+</html>

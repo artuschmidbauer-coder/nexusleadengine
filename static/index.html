@@ -189,9 +189,9 @@
     <section id="pricing" class="py-24 border-t border-white/5 bg-[#05070e]">
         <div class="max-w-6xl mx-auto px-6">
             <div class="text-center max-w-2xl mx-auto mb-16">
-                <span class="text-brand text-xs font-mono font-bold uppercase tracking-widest">Precios Ultra Económicos</span>
-                <h2 class="text-3xl md:text-5xl font-extrabold text-white mt-2 mb-4">Paga en 1 Clic con PayPal</h2>
-                <p class="text-slate-400 text-sm">Precios tan accesibles que los bots no tienen que consultar para contratar. Paga y recibe tu API Key al instante.</p>
+                <span class="text-brand text-xs font-mono font-bold uppercase tracking-widest">Elige tu pack</span>
+                <h2 class="text-3xl md:text-5xl font-extrabold text-white mt-2 mb-4">Paga con tarjeta, recibe tu API key al instante</h2>
+                <p class="text-slate-400 text-sm">Sin suscripción ni permanencia. Pagas una vez, tus créditos no caducan y se consumen solo cuando se entrega un lead.</p>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
@@ -212,8 +212,8 @@
                             <li>✓ Mensaje de apertura listo</li>
                         </ul>
                     </div>
-                    <button onclick="payWithPayPal(9, 'pack_micro_15', 15)" class="w-full bg-white/10 hover:bg-white/20 text-white font-semibold py-3 rounded-xl transition text-xs flex items-center justify-center gap-1">
-                        Pagar $9 USD ↗
+                    <button onclick="buyPack(9, 'pack_micro_15', 15)" class="w-full bg-white/10 hover:bg-white/20 text-white font-semibold py-3 rounded-xl transition text-xs flex items-center justify-center gap-1">
+                        Comprar pack · $9 USD
                     </button>
                 </div>
 
@@ -234,15 +234,15 @@
                             <li>✓ Sectores de Ticket Alto</li>
                         </ul>
                     </div>
-                    <button onclick="payWithPayPal(29, 'pack_starter_60', 60)" class="w-full bg-white/10 hover:bg-white/20 text-white font-semibold py-3 rounded-xl transition text-xs flex items-center justify-center gap-1">
-                        Pagar $29 USD ↗
+                    <button onclick="buyPack(29, 'pack_starter_60', 60)" class="w-full bg-white/10 hover:bg-white/20 text-white font-semibold py-3 rounded-xl transition text-xs flex items-center justify-center gap-1">
+                        Comprar pack · $29 USD
                     </button>
                 </div>
 
                 <!-- Pack 3: PRO $69 (POPULAR) -->
                 <div class="p-6 rounded-2xl bg-brand/5 border-2 border-brand relative flex flex-col justify-between shadow-xl shadow-brand/10">
                     <div class="absolute -top-3 left-1/2 -translate-x-1/2 bg-brand text-black font-extrabold text-[9px] tracking-widest uppercase px-3 py-0.5 rounded-full">
-                        Recomendado Bots
+                        Más elegido
                     </div>
                     <div>
                         <span class="text-[10px] font-mono uppercase bg-brand/20 text-brand px-2 py-0.5 rounded">Mejor Retorno</span>
@@ -260,8 +260,8 @@
                             <li>✓ Soporte por webhook</li>
                         </ul>
                     </div>
-                    <button onclick="payWithPayPal(69, 'pack_pro_200', 200)" class="w-full bg-brand hover:bg-emerald-400 text-black font-extrabold py-3 rounded-xl transition text-xs shadow-lg shadow-brand/20 flex items-center justify-center gap-1">
-                        Pagar $69 USD ↗
+                    <button onclick="buyPack(69, 'pack_pro_200', 200)" class="w-full bg-brand hover:bg-emerald-400 text-black font-extrabold py-3 rounded-xl transition text-xs shadow-lg shadow-brand/20 flex items-center justify-center gap-1">
+                        Comprar pack · $69 USD
                     </button>
                 </div>
 
@@ -279,49 +279,44 @@
                         <ul class="text-xs text-slate-300 space-y-2 mb-6 border-t border-white/5 pt-4">
                             <li>✓ 600 Leads Calificados</li>
                             <li>✓ Máximo descuento (-60%)</li>
-                            <li>✓ Streaming M2M prioritario</li>
+                            <li>✓ Entrega por webhook</li>
                             <li>✓ Soporte directo con desarrolladores</li>
                         </ul>
                     </div>
-                    <button onclick="payWithPayPal(149, 'pack_scale_600', 600)" class="w-full bg-white/10 hover:bg-white/20 text-white font-semibold py-3 rounded-xl transition text-xs flex items-center justify-center gap-1">
-                        Pagar $149 USD ↗
+                    <button onclick="buyPack(149, 'pack_scale_600', 600)" class="w-full bg-white/10 hover:bg-white/20 text-white font-semibold py-3 rounded-xl transition text-xs flex items-center justify-center gap-1">
+                        Comprar pack · $149 USD
                     </button>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Instant API Key Activation Modal / Section -->
+    <!-- Checkout Modal -->
     <div id="activationModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-6">
         <div class="bg-[#0b0f19] border border-white/10 rounded-2xl max-w-md w-full p-8 text-slate-300 text-sm shadow-2xl">
             <div class="flex items-center justify-between mb-4">
-                <h3 class="text-lg font-bold text-white">Activar tu API Key con PayPal</h3>
+                <h3 class="text-lg font-bold text-white">Finalizar compra</h3>
                 <button onclick="closeModal('activationModal')" class="text-slate-500 hover:text-white">&times;</button>
             </div>
             <p class="text-xs text-slate-400 mb-6">
-                1. Serás redirigido a <strong>paypal.me/NexusLeadEngine</strong> para pagar <span id="modalAmountText" class="text-brand font-bold"></span>.<br>
-                2. Tras completar el pago, ingresa tu correo para activar tu saldo inmediatamente:
+                Pack seleccionado: <span id="modalAmountText" class="text-brand font-bold"></span><br>
+                Pagas con tarjeta en Stripe y al volver a esta página recibes tu API key al instante.
             </p>
 
-            <form onsubmit="handleActivationSubmit(event)" class="space-y-4">
+            <form onsubmit="handleCheckoutSubmit(event)" class="space-y-4">
                 <div>
-                    <label class="block text-xs font-mono text-slate-400 mb-1">Nombre de tu Bot o Empresa:</label>
-                    <input type="text" id="clientIdInput" required placeholder="ej: mi_bot_ventas_01" class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-white text-xs focus:outline-none focus:border-brand">
+                    <label class="block text-xs font-mono text-slate-400 mb-1">Tu email (recibo y soporte):</label>
+                    <input type="email" id="buyerEmailInput" required placeholder="tunombre@empresa.com" class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-white text-xs focus:outline-none focus:border-brand">
                 </div>
                 <div>
-                    <label class="block text-xs font-mono text-slate-400 mb-1">Tu Correo de PayPal:</label>
-                    <input type="email" id="payerEmailInput" required placeholder="tunombre@correo.com" class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-white text-xs focus:outline-none focus:border-brand">
+                    <label class="block text-xs font-mono text-slate-400 mb-1">¿Ya tienes API key? Pégala para recargar (opcional):</label>
+                    <input type="text" id="existingKeyInput" placeholder="sk_live_..." class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-white text-xs focus:outline-none focus:border-brand">
                 </div>
-                <div class="pt-2 flex gap-3">
-                    <button type="button" onclick="goToPayPalDirect()" class="w-1/2 bg-blue-600 hover:bg-blue-500 text-white font-bold py-2.5 rounded-xl text-xs transition">
-                        Pagar en PayPal ↗
-                    </button>
-                    <button type="submit" class="w-1/2 bg-brand hover:bg-emerald-400 text-black font-extrabold py-2.5 rounded-xl text-xs transition">
-                        Activar Saldo
-                    </button>
-                </div>
+                <button id="checkoutSubmit" type="submit" class="w-full bg-brand hover:bg-emerald-400 text-black font-extrabold py-3 rounded-xl text-sm transition disabled:opacity-60">
+                    Ir al pago seguro →
+                </button>
             </form>
-            <div id="activationResult" class="mt-4 hidden p-3 rounded-xl bg-white/5 text-xs font-mono"></div>
+            <div id="checkoutResult" class="mt-4 hidden p-3 rounded-xl bg-white/5 text-xs font-mono"></div>
         </div>
     </div>
 
@@ -356,7 +351,7 @@
                     <span>⚡ NexusLeadEngine.io</span>
                 </div>
                 <p class="leading-relaxed mb-4">
-                    Motor de Comercialización de Leads B2B e Infraestructura Machine-to-Machine.
+                    Leads B2B de ticket alto para agencias, con mensaje de apertura listo.
                 </p>
                 <div class="text-slate-500 font-mono">
                     Contacto: hola@nexusleadengine.io
@@ -368,7 +363,7 @@
                 <ul class="space-y-2">
                     <li><a href="/docs" class="hover:text-white transition">Swagger API Docs (/docs)</a></li>
                     <li><a href="#payload" class="hover:text-white transition">Estructura del Payload JSON</a></li>
-                    <li><a href="#pricing" class="hover:text-white transition">Precios Ultra Económicos</a></li>
+                    <li><a href="#pricing" class="hover:text-white transition">Elige tu pack</a></li>
                 </ul>
             </div>
 
@@ -382,12 +377,12 @@
             </div>
 
             <div>
-                <div class="font-semibold text-white mb-3">Pagos Rápidos</div>
+                <div class="font-semibold text-white mb-3">Pagos</div>
                 <p class="leading-relaxed mb-2">
-                    Pagos directos y seguros vía PayPal.me y procesadores internacionales.
+                    Pago seguro con tarjeta procesado por Stripe. No guardamos los datos de tu tarjeta.
                 </p>
-                <a href="https://www.paypal.com/paypalme/NexusLeadEngine" target="_blank" class="text-brand hover:underline font-mono">
-                    paypal.me/NexusLeadEngine ↗
+                <a href="mailto:hola@nexusleadengine.io" class="text-brand hover:underline font-mono">
+                    hola@nexusleadengine.io
                 </a>
             </div>
         </div>
@@ -395,7 +390,7 @@
         <div class="max-w-7xl mx-auto px-6 border-t border-white/5 pt-8 flex flex-col md:flex-row items-center justify-between gap-4 text-slate-600">
             <div>© 2026 NexusLeadEngine.io. Dominio oficial: nexusleadengine.io • Correo: hola@nexusleadengine.io</div>
             <div class="flex items-center gap-6">
-                <span>Construido para bots, agencias y automatizadores</span>
+                <span>Hecho para agencias y automatizadores</span>
             </div>
         </div>
     </footer>
@@ -413,7 +408,7 @@
     <div id="privacyModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-6">
         <div class="bg-[#0b0f19] border border-white/10 rounded-2xl max-w-2xl w-full p-8 max-h-[80vh] overflow-y-auto text-slate-300 text-sm">
             <h3 class="text-xl font-bold text-white mb-4">Política de Privacidad • NexusLeadEngine.io</h3>
-            <p class="mb-4">En NexusLeadEngine.io protegemos la privacidad de nuestros clientes. Solo recolectamos los datos necesarios para autenticar tu API Key y activar tus créditos. No almacenamos datos financieros; todas las transacciones son procesadas externamente por PayPal.</p>
+            <p class="mb-4">En NexusLeadEngine.io protegemos la privacidad de nuestros clientes. Solo recolectamos los datos necesarios para autenticar tu API Key y activar tus créditos (tu email de compra). No almacenamos datos de tarjeta; todas las transacciones son procesadas externamente por Stripe.</p>
             <p class="mb-4">Contacto de privacidad: <strong>hola@nexusleadengine.io</strong>.</p>
             <button onclick="closeModal('privacyModal')" class="mt-4 bg-brand text-black font-semibold px-6 py-2 rounded-xl">Cerrar</button>
         </div>
@@ -422,7 +417,7 @@
     <div id="refundModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-6">
         <div class="bg-[#0b0f19] border border-white/10 rounded-2xl max-w-2xl w-full p-8 max-h-[80vh] overflow-y-auto text-slate-300 text-sm">
             <h3 class="text-xl font-bold text-white mb-4">Política de Reembolso (14 días)</h3>
-            <p class="mb-4">Ofrecemos una garantía total de reembolso durante los primeros 14 días si no estás conforme con la calidad de los datos y has consumido menos del 20% de tus créditos. Para solicitar un reembolso, escribe a <strong>hola@nexusleadengine.io</strong> indicando tu email de PayPal.</p>
+            <p class="mb-4">Ofrecemos una garantía total de reembolso durante los primeros 14 días si no estás conforme con la calidad de los datos y has consumido menos del 20% de tus créditos. Para solicitar un reembolso, escribe a <strong>hola@nexusleadengine.io</strong> indicando el email con el que compraste.</p>
             <button onclick="closeModal('refundModal')" class="mt-4 bg-brand text-black font-semibold px-6 py-2 rounded-xl">Cerrar</button>
         </div>
     </div>
@@ -437,47 +432,45 @@
             document.getElementById(id).classList.add('hidden');
         }
 
-        function payWithPayPal(amount, packageId, credits) {
+        function buyPack(amount, packageId, credits) {
             currentPackage = { price: amount, id: packageId, credits: credits };
-            document.getElementById('modalAmountText').innerText = `$${amount} USD (${credits} Leads)`;
+            document.getElementById('modalAmountText').innerText = `$${amount} USD · ${credits} leads`;
+            document.getElementById('checkoutResult').classList.add('hidden');
             openModal('activationModal');
         }
 
-        function goToPayPalDirect() {
-            window.open(`https://www.paypal.com/paypalme/NexusLeadEngine/${currentPackage.price}USD`, '_blank');
-        }
-
-        async function handleActivationSubmit(e) {
+        async function handleCheckoutSubmit(e) {
             e.preventDefault();
-            const clientId = document.getElementById('clientIdInput').value.trim();
-            const payerEmail = document.getElementById('payerEmailInput').value.trim();
-            const resultBox = document.getElementById('activationResult');
+            const email = document.getElementById('buyerEmailInput').value.trim();
+            const apiKey = document.getElementById('existingKeyInput').value.trim();
+            const resultBox = document.getElementById('checkoutResult');
+            const submitBtn = document.getElementById('checkoutSubmit');
 
             resultBox.classList.remove('hidden');
-            resultBox.innerText = 'Activando créditos en NexusLeadEngine...';
+            resultBox.innerText = 'Preparando pago seguro...';
+            submitBtn.disabled = true;
 
             try {
-                const res = await fetch('/v1/billing/paypal-activate', {
+                const payload = { package_id: currentPackage.id, email: email };
+                if (apiKey) payload.api_key = apiKey;
+                const res = await fetch('/v1/billing/buy', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        client_id: clientId,
-                        payer_email: payerEmail,
-                        package_id: currentPackage.id
-                    })
+                    body: JSON.stringify(payload)
                 });
                 const data = await res.json();
-                if (res.ok) {
-                    resultBox.innerHTML = `
-                        <div class="text-emerald-400 font-bold mb-1">✅ ¡Créditos Activados (+${data.credits_added})!</div>
-                        <div><strong>Tu API Key:</strong> <span class="text-brand font-mono">${data.api_key}</span></div>
-                        <div class="mt-1 text-slate-400">Saldo actual: ${data.new_balance} leads</div>
-                    `;
-                } else {
-                    resultBox.innerHTML = `<span class="text-rose-400 font-bold">Error:</span> ${data.detail || JSON.stringify(data)}`;
+                if (res.ok && data.checkout_url) {
+                    window.location.href = data.checkout_url;
+                    return;
                 }
+                const detail = data.detail;
+                const msg = (detail && detail.message) ? detail.message : (typeof detail === 'string' ? detail : 'No se pudo iniciar el pago.');
+                const contact = (detail && detail.contact) ? ` Escríbenos a ${detail.contact} y te activamos tu pack.` : '';
+                resultBox.innerHTML = `<span class="text-rose-400 font-bold">Error:</span> ${msg}${contact}`;
             } catch (err) {
                 resultBox.innerHTML = `<span class="text-rose-400 font-bold">Error de red:</span> ${err.message}`;
+            } finally {
+                submitBtn.disabled = false;
             }
         }
     </script>

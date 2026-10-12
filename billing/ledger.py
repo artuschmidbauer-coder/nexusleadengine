@@ -40,6 +40,34 @@ class BillingLedger:
         except Exception as e:
             print(f"Error saving ledger: {e}")
 
+    # --- Idempotency: payment sessions already credited ---------------------
+    @property
+    def _sessions_path(self) -> str:
+        return self.path.replace(".json", "_sessions.json")
+
+    def _load_sessions(self) -> set:
+        if not hasattr(self, "_processed_sessions"):
+            self._processed_sessions = set()
+            if os.path.exists(self._sessions_path):
+                try:
+                    with open(self._sessions_path, "r", encoding="utf-8") as f:
+                        self._processed_sessions = set(json.load(f))
+                except Exception as e:
+                    print(f"Error loading processed sessions: {e}")
+        return self._processed_sessions
+
+    def is_session_processed(self, session_id: str) -> bool:
+        return session_id in self._load_sessions()
+
+    def mark_session_processed(self, session_id: str) -> None:
+        sessions = self._load_sessions()
+        sessions.add(session_id)
+        try:
+            with open(self._sessions_path, "w", encoding="utf-8") as f:
+                json.dump(sorted(sessions), f)
+        except Exception as e:
+            print(f"Error saving processed sessions: {e}")
+
     def create_account(self, client_id: str, initial_credits: int = 0) -> ApiKeyAccount:
         if client_id in self._client_to_key:
             return self._accounts[self._client_to_key[client_id]]

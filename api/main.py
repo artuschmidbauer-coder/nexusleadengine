@@ -1,4 +1,8 @@
+import hmac
+import os
+import uuid
 from fastapi import FastAPI, HTTPException, status, Header, Request
+from pydantic import BaseModel, EmailStr
 from typing import List, Dict, Any, Optional
 from models.schema import (
     ScanRequest,
@@ -16,9 +20,16 @@ from analyzers.web_auditor import WebAuditor
 from analyzers.ai_qualifier import AIQualifier
 from dispatchers.webhook_sender import WebhookDispatcher
 from billing.ledger import BillingLedger
-from billing.stripe_service import StripeService, PACKAGES
+from billing.stripe_service import StripeService, PACKAGES, PaymentsNotConfigured
 from billing.guard import get_or_create_account, deduct_credit_for_delivery
 from analytics.tracker import AnalyticsTracker
+
+
+def require_admin(token: Optional[str]) -> None:
+    """Blocks admin endpoints unless ADMIN_TOKEN is set and matches (constant-time compare)."""
+    expected = os.getenv("ADMIN_TOKEN")
+    if not expected or not token or not hmac.compare_digest(token, expected):
+        raise HTTPException(status_code=403, detail="Acceso restringido.")
 
 app = FastAPI(
     title="NexusLeadEngine.io - M2M Lead Intelligence API",
@@ -64,6 +75,17 @@ def serve_telemetry_dashboard(request: Request):
         return FileResponse(dashboard_file)
     return {"message": "Dashboard file not found."}
 
+@app.get("/billing/success", include_in_schema=False)
+def serve_billing_success():
+    """Post-payment page: shows the API key once Stripe confirms the payment."""
+    return FileResponse(os.path.join(STATIC_DIR, "success.html"))
+
+@app.get("/billing/cancel", include_in_schema=False)
+def billing_cancel():
+    """Checkout cancelled: send the visitor back to the pricing section."""
+    from fastapi.responses import RedirectResponse
+    return RedirectResponse(url="/#pricing")
+
 @app.get("/templates/n8n", include_in_schema=False)
 def download_n8n_template():
     """Download the ready-to-import n8n lead automation workflow."""
@@ -106,34 +128,89 @@ def get_credit_packages():
     """Returns available prepaid credit packs for bots and clients."""
     return stripe_service.get_packages()
 
-@app.post("/v1/billing/create-checkout", response_model=CheckoutResponse, tags=["Billing"])
-def create_checkout_session(req: CreateCheckoutRequest):
+class BuyRequest(BaseModel):
+    package_id: str
+    email: EmailStr
+    api_key: Optional[str] = None  # present when an existing customer tops up
+
+
+@app.post("/v1/billing/buy", tags=["Billing"])
+def buy_credits(req: BuyRequest):
     """
-    Generates an automated Stripe Checkout Session link.
-    When paid, Stripe webhooks will automatically credit the account 24/7.
+    Starts a Stripe Checkout for a credit pack.
+    - New customer: a server-generated client id is created (never user-chosen).
+    - Existing customer: pass their api_key to top up the same account.
+    """
+    if req.package_id not in PACKAGES:
+        raise HTTPException(status_code=400, detail=f"Paquete inválido. Opciones: {list(PACKAGES.keys())}")
+
+    client_id: Optional[str] = None
+    if req.api_key:
+        existing = ledger.get_by_api_key(req.api_key)
+        if not existing:
+            raise HTTPException(status_code=401, detail="API key inválida.")
+        client_id = existing.client_id
+    else:
+        client_id = f"cli_{uuid.uuid4().hex[:12]}"
+
+    try:
+        checkout = stripe_service.create_checkout_session(
+            client_id=client_id,
+            package_id=req.package_id,
+            customer_email=str(req.email),
+        )
+    except PaymentsNotConfigured as e:
+        raise HTTPException(
+            status_code=503,
+            detail={"error": "PAYMENTS_UNAVAILABLE", "message": str(e), "contact": "hola@nexusleadengine.io"},
+        )
+    return checkout
+
+
+@app.get("/v1/billing/session/{session_id}", tags=["Billing"])
+def get_checkout_result(session_id: str):
+    """
+    Called by the success page. Asks Stripe whether the session was really paid
+    (never trusts the browser), credits it once, and returns the API key.
     """
     try:
-        return stripe_service.create_checkout_session(
-            client_id=req.client_id,
-            package_id=req.package_id,
-            success_url=req.success_url or "https://tu-dominio.com/billing/success",
-            cancel_url=req.cancel_url or "https://tu-dominio.com/billing/cancel"
-        )
-    except ValueError as e:
-        raise HTTPException(status_code=400, detail=str(e))
+        result = stripe_service.retrieve_and_fulfill(session_id)
+    except PaymentsNotConfigured as e:
+        raise HTTPException(status_code=503, detail=str(e))
+    except Exception:
+        raise HTTPException(status_code=404, detail="Sesión de pago no encontrada.")
+
+    if result["status"] == "PENDING":
+        return {"status": "PENDING", "message": "El pago aún no se ha confirmado."}
+    if result["status"] not in ("PROCESSED", "ALREADY_PROCESSED"):
+        raise HTTPException(status_code=400, detail="Sesión de pago inválida.")
+
+    account = ledger.get_by_client_id(result["client_id"])
+    if result["status"] == "PROCESSED":
+        tracker.record_revenue(result["price_usd"], result.get("customer_email") or "stripe", result["credits_added"])
+
+    return {
+        "status": "PAID",
+        "credits_added": result["credits_added"],
+        "new_balance": account.credits_balance,
+        "api_key": account.api_key,
+    }
+
 
 @app.post("/v1/billing/stripe-webhook", tags=["Billing"])
-async def process_stripe_webhook(request: Request):
+async def process_stripe_webhook(request: Request, stripe_signature: Optional[str] = Header(None)):
     """
-    Autonomous Stripe Webhook Receiver.
-    Fires when a client completes a payment and adds credits to their API account instantly.
+    Stripe webhook receiver. The Stripe-Signature header is verified against
+    STRIPE_WEBHOOK_SECRET; unsigned or forged events are rejected with 400.
     """
+    raw_body = await request.body()
     try:
-        body = await request.json()
-    except Exception:
-        raise HTTPException(status_code=400, detail="Invalid JSON payload")
+        result = stripe_service.handle_webhook_event(raw_body, stripe_signature)
+    except PermissionError as e:
+        raise HTTPException(status_code=400, detail=str(e))
 
-    result = stripe_service.handle_webhook_event(body)
+    if result.get("status") == "PROCESSED":
+        tracker.record_revenue(result["price_usd"], result.get("customer_email") or "stripe", result["credits_added"])
     return result
 
 @app.get("/v1/billing/balance", response_model=CreditBalanceResponse, tags=["Billing"])
@@ -158,12 +235,14 @@ def check_balance(
         status=status_str
     )
 
-@app.post("/v1/billing/paypal-activate", tags=["Billing"])
-def activate_paypal_purchase(req: PayPalActivationRequest):
+@app.post("/v1/billing/paypal-activate", tags=["Billing (admin)"])
+def activate_paypal_purchase(req: PayPalActivationRequest, x_admin_token: Optional[str] = Header(None)):
     """
-    Activación Inmediata de Créditos tras pago en PayPal.me/NexusLeadEngine:
-    El cliente o bot envía los datos de pago y recibe su API Key activa con los créditos acreditados al instante.
+    ADMIN ONLY. Manual credit activation after the owner has confirmed a PayPal payment
+    in their own PayPal account. Requires the X-Admin-Token header (env ADMIN_TOKEN).
     """
+    require_admin(x_admin_token)
+
     package = PACKAGES.get(req.package_id)
     if not package:
         raise HTTPException(
@@ -197,9 +276,10 @@ def activate_paypal_purchase(req: PayPalActivationRequest):
         }
     }
 
-@app.post("/v1/billing/topup-dev", tags=["Billing"])
-def topup_development_credits(req: TopupDevRequest):
-    """Testing/Dev helper: Add instant credits to a client without going through Stripe."""
+@app.post("/v1/billing/topup-dev", tags=["Billing (admin)"])
+def topup_development_credits(req: TopupDevRequest, x_admin_token: Optional[str] = Header(None)):
+    """ADMIN ONLY. Add credits to a client manually. Requires the X-Admin-Token header."""
+    require_admin(x_admin_token)
     updated = ledger.add_credits(req.client_id, req.credits_to_add)
     return {
         "status": "TOPUP_SUCCESSFUL",

@@ -42,9 +42,15 @@ PACKAGES: Dict[str, CreditPackage] = {
 }
 
 PAYPAL_ME_BASE = "https://www.paypal.com/paypalme/NexusLeadEngine"
+PUBLIC_BASE_URL = os.getenv("PUBLIC_BASE_URL", "https://nexusleadengine.io").rstrip("/")
+
+
+class PaymentsNotConfigured(Exception):
+    """Raised when live Stripe credentials are missing."""
+
 
 class StripeService:
-    """Manages Stripe Checkout Sessions and autonomous webhook payment fulfillment."""
+    """Manages Stripe Checkout Sessions and verified, idempotent payment fulfillment."""
 
     def __init__(self, ledger: BillingLedger):
         self.ledger = ledger
@@ -54,6 +60,10 @@ class StripeService:
         if self.api_key:
             stripe.api_key = self.api_key
 
+    @property
+    def live_enabled(self) -> bool:
+        return bool(self.api_key) and not self.api_key.startswith("mock_")
+
     def get_packages(self) -> List[CreditPackage]:
         return list(PACKAGES.values())
 
@@ -61,83 +71,121 @@ class StripeService:
         self,
         client_id: str,
         package_id: str,
-        success_url: str = "https://tu-dominio.com/billing/success",
-        cancel_url: str = "https://tu-dominio.com/billing/cancel"
+        success_url: Optional[str] = None,
+        cancel_url: Optional[str] = None,
+        customer_email: Optional[str] = None,
     ) -> CheckoutResponse:
         package = PACKAGES.get(package_id)
         if not package:
             raise ValueError(f"Paquete no válido: {package_id}. Opciones: {list(PACKAGES.keys())}")
 
+        if not self.live_enabled:
+            raise PaymentsNotConfigured("Los pagos con tarjeta no están configurados todavía.")
+
+        success_url = success_url or f"{PUBLIC_BASE_URL}/billing/success"
+        cancel_url = cancel_url or f"{PUBLIC_BASE_URL}/billing/cancel"
+
         # Ensure account exists in ledger
-        account = self.ledger.get_by_client_id(client_id)
-        if not account:
-            account = self.ledger.create_account(client_id)
+        if not self.ledger.get_by_client_id(client_id):
+            self.ledger.create_account(client_id)
 
-        # 1. Real Stripe Integration if API key is present
-        if self.api_key and not self.api_key.startswith("mock_"):
-            session = stripe.checkout.Session.create(
-                payment_method_types=["card"],
-                line_items=[{
-                    "price_data": {
-                        "currency": "usd",
-                        "unit_amount": int(package.price_usd * 100),
-                        "product_data": {
-                            "name": package.name,
-                            "description": package.description,
-                        },
+        params = dict(
+            payment_method_types=["card"],
+            line_items=[{
+                "price_data": {
+                    "currency": "usd",
+                    "unit_amount": int(round(package.price_usd * 100)),
+                    "product_data": {
+                        "name": package.name,
+                        "description": package.description,
                     },
-                    "quantity": 1,
-                }],
-                mode="payment",
-                client_reference_id=client_id,
-                metadata={
-                    "client_id": client_id,
-                    "package_id": package.package_id,
-                    "credits": str(package.credits)
                 },
-                success_url=f"{success_url}?session_id={{CHECKOUT_SESSION_ID}}",
-                cancel_url=cancel_url,
-            )
-            return CheckoutResponse(
-                checkout_url=session.url,
-                session_id=session.id,
-                credits_to_add=package.credits,
-                price_usd=package.price_usd,
-                mode="stripe_live"
-            )
+                "quantity": 1,
+            }],
+            mode="payment",
+            client_reference_id=client_id,
+            metadata={"client_id": client_id, "package_id": package.package_id},
+            success_url=f"{success_url}?session_id={{CHECKOUT_SESSION_ID}}",
+            cancel_url=cancel_url,
+        )
+        if customer_email:
+            params["customer_email"] = customer_email
 
-        # 2. Seamless PayPal.me & Local Sandbox Mode (Instant Checkout Link for testing)
-        # Direct PayPal payment link formatted as https://www.paypal.com/paypalme/NexusLeadEngine/{amount}USD
-        paypal_direct_url = f"{PAYPAL_ME_BASE}/{int(package.price_usd)}USD"
-
+        session = stripe.checkout.Session.create(**params)
         return CheckoutResponse(
-            checkout_url=paypal_direct_url,
-            session_id=f"pp_session_{uuid.uuid4().hex[:12]}",
+            checkout_url=session.url,
+            session_id=session.id,
             credits_to_add=package.credits,
             price_usd=package.price_usd,
-            mode="paypal_me"
+            mode="stripe_live",
         )
 
-    def handle_webhook_event(self, payload: dict, signature: Optional[str] = None) -> dict:
+    def fulfill_session(self, session: dict) -> dict:
         """
-        Ingests Stripe Webhook events and credits accounts automatically.
-        Triggered when 'checkout.session.completed' fires.
+        Credits an account for a PAID Checkout Session. Idempotent per session id:
+        the webhook and the success page can both call this safely.
         """
-        event_type = payload.get("type")
-        data_object = payload.get("data", {}).get("object", {})
+        if hasattr(session, "to_dict"):
+            session = session.to_dict()
+        session_id = session.get("id")
+        if not session_id:
+            return {"status": "IGNORED", "reason": "missing_session_id"}
+        if session.get("payment_status") != "paid":
+            return {"status": "PENDING", "session_id": session_id}
 
-        if event_type == "checkout.session.completed":
-            metadata = data_object.get("metadata", {})
-            client_id = metadata.get("client_id") or data_object.get("client_reference_id")
-            credits = int(metadata.get("credits", 0))
+        metadata = session.get("metadata") or {}
+        client_id = metadata.get("client_id") or session.get("client_reference_id")
+        package = PACKAGES.get(metadata.get("package_id", ""))
+        if not client_id or not package:
+            return {"status": "IGNORED", "reason": "invalid_metadata", "session_id": session_id}
 
-            if client_id and credits > 0:
-                updated_account = self.ledger.add_credits(client_id, credits)
-                return {
-                    "status": "PROCESSED",
-                    "client_id": client_id,
-                    "credits_added": credits,
-                    "new_balance": updated_account.credits_balance
-                }
+        if self.ledger.is_session_processed(session_id):
+            account = self.ledger.get_by_client_id(client_id)
+            return {
+                "status": "ALREADY_PROCESSED",
+                "session_id": session_id,
+                "client_id": client_id,
+                "credits_added": 0,
+                "new_balance": account.credits_balance if account else 0,
+            }
 
+        # Mark first, credit second: a crash can never double-credit.
+        self.ledger.mark_session_processed(session_id)
+        account = self.ledger.add_credits(client_id, package.credits)
+        return {
+            "status": "PROCESSED",
+            "session_id": session_id,
+            "client_id": client_id,
+            "package_id": package.package_id,
+            "credits_added": package.credits,
+            "price_usd": package.price_usd,
+            "customer_email": (session.get("customer_details") or {}).get("email")
+                              or session.get("customer_email"),
+            "new_balance": account.credits_balance,
+        }
+
+    def retrieve_and_fulfill(self, session_id: str) -> dict:
+        """Used by the success page: asks Stripe directly (never trusts the browser)."""
+        if not self.live_enabled:
+            raise PaymentsNotConfigured("Los pagos con tarjeta no están configurados todavía.")
+        session = stripe.checkout.Session.retrieve(session_id)
+        return self.fulfill_session(session.to_dict() if hasattr(session, "to_dict") else dict(session))
+
+    def handle_webhook_event(self, raw_body: bytes, signature: Optional[str] = None) -> dict:
+        """
+        Ingests Stripe webhook events. The signature is ALWAYS verified against
+        STRIPE_WEBHOOK_SECRET; unsigned events are rejected.
+        """
+        if not self.webhook_secret:
+            raise PermissionError("STRIPE_WEBHOOK_SECRET no configurado: webhook deshabilitado.")
+        if not signature:
+            raise PermissionError("Falta la cabecera Stripe-Signature.")
+        try:
+            event = stripe.Webhook.construct_event(raw_body, signature, self.webhook_secret)
+        except Exception as e:  # invalid payload or signature
+            raise PermissionError(f"Firma de Stripe inválida: {e}")
+
+        event_type = event["type"]
+        if event_type in ("checkout.session.completed", "checkout.session.async_payment_succeeded"):
+            return self.fulfill_session(event["data"]["object"])
         return {"status": "IGNORED", "event_type": event_type}
