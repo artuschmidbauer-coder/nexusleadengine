@@ -126,8 +126,9 @@ class PayPalActivationRequest(BaseModel):
 
 class ScanRequest(BaseModel):
     """Parameters to trigger an autonomous prospecting run"""
-    niche: str = Field(example="implantes dentales", description="Target industry or high-ticket service")
-    location: str = Field(example="Madrid", description="City or region")
+    niche: str = Field(default="dental implants", description="Target industry or high-ticket service")
+    location: str = Field(default="Miami", description="City, state, or metropolitan area")
+    country_code: str = Field(default="US", description="Two-letter ISO country code (e.g., US, GB, CA, AU, ES)")
     max_leads: int = Field(default=5, ge=1, le=50)
     min_score: int = Field(default=60, ge=0, le=100)
     auto_dispatch_webhooks: bool = Field(default=True)

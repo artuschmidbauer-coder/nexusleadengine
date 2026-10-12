@@ -21,6 +21,7 @@ from analyzers.ai_qualifier import AIQualifier
 from dispatchers.webhook_sender import WebhookDispatcher
 from billing.ledger import BillingLedger
 from billing.stripe_service import StripeService, PACKAGES, PaymentsNotConfigured
+from billing.polar_service import PolarService
 from billing.guard import get_or_create_account, deduct_credit_for_delivery
 from analytics.tracker import AnalyticsTracker
 
@@ -50,6 +51,7 @@ qualifier = AIQualifier()
 dispatcher = WebhookDispatcher()
 ledger = BillingLedger()
 stripe_service = StripeService(ledger)
+polar_service = PolarService(ledger)
 tracker = AnalyticsTracker()
 
 # In-memory store for recent generated leads
@@ -154,12 +156,19 @@ def buy_credits(req: BuyRequest):
         client_id = f"cli_{uuid.uuid4().hex[:12]}"
 
     try:
-        checkout = stripe_service.create_checkout_session(
-            client_id=client_id,
-            package_id=req.package_id,
-            customer_email=str(req.email),
-        )
-    except PaymentsNotConfigured as e:
+        if polar_service.is_configured:
+            checkout = polar_service.create_checkout_session(
+                client_id=client_id,
+                package_id=req.package_id,
+                customer_email=str(req.email)
+            )
+        else:
+            checkout = stripe_service.create_checkout_session(
+                client_id=client_id,
+                package_id=req.package_id,
+                customer_email=str(req.email),
+            )
+    except (PaymentsNotConfigured, RuntimeError, ValueError) as e:
         raise HTTPException(
             status_code=503,
             detail={"error": "PAYMENTS_UNAVAILABLE", "message": str(e), "contact": "hola@nexusleadengine.io"},
@@ -170,7 +179,7 @@ def buy_credits(req: BuyRequest):
 @app.get("/v1/billing/session/{session_id}", tags=["Billing"])
 def get_checkout_result(session_id: str):
     """
-    Called by the success page. Asks Stripe whether the session was really paid
+    Called by the success page. Asks Stripe or Polar whether the session was really paid
     (never trusts the browser), credits it once, and returns the API key.
     """
     try:
@@ -212,6 +221,36 @@ async def process_stripe_webhook(request: Request, stripe_signature: Optional[st
     if result.get("status") == "PROCESSED":
         tracker.record_revenue(result["price_usd"], result.get("customer_email") or "stripe", result["credits_added"])
     return result
+
+
+@app.post("/v1/billing/polar-webhook", tags=["Billing"])
+async def process_polar_webhook(request: Request):
+    """
+    Polar.sh Standard Webhook Receiver.
+    Fires on order.created / checkout.updated to automatically credit customer accounts.
+    """
+    raw_body = await request.body()
+    headers = dict(request.headers)
+    try:
+        polar_service.verify_webhook_signature(raw_body, headers)
+    except PermissionError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
+    try:
+        import json
+        payload = json.loads(raw_body.decode("utf-8"))
+    except Exception:
+        raise HTTPException(status_code=400, detail="Invalid JSON payload")
+
+    event_type = payload.get("type")
+    if event_type in ("order.created", "checkout.updated"):
+        order_data = payload.get("data", {})
+        result = polar_service.fulfill_order(order_data)
+        if result.get("status") == "PROCESSED":
+            tracker.record_revenue(result["price_usd"], result.get("customer_email") or "polar", result["credits_added"])
+        return result
+
+    return {"status": "IGNORED", "event_type": event_type}
 
 @app.get("/v1/billing/balance", response_model=CreditBalanceResponse, tags=["Billing"])
 def check_balance(
@@ -323,7 +362,7 @@ def trigger_scan(
     """
     account = get_or_create_account(ledger, api_key=x_api_key, client_id="demo_client")
 
-    prospects = finder.search(req.niche, req.location, limit=req.max_leads)
+    prospects = finder.search(req.niche, req.location, limit=req.max_leads, country=req.country_code)
     tracker.record_scan_event(req.niche, req.location, len(prospects))
     new_leads: List[EnrichedLead] = []
 

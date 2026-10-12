@@ -1,9 +1,30 @@
 import re
 import time
+import socket
+import ipaddress
+from urllib.parse import urlparse
 import requests
 from bs4 import BeautifulSoup
 from typing import Optional, List
 from models.schema import TechSignal
+
+def is_safe_public_url(url: str) -> bool:
+    """Blocks SSRF attacks by ensuring hostname resolves only to public routable IPs."""
+    try:
+        parsed = urlparse(url)
+        if parsed.scheme not in ("http", "https"):
+            return False
+        hostname = parsed.hostname
+        if not hostname or hostname.lower() in ("localhost", "127.0.0.1", "0.0.0.0"):
+            return False
+        addr_info = socket.getaddrinfo(hostname, None)
+        for _, _, _, _, sockaddr in addr_info:
+            ip = ipaddress.ip_address(sockaddr[0])
+            if ip.is_private or ip.is_loopback or ip.is_link_local or ip.is_multicast or ip.is_reserved:
+                return False
+        return True
+    except Exception:
+        return False
 
 class WebAuditor:
     """Audits a business website to detect marketing tech stack and conversion bottlenecks."""
@@ -32,6 +53,19 @@ class WebAuditor:
             )
 
         target_url = url if url.startswith(("http://", "https://")) else f"https://{url}"
+        if not is_safe_public_url(target_url):
+            return TechSignal(
+                has_ssl=False,
+                has_meta_pixel=False,
+                has_google_tag=False,
+                has_whatsapp_widget=False,
+                has_contact_form=False,
+                is_mobile_friendly=False,
+                page_load_seconds=0.0,
+                detected_cms=None,
+                social_profiles=[]
+            )
+
         has_ssl = target_url.startswith("https://")
         start_time = time.time()
 
