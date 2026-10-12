@@ -1,0 +1,61 @@
+{
+  "name": "NexusLeadEngine - Make.com Auto Lead Injector",
+  "version": 1,
+  "description": "Blueprint oficial de Make.com para consumir leads calificados de NexusLeadEngine.io",
+  "flow": [
+    {
+      "id": 1,
+      "module": "builtin:BasicScheduler",
+      "version": 1,
+      "parameters": {},
+      "metadata": {
+        "designer": {
+          "x": 0,
+          "y": 0
+        }
+      }
+    },
+    {
+      "id": 2,
+      "module": "http:ActionMakeRequest",
+      "version": 3,
+      "parameters": {
+        "url": "https://nexusleadengine.io/v1/leads/trigger-scan",
+        "method": "POST",
+        "headers": [
+          {
+            "name": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "name": "x-api-key",
+            "value": "demo_client"
+          }
+        ],
+        "bodyType": "raw",
+        "raw": "{\n  \"niche\": \"implantes dentales\",\n  \"location\": \"Madrid\",\n  \"max_leads\": 5,\n  \"min_score\": 70,\n  \"auto_dispatch_webhooks\": false\n}",
+        "parseResponse": true
+      },
+      "metadata": {
+        "designer": {
+          "x": 300,
+          "y": 0
+        }
+      }
+    },
+    {
+      "id": 3,
+      "module": "builtin:Iterator",
+      "version": 1,
+      "parameters": {
+        "array": "{{2.data}}"
+      },
+      "metadata": {
+        "designer": {
+          "x": 600,
+          "y": 0
+        }
+      }
+    }
+  ]
+}
