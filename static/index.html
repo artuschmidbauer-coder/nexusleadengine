@@ -76,7 +76,8 @@
             <nav class="hidden md:flex items-center gap-8 text-sm font-medium text-slate-400">
                 <a href="#features" class="hover:text-white transition">Cómo Opera</a>
                 <a href="#payload" class="hover:text-white transition">Payload para Bots</a>
-                <a href="#pricing" class="hover:text-white transition">Precios Ultra Económicos</a>
+                <a href="#pricing" class="hover:text-white transition">Precios</a>
+                <a href="#templates" class="text-cyan-400 hover:text-white transition text-xs font-semibold">🎁 Plantilla n8n</a>
                 <a href="/dashboard" class="text-emerald-400 hover:text-white transition flex items-center gap-1 font-mono text-xs bg-emerald-500/10 px-3 py-1 rounded-lg border border-emerald-500/20">
                     📊 Telemetría en Vivo
                 </a>
@@ -323,6 +324,29 @@
             <div id="activationResult" class="mt-4 hidden p-3 rounded-xl bg-white/5 text-xs font-mono"></div>
         </div>
     </div>
+
+    <!-- Free n8n Blueprint Banner -->
+    <section id="templates" class="py-20 border-t border-white/5 bg-gradient-to-b from-[#05070e] to-[#070b14]">
+        <div class="max-w-4xl mx-auto px-6 text-center">
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 font-mono text-xs mb-6">
+                🎁 Recurso Gratuito para Automatizadores
+            </div>
+            <h2 class="text-3xl md:text-4xl font-extrabold text-white mb-4">
+                Descarga la Plantilla Oficial de n8n
+            </h2>
+            <p class="text-slate-400 text-sm max-w-2xl mx-auto mb-8 leading-relaxed">
+                Importa este flujo en tu instancia de n8n en 5 segundos. Incluye el cron programado a las 9 AM, la llamada a la API de NexusLeadEngine y el formateo automático para WhatsApp o CRM.
+            </p>
+            <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+                <a href="/templates/n8n" download="nexus_n8n_lead_workflow.json" class="w-full sm:w-auto bg-brand hover:bg-emerald-400 text-black font-extrabold px-8 py-3.5 rounded-xl transition text-sm flex items-center justify-center gap-2 shadow-xl shadow-brand/20">
+                    <span>⬇</span> Descargar Flujo n8n (.JSON)
+                </a>
+                <a href="/docs" target="_blank" class="w-full sm:w-auto bg-white/5 hover:bg-white/10 text-white font-medium border border-white/10 px-6 py-3.5 rounded-xl transition text-xs font-mono">
+                    Ver Especificación OpenAPI ↗
+                </a>
+            </div>
+        </div>
+    </section>
 
     <!-- Footer & Legal Compliance -->
     <footer class="border-t border-white/5 py-16 bg-[#04060c] text-slate-400 text-xs">

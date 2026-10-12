@@ -64,6 +64,14 @@ def serve_telemetry_dashboard(request: Request):
         return FileResponse(dashboard_file)
     return {"message": "Dashboard file not found."}
 
+@app.get("/templates/n8n", include_in_schema=False)
+def download_n8n_template():
+    """Download the ready-to-import n8n lead automation workflow."""
+    template_path = os.path.join(STATIC_DIR, "templates", "nexus_n8n_lead_workflow.json")
+    if os.path.exists(template_path):
+        return FileResponse(template_path, media_type="application/json", filename="nexus_n8n_lead_workflow.json")
+    raise HTTPException(status_code=404, detail="Template not found")
+
 @app.get("/v1/analytics/dashboard", tags=["Telemetry"])
 def get_analytics_metrics():
     """Returns live throughput, conversion rates, revenues and activity feed."""

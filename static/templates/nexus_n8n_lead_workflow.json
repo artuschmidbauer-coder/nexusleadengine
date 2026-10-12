@@ -1,0 +1,108 @@
+{
+  "name": "NexusLeadEngine - Automated B2B Lead Harvester",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "0 9 * * 1-5"
+            }
+          ]
+        }
+      },
+      "id": "1",
+      "name": "Disparador Diario (9 AM)",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.1,
+      "position": [250, 300]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://nexusleadengine.io/v1/leads/trigger-scan",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "x-api-key",
+              "value": "sk_live_demo_client"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "{\n  \"niche\": \"implantes dentales\",\n  \"location\": \"Madrid\",\n  \"max_leads\": 5,\n  \"min_score\": 70,\n  \"auto_dispatch_webhooks\": false\n}",
+        "options": {}
+      },
+      "id": "2",
+      "name": "NexusLeadEngine API (Escanear Leads)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [480, 300]
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "data"
+      },
+      "id": "3",
+      "name": "Dividir Lista de Leads",
+      "type": "n8n-nodes-base.itemLists",
+      "typeVersion": 2,
+      "position": [700, 300]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Extrae los datos clave listos para WhatsApp o CRM\nconst lead = $input.item.json;\nreturn {\n  lead_id: lead.lead_id,\n  empresa: lead.business_name,\n  sector: lead.category,\n  ciudad: lead.location.city,\n  whatsapp: lead.contact_channels.whatsapp || lead.contact_channels.phone,\n  score: lead.score,\n  ticket_estimado_usd: lead.bot_action.estimated_ticket_value_usd,\n  mensaje_whatsapp_listo: lead.bot_action.pre_drafted_outreach_hook,\n  diagnostico_fuga: lead.bot_action.loss_hypothesis\n};"
+      },
+      "id": "4",
+      "name": "Formateador para Bot de Ventas",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [920, 300]
+    }
+  ],
+  "connections": {
+    "Disparador Diario (9 AM)": {
+      "main": [
+        [
+          {
+            "node": "NexusLeadEngine API (Escanear Leads)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "NexusLeadEngine API (Escanear Leads)": {
+      "main": [
+        [
+          {
+            "node": "Dividir Lista de Leads",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Dividir Lista de Leads": {
+      "main": [
+        [
+          {
+            "node": "Formateador para Bot de Ventas",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  }
+}
