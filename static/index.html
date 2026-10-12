@@ -3,23 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NexusLeadEngine.io | Leads de ticket alto con mensaje de WhatsApp listo para agencias</title>
-    <meta name="description" content="Leads de clínicas dentales y reformas con teléfono, email, diagnóstico y mensaje de WhatsApp redactado. Entrega a tu CRM, Make o n8n por webhook. Packs desde $9 USD.">
-    <meta name="keywords" content="leads B2B para agencias, leads clínicas dentales, leads reformas, leads para Make.com, n8n leads workflow, GoHighLevel leads, implantes dentales leads">
+    <title>NexusLeadEngine.io | High-Ticket B2B Lead Intelligence & Pre-Drafted Outreach</title>
+    <meta name="description" content="Qualified high-ticket B2B local business leads with verified contacts, website technical diagnostics, and pre-drafted outreach hooks. Instant webhook delivery to Make, n8n, GoHighLevel. Packs from $9 USD.">
+    <meta name="keywords" content="B2B lead intelligence, dental clinic leads, contractor leads, make.com leads, n8n lead workflow, GoHighLevel leads, website audit signals, polar.sh">
     <meta name="author" content="NexusLeadEngine.io">
     <link rel="canonical" href="https://nexusleadengine.io">
 
-    <!-- Open Graph / Facebook -->
+    <!-- Open Graph / Social -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://nexusleadengine.io">
-    <meta property="og:title" content="NexusLeadEngine.io | Leads de ticket alto con mensaje de WhatsApp listo">
-    <meta property="og:description" content="Prospectos de clínicas dentales y reformas con diagnóstico y mensaje de apertura listo. Directo a tu CRM, Make o n8n. Desde $9 USD.">
-
-    <!-- Twitter -->
-    <meta property="twitter:card" content="summary_large_image">
-    <meta property="twitter:url" content="https://nexusleadengine.io">
-    <meta property="twitter:title" content="NexusLeadEngine.io | Leads de ticket alto para agencias">
-    <meta property="twitter:description" content="Leads con mensaje de WhatsApp listo, directo a tu CRM, Make o n8n.">
+    <meta property="og:title" content="NexusLeadEngine.io | High-Ticket B2B Leads for Growth Agencies">
+    <meta property="og:description" content="High-ticket prospects with tech audit signals and pre-drafted outreach hooks. Instant delivery to your CRM, Make, or n8n. Starting at $9 USD.">
 
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -56,38 +50,51 @@
             background: #090d16;
             border: 1px solid rgba(255, 255, 255, 0.08);
         }
+        pre {
+            scrollbar-width: thin;
+            scrollbar-color: rgba(255,255,255,0.15) transparent;
+        }
     </style>
 </head>
 <body class="bg-[#05070e] text-slate-200 font-sans antialiased selection:bg-brand selection:text-black">
 
     <!-- Top Navigation -->
-    <header class="border-b border-white/5 backdrop-blur-md bg-[#05070e]/80 sticky top-0 z-50">
+    <header class="border-b border-white/5 backdrop-blur-md bg-[#05070e]/85 sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
             <div class="flex items-center gap-3">
-                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-brand to-cyan-500 flex items-center justify-center font-bold text-black text-xl shadow-lg shadow-brand/20">
-                    ⚡
-                </div>
-                <div>
-                    <span class="text-xl font-extrabold tracking-tight text-white">Nexus<span class="text-brand">LeadEngine</span><span class="text-xs text-slate-400">.io</span></span>
-                    <span class="text-[10px] ml-2 px-2 py-0.5 rounded-full bg-brand/10 text-brand border border-brand/20 font-mono">Leads B2B</span>
-                </div>
+                <a href="/" class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-brand to-cyan-500 flex items-center justify-center font-bold text-black text-xl shadow-lg shadow-brand/20">
+                        ⚡
+                    </div>
+                    <div>
+                        <span class="text-xl font-extrabold tracking-tight text-white">Nexus<span class="text-brand">LeadEngine</span><span class="text-xs text-slate-400">.io</span></span>
+                        <span class="text-[10px] ml-2 px-2 py-0.5 rounded-full bg-brand/10 text-brand border border-brand/20 font-mono" data-i18n="badge_tier1">Global Tier-1</span>
+                    </div>
+                </a>
             </div>
 
-            <nav class="hidden md:flex items-center gap-8 text-sm font-medium text-slate-400">
-                <a href="#features" class="hover:text-white transition">Cómo Opera</a>
-                <a href="#payload" class="hover:text-white transition">Payload para Bots</a>
-                <a href="#pricing" class="hover:text-white transition">Precios</a>
-                <a href="#templates" class="text-cyan-400 hover:text-white transition text-xs font-semibold">🎁 Plantilla n8n</a>
+            <nav class="hidden md:flex items-center gap-7 text-sm font-medium text-slate-400">
+                <a href="#explorer" class="hover:text-white transition" data-i18n="nav_explorer">Explorador de Leads</a>
+                <a href="#features" class="hover:text-white transition" data-i18n="nav_features">Cómo Opera</a>
+                <a href="#pricing" class="hover:text-white transition" data-i18n="nav_pricing">Precios</a>
+                <a href="#templates" class="text-cyan-400 hover:text-white transition text-xs font-semibold" data-i18n="nav_n8n">🎁 Plantilla n8n</a>
                 <a href="/dashboard" class="text-emerald-400 hover:text-white transition flex items-center gap-1 font-mono text-xs bg-emerald-500/10 px-3 py-1 rounded-lg border border-emerald-500/20">
-                    📊 Telemetría en Vivo
+                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                    <span data-i18n="nav_telemetry">Telemetría</span>
                 </a>
                 <a href="/docs" target="_blank" class="hover:text-brand transition flex items-center gap-1 font-mono text-xs">
                     Swagger API ↗
                 </a>
             </nav>
 
-            <div class="flex items-center gap-4">
-                <a href="#pricing" class="bg-brand text-black font-bold text-xs md:text-sm px-5 py-2.5 rounded-xl hover:bg-emerald-400 transition shadow-lg shadow-brand/25">
+            <div class="flex items-center gap-3">
+                <!-- Language Switcher -->
+                <div class="flex items-center bg-white/5 border border-white/10 rounded-xl p-1 text-xs font-mono">
+                    <button id="btnLangEn" onclick="setLanguage('en')" class="px-2.5 py-1 rounded-lg transition font-bold text-white bg-white/10">🇺🇸 EN</button>
+                    <button id="btnLangEs" onclick="setLanguage('es')" class="px-2.5 py-1 rounded-lg transition text-slate-400 hover:text-white">🇪🇸 ES</button>
+                </div>
+
+                <a href="#pricing" class="bg-brand text-black font-bold text-xs md:text-sm px-5 py-2.5 rounded-xl hover:bg-emerald-400 transition shadow-lg shadow-brand/25" data-i18n="nav_cta_buy">
                     Comprar Leads ($9 USD)
                 </a>
             </div>
@@ -96,123 +103,241 @@
 
     <!-- Hero Section -->
     <section class="relative pt-20 pb-20 overflow-hidden">
-        <div class="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[650px] h-[400px] bg-brand/15 blur-[140px] pointer-events-none rounded-full"></div>
+        <div class="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[450px] bg-brand/15 blur-[150px] pointer-events-none rounded-full"></div>
         <div class="max-w-5xl mx-auto px-6 text-center relative z-10">
             <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/5 border border-white/10 text-xs font-medium text-slate-300 mb-8">
                 <span class="w-2 h-2 rounded-full bg-brand animate-pulse"></span>
-                Para agencias de marketing y automatización
+                <span data-i18n="hero_pill">Para agencias de marketing y automatizadores B2B</span>
             </div>
 
-            <h1 class="text-4xl md:text-6xl font-extrabold tracking-tight text-white leading-tight mb-8">
-                Leads de clínicas dentales y reformas, <br>
-                <span class="gradient-text">con el mensaje de WhatsApp ya redactado</span>
+            <h1 class="text-4xl md:text-6xl font-extrabold tracking-tight text-white leading-tight mb-8" data-i18n="hero_title">
+                Leads de ticket alto para agencias, <br>
+                <span class="gradient-text">con auditoría técnica y mensaje listo</span>
             </h1>
 
-            <p class="text-base md:text-lg text-slate-400 max-w-3xl mx-auto mb-10 leading-relaxed">
-                Recibe prospectos de ticket alto con teléfono, email y un diagnóstico de qué les está haciendo perder clientes.
-                Llegan directo a tu CRM, Make o n8n, listos para contactar. Packs desde <strong>$9 USD</strong>, sin suscripción.
+            <p class="text-base md:text-lg text-slate-400 max-w-3xl mx-auto mb-10 leading-relaxed" data-i18n="hero_subtitle">
+                Recibe prospectos calificados de clínicas dentales, reformas y servicios con teléfono, email y diagnóstico de fuga de conversión.
+                Llegan directo a tu CRM, Make o n8n. Packs desde <strong>$9 USD</strong>, sin suscripción.
             </p>
 
             <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
-                <a href="#pricing" class="w-full sm:w-auto bg-brand hover:bg-emerald-400 text-black font-extrabold px-8 py-4 rounded-xl transition shadow-xl shadow-brand/20">
+                <a href="#pricing" class="w-full sm:w-auto bg-brand hover:bg-emerald-400 text-black font-extrabold px-8 py-4 rounded-xl transition shadow-xl shadow-brand/20" data-i18n="hero_cta_primary">
                     Ver packs desde $9 USD
                 </a>
-                <a href="#payload" class="w-full sm:w-auto bg-white/5 hover:bg-white/10 text-white font-medium border border-white/10 px-8 py-4 rounded-xl transition flex items-center justify-center gap-2 text-sm">
-                    Ver un lead de ejemplo ↓
+                <a href="#explorer" class="w-full sm:w-auto bg-white/5 hover:bg-white/10 text-white font-medium border border-white/10 px-8 py-4 rounded-xl transition flex items-center justify-center gap-2 text-sm" data-i18n="hero_cta_secondary">
+                    Explorar leads en vivo ↓
                 </a>
             </div>
 
-            <!-- Beneficios -->
+            <!-- Value Metric Highlights -->
             <div class="grid grid-cols-2 md:grid-cols-4 gap-6 mt-16 max-w-4xl mx-auto border-t border-white/5 pt-12">
                 <div>
-                    <div class="text-2xl md:text-3xl font-extrabold text-brand font-mono">Desde $0.24</div>
-                    <div class="text-xs text-slate-400 mt-1">por lead, según el pack</div>
+                    <div class="text-2xl md:text-3xl font-extrabold text-brand font-mono" data-i18n="metric_1_val">Desde $0.24</div>
+                    <div class="text-xs text-slate-400 mt-1" data-i18n="metric_1_lbl">por lead entregado</div>
                 </div>
                 <div>
-                    <div class="text-2xl md:text-3xl font-extrabold text-white font-mono">WhatsApp</div>
-                    <div class="text-xs text-slate-400 mt-1">Mensaje de apertura incluido</div>
+                    <div class="text-2xl md:text-3xl font-extrabold text-white font-mono" data-i18n="metric_2_val">Tier-1 Global</div>
+                    <div class="text-xs text-slate-400 mt-1" data-i18n="metric_2_lbl">USA, UK & España</div>
                 </div>
                 <div>
-                    <div class="text-2xl md:text-3xl font-extrabold text-white font-mono">Make · n8n</div>
-                    <div class="text-xs text-slate-400 mt-1">Plantillas y webhook listos</div>
+                    <div class="text-2xl md:text-3xl font-extrabold text-white font-mono" data-i18n="metric_3_val">Make · n8n · GHL</div>
+                    <div class="text-xs text-slate-400 mt-1" data-i18n="metric_3_lbl">Webhooks & Plantillas</div>
                 </div>
                 <div>
-                    <div class="text-2xl md:text-3xl font-extrabold text-cyan-400 font-mono">14 días</div>
-                    <div class="text-xs text-slate-400 mt-1">Garantía de reembolso</div>
+                    <div class="text-2xl md:text-3xl font-extrabold text-cyan-400 font-mono" data-i18n="metric_4_val">14 Días</div>
+                    <div class="text-xs text-slate-400 mt-1" data-i18n="metric_4_lbl">Garantía de reembolso</div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Code / JSON Payload Showcase -->
-    <section id="payload" class="py-20 border-t border-white/5 bg-[#070b14]">
+    <!-- LIVE INTERACTIVE LEAD EXPLORER -->
+    <section id="explorer" class="py-20 border-t border-white/5 bg-[#070b14]">
         <div class="max-w-6xl mx-auto px-6">
-            <div class="text-center max-w-2xl mx-auto mb-12">
-                <h2 class="text-3xl font-bold text-white mb-3">Diseñado para que una máquina lo ejecute</h2>
-                <p class="text-slate-400 text-sm">
-                    Cada paquete incluye teléfono de WhatsApp verificado, el fallo tecnológico detectado y el hook exacto para disparar la conversación.
+            <div class="text-center max-w-3xl mx-auto mb-10">
+                <span class="text-brand text-xs font-mono font-bold uppercase tracking-widest" data-i18n="exp_tag">Buscador Interactivo</span>
+                <h2 class="text-3xl md:text-4xl font-extrabold text-white mt-2 mb-3" data-i18n="exp_title">
+                    Auditoría de Prospectos en Tiempo Real
+                </h2>
+                <p class="text-slate-400 text-sm" data-i18n="exp_subtitle">
+                    Selecciona un mercado global para auditar prospectos verificados con diagnóstico de fuga de clientes y hook de contacto listo.
                 </p>
             </div>
 
-            <div class="code-bg rounded-2xl p-6 shadow-2xl relative overflow-hidden">
-                <div class="flex items-center justify-between pb-4 mb-4 border-b border-white/5 text-xs text-slate-400 font-mono">
-                    <div class="flex items-center gap-2">
-                        <span class="w-3 h-3 rounded-full bg-red-500/80"></span>
-                        <span class="w-3 h-3 rounded-full bg-yellow-500/80"></span>
-                        <span class="w-3 h-3 rounded-full bg-emerald-500/80"></span>
-                        <span class="ml-2 text-slate-300">nexus_stream_lead.json</span>
+            <!-- Country & City Filter Bar -->
+            <div class="flex flex-wrap items-center justify-between gap-4 bg-white/[0.03] border border-white/10 rounded-2xl p-3 mb-8 max-w-4xl mx-auto">
+                <div class="flex items-center gap-2">
+                    <span class="text-xs font-mono text-slate-400 ml-2" data-i18n="exp_select_country">País:</span>
+                    <div class="flex items-center bg-black/40 rounded-xl p-1 border border-white/5">
+                        <button id="tabUS" onclick="selectCountry('US')" class="px-3.5 py-1.5 rounded-lg text-xs font-bold transition text-black bg-brand">
+                            🇺🇸 United States
+                        </button>
+                        <button id="tabGB" onclick="selectCountry('GB')" class="px-3.5 py-1.5 rounded-lg text-xs font-medium transition text-slate-400 hover:text-white">
+                            🇬🇧 United Kingdom
+                        </button>
+                        <button id="tabES" onclick="selectCountry('ES')" class="px-3.5 py-1.5 rounded-lg text-xs font-medium transition text-slate-400 hover:text-white">
+                            🇪🇸 España
+                        </button>
                     </div>
-                    <div class="text-emerald-400 font-semibold font-mono">API Key Auth • HMAC-SHA256</div>
                 </div>
 
-                <pre class="font-mono text-xs md:text-sm text-slate-300 overflow-x-auto leading-relaxed"><code>{
+                <div class="flex items-center gap-3">
+                    <button onclick="fetchLeadSample()" id="btnRefreshLead" class="bg-white/10 hover:bg-white/20 text-white font-mono text-xs px-4 py-2 rounded-xl transition flex items-center gap-2 border border-white/10">
+                        <span id="spinnerLead" class="hidden animate-spin">↻</span>
+                        <span data-i18n="exp_btn_refresh">Re-auditar / Siguiente</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- 2-Column Display: Visual Intelligence Card + JSON Payload -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+                
+                <!-- Left: Visual Intelligence Card -->
+                <div class="lg:col-span-6 bg-[#0b0f19] border border-white/10 rounded-2xl p-6 shadow-2xl relative">
+                    <div class="flex items-center justify-between mb-4 pb-4 border-b border-white/5">
+                        <div class="flex items-center gap-2">
+                            <span id="cardCountryBadge" class="text-xs font-mono px-2 py-0.5 rounded bg-brand/10 text-brand border border-brand/20">🇺🇸 US · Miami</span>
+                            <span id="cardNicheBadge" class="text-xs font-mono px-2 py-0.5 rounded bg-white/5 text-slate-300">Dental Implants</span>
+                        </div>
+                        <div class="flex items-center gap-1.5">
+                            <span class="text-xs text-slate-400 font-mono">Score:</span>
+                            <span id="cardScoreBadge" class="text-xs font-extrabold px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 font-mono">95 / 100</span>
+                        </div>
+                    </div>
+
+                    <!-- Business Identity -->
+                    <h3 id="cardBusinessName" class="text-xl font-bold text-white mb-2">Biscayne Dental & Implant Center</h3>
+                    <div class="space-y-1.5 text-xs text-slate-400 mb-6 font-mono">
+                        <div class="flex items-center gap-2">
+                            <span class="text-brand">📞</span>
+                            <span id="cardPhone">+1 (305) 555-0142</span>
+                            <span class="text-[10px] text-emerald-400 bg-emerald-500/10 px-1.5 py-0.2 rounded">Verificado</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span class="text-brand">✉️</span>
+                            <span id="cardEmail">concierge@biscaynedentalimplants.com</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span class="text-brand">🌐</span>
+                            <a id="cardWebsite" href="#" target="_blank" class="text-cyan-400 hover:underline truncate">https://biscaynedentalimplants.com</a>
+                        </div>
+                    </div>
+
+                    <!-- Technical Audit Signals -->
+                    <div class="bg-black/40 rounded-xl p-4 border border-white/5 mb-6">
+                        <div class="text-[11px] font-mono text-slate-400 uppercase tracking-wider mb-3 flex items-center justify-between">
+                            <span data-i18n="exp_signals_title">Hallazgos Técnicos de Auditoría</span>
+                            <span class="text-emerald-400 text-[10px]">Verificación en Vivo</span>
+                        </div>
+                        <div class="grid grid-cols-2 gap-2 text-xs font-mono">
+                            <div class="flex items-center gap-2 text-emerald-300">
+                                <span>✓</span> <span>SSL Activo</span>
+                            </div>
+                            <div id="signalPixel" class="flex items-center gap-2 text-rose-400">
+                                <span>✗</span> <span>Sin Meta Pixel</span>
+                            </div>
+                            <div class="flex items-center gap-2 text-emerald-300">
+                                <span>✓</span> <span>Google Analytics</span>
+                            </div>
+                            <div id="signalWidget" class="flex items-center gap-2 text-rose-400">
+                                <span>✗</span> <span>Sin Botón WhatsApp</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Loss Hypothesis -->
+                    <div class="bg-amber-500/10 border border-amber-500/20 rounded-xl p-4 mb-6">
+                        <div class="text-[11px] font-mono text-amber-400 font-bold uppercase mb-1" data-i18n="exp_loss_title">
+                            ⚠️ Fuga Financiera Estimada
+                        </div>
+                        <p id="cardLossHypothesis" class="text-xs text-amber-200/90 leading-relaxed">
+                            Lacking instant mobile conversion triggers causes an estimated leak of 3 to 6 high-ticket clients monthly (approx. $5,400 - $10,800 USD).
+                        </p>
+                    </div>
+
+                    <!-- Pre-drafted Bot Outreach Hook -->
+                    <div>
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-xs font-mono text-slate-400" data-i18n="exp_hook_title">Mensaje de Apertura Pre-redactado:</span>
+                            <button onclick="copyHookText()" id="btnCopyHook" class="text-[11px] font-mono text-brand hover:underline flex items-center gap-1">
+                                📋 <span data-i18n="exp_copy_btn">Copiar Mensaje</span>
+                            </button>
+                        </div>
+                        <div id="cardHookText" class="p-3.5 rounded-xl bg-white/5 border border-white/10 text-xs text-emerald-300 font-sans leading-relaxed italic">
+                            "Hi Biscayne Dental & Implant Center team, I was reviewing your website with strong reviews (142 ratings). Noticed prospective clients searching for dental implants in Miami cannot initiate an instant consultation from mobile..."
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right: Machine M2M JSON Payload -->
+                <div class="lg:col-span-6 code-bg rounded-2xl p-6 shadow-2xl relative overflow-hidden">
+                    <div class="flex items-center justify-between pb-4 mb-4 border-b border-white/5 text-xs text-slate-400 font-mono">
+                        <div class="flex items-center gap-2">
+                            <span class="w-3 h-3 rounded-full bg-red-500/80"></span>
+                            <span class="w-3 h-3 rounded-full bg-yellow-500/80"></span>
+                            <span class="w-3 h-3 rounded-full bg-emerald-500/80"></span>
+                            <span class="ml-2 text-slate-300">nexus_stream_lead.json</span>
+                        </div>
+                        <div class="text-emerald-400 font-semibold font-mono">M2M Webhook Payload</div>
+                    </div>
+
+                    <pre id="jsonPreviewBlock" class="font-mono text-xs md:text-sm text-slate-300 overflow-x-auto leading-relaxed max-h-[580px]"><code>{
   <span class="text-brand">"lead_id"</span>: <span class="text-cyan-300">"nexus_83fa109b"</span>,
   <span class="text-brand">"score"</span>: <span class="text-amber-400">95</span>,
   <span class="text-brand">"tier"</span>: <span class="text-cyan-300">"ULTRA_HIGH"</span>,
-  <span class="text-brand">"business_name"</span>: <span class="text-cyan-300">"Clínica Dental Dr. Velásquez - Implantes"</span>,
+  <span class="text-brand">"business_name"</span>: <span class="text-cyan-300">"Biscayne Dental & Implant Center"</span>,
+  <span class="text-brand">"location"</span>: {
+    <span class="text-brand">"city"</span>: <span class="text-cyan-300">"Miami"</span>,
+    <span class="text-brand">"country"</span>: <span class="text-cyan-300">"US"</span>
+  },
   <span class="text-brand">"contact_channels"</span>: {
-    <span class="text-brand">"whatsapp"</span>: <span class="text-cyan-300">"+34 912 345 678"</span>,
-    <span class="text-brand">"email"</span>: <span class="text-cyan-300">"citas@dentalvelasquez-madrid.es"</span>
+    <span class="text-brand">"phone"</span>: <span class="text-cyan-300">"+1 (305) 555-0142"</span>,
+    <span class="text-brand">"email"</span>: <span class="text-cyan-300">"concierge@biscaynedentalimplants.com"</span>
   },
   <span class="text-brand">"bot_action"</span>: {
     <span class="text-brand">"recommended_channel"</span>: <span class="text-cyan-300">"WHATSAPP"</span>,
     <span class="text-brand">"estimated_ticket_value_usd"</span>: <span class="text-amber-400">1800</span>,
-    <span class="text-brand">"loss_hypothesis"</span>: <span class="text-cyan-300">"Pierden aprox. $5,400 - $10,800 USD/mes por no tener captura rápida en WhatsApp"</span>,
-    <span class="text-brand">"pre_drafted_outreach_hook"</span>: <span class="text-emerald-300">"Hola Dr. Velásquez, noté que reciben visitas interesadas en implantes dentales pero no tienen botón de WhatsApp directo. Estimamos que pierden un 30% de pacientes que cotizan de noche..."</span>
+    <span class="text-brand">"loss_hypothesis"</span>: <span class="text-cyan-300">"Lacking instant mobile conversion triggers causes an estimated leak of 3 to 6 high-ticket clients monthly ($5,400 - $10,800 USD)"</span>,
+    <span class="text-brand">"pre_drafted_outreach_hook"</span>: <span class="text-emerald-300">"Hi Biscayne Dental team, I was reviewing your website with strong reviews..."</span>
   }
 }</code></pre>
+                </div>
             </div>
         </div>
     </section>
 
-    <!-- Pricing Section: ULTRA ECONÓMICOS -->
+    <!-- Pricing Section: PACKS EN DÓLARES -->
     <section id="pricing" class="py-24 border-t border-white/5 bg-[#05070e]">
         <div class="max-w-6xl mx-auto px-6">
             <div class="text-center max-w-2xl mx-auto mb-16">
-                <span class="text-brand text-xs font-mono font-bold uppercase tracking-widest">Elige tu pack</span>
-                <h2 class="text-3xl md:text-5xl font-extrabold text-white mt-2 mb-4">Paga con tarjeta, recibe tu API key al instante</h2>
-                <p class="text-slate-400 text-sm">Sin suscripción ni permanencia. Pagas una vez, tus créditos no caducan y se consumen solo cuando se entrega un lead.</p>
+                <span class="text-brand text-xs font-mono font-bold uppercase tracking-widest" data-i18n="price_tag">Planes y Precios</span>
+                <h2 class="text-3xl md:text-5xl font-extrabold text-white mt-2 mb-4" data-i18n="price_title">
+                    Paga con tarjeta, recibe tu API key al instante
+                </h2>
+                <p class="text-slate-400 text-sm" data-i18n="price_subtitle">
+                    Sin suscripción ni permanencia. Pagas una vez, tus créditos no caducan y se consumen solo cuando se entrega un lead verificado.
+                </p>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
                 <!-- Pack 1: MICRO $9 -->
                 <div class="p-6 rounded-2xl bg-white/[0.02] border border-white/10 flex flex-col justify-between hover:border-brand/30 transition">
                     <div>
-                        <span class="text-[10px] font-mono uppercase bg-white/5 text-slate-300 px-2 py-0.5 rounded">Prueba Inmediata</span>
-                        <div class="text-lg font-bold text-white mt-3 mb-1">Pack Micro</div>
-                        <p class="text-xs text-slate-400 mb-4">Para probar en Make o n8n en 30 segundos.</p>
+                        <span class="text-[10px] font-mono uppercase bg-white/5 text-slate-300 px-2 py-0.5 rounded" data-i18n="p1_badge">Prueba Rápida</span>
+                        <div class="text-lg font-bold text-white mt-3 mb-1" data-i18n="p1_name">Pack Micro</div>
+                        <p class="text-xs text-slate-400 mb-4" data-i18n="p1_desc">Para probar en Make o n8n en 30 segundos.</p>
                         <div class="flex items-baseline gap-1 mb-2">
                             <span class="text-3xl font-extrabold text-white">$9</span>
                             <span class="text-xs text-slate-400">USD</span>
                         </div>
-                        <div class="text-xs font-mono text-brand mb-6 font-semibold">15 Leads ($0.60 c/u)</div>
+                        <div class="text-xs font-mono text-brand mb-6 font-semibold" data-i18n="p1_unit">15 Leads ($0.60 c/u)</div>
                         <ul class="text-xs text-slate-300 space-y-2 mb-6 border-t border-white/5 pt-4">
-                            <li>✓ 15 Leads Calificados</li>
-                            <li>✓ WhatsApp & Webhook</li>
-                            <li>✓ Mensaje de apertura listo</li>
+                            <li data-i18n="p1_f1">✓ 15 Leads Calificados</li>
+                            <li data-i18n="p1_f2">✓ Webhook & API Key</li>
+                            <li data-i18n="p1_f3">✓ Mensaje de apertura incluido</li>
                         </ul>
                     </div>
-                    <button onclick="buyPack(9, 'pack_micro_15', 15)" class="w-full bg-white/10 hover:bg-white/20 text-white font-semibold py-3 rounded-xl transition text-xs flex items-center justify-center gap-1">
+                    <button onclick="buyPack(9, 'pack_micro_15', 15)" class="w-full bg-white/10 hover:bg-white/20 text-white font-semibold py-3 rounded-xl transition text-xs flex items-center justify-center gap-1" data-i18n="btn_buy_9">
                         Comprar pack · $9 USD
                     </button>
                 </div>
@@ -220,47 +345,47 @@
                 <!-- Pack 2: STARTER $29 -->
                 <div class="p-6 rounded-2xl bg-white/[0.02] border border-white/10 flex flex-col justify-between hover:border-brand/30 transition">
                     <div>
-                        <span class="text-[10px] font-mono uppercase bg-cyan-500/10 text-cyan-400 px-2 py-0.5 rounded">Más Accesible</span>
-                        <div class="text-lg font-bold text-white mt-3 mb-1">Pack Starter</div>
-                        <p class="text-xs text-slate-400 mb-4">Prospección continua para 1-2 semanas.</p>
+                        <span class="text-[10px] font-mono uppercase bg-cyan-500/10 text-cyan-400 px-2 py-0.5 rounded" data-i18n="p2_badge">Más Accesible</span>
+                        <div class="text-lg font-bold text-white mt-3 mb-1" data-i18n="p2_name">Pack Starter</div>
+                        <p class="text-xs text-slate-400 mb-4" data-i18n="p2_desc">Prospección continua para 1-2 semanas.</p>
                         <div class="flex items-baseline gap-1 mb-2">
                             <span class="text-3xl font-extrabold text-white">$29</span>
                             <span class="text-xs text-slate-400">USD</span>
                         </div>
-                        <div class="text-xs font-mono text-cyan-400 mb-6 font-semibold">60 Leads ($0.48 c/u)</div>
+                        <div class="text-xs font-mono text-cyan-400 mb-6 font-semibold" data-i18n="p2_unit">60 Leads ($0.48 c/u)</div>
                         <ul class="text-xs text-slate-300 space-y-2 mb-6 border-t border-white/5 pt-4">
-                            <li>✓ 60 Leads Calificados</li>
-                            <li>✓ Diagnóstico de Pixel & Web</li>
-                            <li>✓ Sectores de Ticket Alto</li>
+                            <li data-i18n="p2_f1">✓ 60 Leads Calificados</li>
+                            <li data-i18n="p2_f2">✓ Diagnóstico de Pixel & Web</li>
+                            <li data-i18n="p2_f3">✓ Nichos de Alto Ticket</li>
                         </ul>
                     </div>
-                    <button onclick="buyPack(29, 'pack_starter_60', 60)" class="w-full bg-white/10 hover:bg-white/20 text-white font-semibold py-3 rounded-xl transition text-xs flex items-center justify-center gap-1">
+                    <button onclick="buyPack(29, 'pack_starter_60', 60)" class="w-full bg-white/10 hover:bg-white/20 text-white font-semibold py-3 rounded-xl transition text-xs flex items-center justify-center gap-1" data-i18n="btn_buy_29">
                         Comprar pack · $29 USD
                     </button>
                 </div>
 
                 <!-- Pack 3: PRO $69 (POPULAR) -->
                 <div class="p-6 rounded-2xl bg-brand/5 border-2 border-brand relative flex flex-col justify-between shadow-xl shadow-brand/10">
-                    <div class="absolute -top-3 left-1/2 -translate-x-1/2 bg-brand text-black font-extrabold text-[9px] tracking-widest uppercase px-3 py-0.5 rounded-full">
+                    <div class="absolute -top-3 left-1/2 -translate-x-1/2 bg-brand text-black font-extrabold text-[9px] tracking-widest uppercase px-3 py-0.5 rounded-full" data-i18n="p3_ribbon">
                         Más elegido
                     </div>
                     <div>
-                        <span class="text-[10px] font-mono uppercase bg-brand/20 text-brand px-2 py-0.5 rounded">Mejor Retorno</span>
-                        <div class="text-lg font-bold text-white mt-3 mb-1">Pack Pro</div>
-                        <p class="text-xs text-slate-400 mb-4">Flujo sostenido para agencias y bots activos.</p>
+                        <span class="text-[10px] font-mono uppercase bg-brand/20 text-brand px-2 py-0.5 rounded" data-i18n="p3_badge">Mejor Retorno</span>
+                        <div class="text-lg font-bold text-white mt-3 mb-1" data-i18n="p3_name">Pack Pro</div>
+                        <p class="text-xs text-slate-400 mb-4" data-i18n="p3_desc">Flujo sostenido para agencias y bots activos.</p>
                         <div class="flex items-baseline gap-1 mb-2">
                             <span class="text-3xl font-extrabold text-white">$69</span>
                             <span class="text-xs text-slate-400">USD</span>
                         </div>
-                        <div class="text-xs font-mono text-brand mb-6 font-semibold">200 Leads ($0.34 c/u)</div>
+                        <div class="text-xs font-mono text-brand mb-6 font-semibold" data-i18n="p3_unit">200 Leads ($0.34 c/u)</div>
                         <ul class="text-xs text-slate-300 space-y-2 mb-6 border-t border-white/5 pt-4">
-                            <li>✓ 200 Leads Calificados</li>
-                            <li>✓ Auditoría multi-ciudad</li>
-                            <li>✓ Despacho en tiempo real</li>
-                            <li>✓ Soporte por webhook</li>
+                            <li data-i18n="p3_f1">✓ 200 Leads Calificados</li>
+                            <li data-i18n="p3_f2">✓ Cobertura USA, UK & España</li>
+                            <li data-i18n="p3_f3">✓ Despacho en tiempo real</li>
+                            <li data-i18n="p3_f4">✓ Soporte prioritario por webhook</li>
                         </ul>
                     </div>
-                    <button onclick="buyPack(69, 'pack_pro_200', 200)" class="w-full bg-brand hover:bg-emerald-400 text-black font-extrabold py-3 rounded-xl transition text-xs shadow-lg shadow-brand/20 flex items-center justify-center gap-1">
+                    <button onclick="buyPack(69, 'pack_pro_200', 200)" class="w-full bg-brand hover:bg-emerald-400 text-black font-extrabold py-3 rounded-xl transition text-xs shadow-lg shadow-brand/20 flex items-center justify-center gap-1" data-i18n="btn_buy_69">
                         Comprar pack · $69 USD
                     </button>
                 </div>
@@ -268,22 +393,22 @@
                 <!-- Pack 4: SCALE $149 -->
                 <div class="p-6 rounded-2xl bg-white/[0.02] border border-white/10 flex flex-col justify-between hover:border-brand/30 transition">
                     <div>
-                        <span class="text-[10px] font-mono uppercase bg-purple-500/10 text-purple-400 px-2 py-0.5 rounded">Volumen Máximo</span>
-                        <div class="text-lg font-bold text-white mt-3 mb-1">Pack Scale</div>
-                        <p class="text-xs text-slate-400 mb-4">Costo mínimo para distribución a escala.</p>
+                        <span class="text-[10px] font-mono uppercase bg-purple-500/10 text-purple-400 px-2 py-0.5 rounded" data-i18n="p4_badge">Volumen Máximo</span>
+                        <div class="text-lg font-bold text-white mt-3 mb-1" data-i18n="p4_name">Pack Scale</div>
+                        <p class="text-xs text-slate-400 mb-4" data-i18n="p4_desc">Costo mínimo para distribución a escala.</p>
                         <div class="flex items-baseline gap-1 mb-2">
                             <span class="text-3xl font-extrabold text-white">$149</span>
                             <span class="text-xs text-slate-400">USD</span>
                         </div>
-                        <div class="text-xs font-mono text-purple-400 mb-6 font-semibold">600 Leads ($0.24 c/u)</div>
+                        <div class="text-xs font-mono text-purple-400 mb-6 font-semibold" data-i18n="p4_unit">600 Leads ($0.24 c/u)</div>
                         <ul class="text-xs text-slate-300 space-y-2 mb-6 border-t border-white/5 pt-4">
-                            <li>✓ 600 Leads Calificados</li>
-                            <li>✓ Máximo descuento (-60%)</li>
-                            <li>✓ Entrega por webhook</li>
-                            <li>✓ Soporte directo con desarrolladores</li>
+                            <li data-i18n="p4_f1">✓ 600 Leads Calificados</li>
+                            <li data-i18n="p4_f2">✓ Máximo descuento (-60%)</li>
+                            <li data-i18n="p4_f3">✓ Entrega continua por webhook</li>
+                            <li data-i18n="p4_f4">✓ Soporte directo con desarrolladores</li>
                         </ul>
                     </div>
-                    <button onclick="buyPack(149, 'pack_scale_600', 600)" class="w-full bg-white/10 hover:bg-white/20 text-white font-semibold py-3 rounded-xl transition text-xs flex items-center justify-center gap-1">
+                    <button onclick="buyPack(149, 'pack_scale_600', 600)" class="w-full bg-white/10 hover:bg-white/20 text-white font-semibold py-3 rounded-xl transition text-xs flex items-center justify-center gap-1" data-i18n="btn_buy_149">
                         Comprar pack · $149 USD
                     </button>
                 </div>
@@ -295,24 +420,24 @@
     <div id="activationModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-6">
         <div class="bg-[#0b0f19] border border-white/10 rounded-2xl max-w-md w-full p-8 text-slate-300 text-sm shadow-2xl">
             <div class="flex items-center justify-between mb-4">
-                <h3 class="text-lg font-bold text-white">Finalizar compra</h3>
-                <button onclick="closeModal('activationModal')" class="text-slate-500 hover:text-white">&times;</button>
+                <h3 class="text-lg font-bold text-white" data-i18n="modal_title">Finalizar compra</h3>
+                <button onclick="closeModal('activationModal')" class="text-slate-500 hover:text-white text-xl">&times;</button>
             </div>
             <p class="text-xs text-slate-400 mb-6">
-                Pack seleccionado: <span id="modalAmountText" class="text-brand font-bold"></span><br>
-                Pagas con tarjeta (vía Polar.sh / Stripe) y al volver a esta página recibes tu API key al instante.
+                <span data-i18n="modal_pack_sel">Pack seleccionado:</span> <span id="modalAmountText" class="text-brand font-bold"></span><br>
+                <span data-i18n="modal_processor_notice">Pagas con tarjeta (Polar.sh / Stripe) y recibes tu API key al instante.</span>
             </p>
 
             <form onsubmit="handleCheckoutSubmit(event)" class="space-y-4">
                 <div>
-                    <label class="block text-xs font-mono text-slate-400 mb-1">Tu email (recibo y soporte):</label>
-                    <input type="email" id="buyerEmailInput" required placeholder="tunombre@empresa.com" class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-white text-xs focus:outline-none focus:border-brand">
+                    <label class="block text-xs font-mono text-slate-400 mb-1" data-i18n="modal_email_lbl">Tu email (recibo y soporte):</label>
+                    <input type="email" id="buyerEmailInput" required placeholder="name@agency.com" class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-white text-xs focus:outline-none focus:border-brand">
                 </div>
                 <div>
-                    <label class="block text-xs font-mono text-slate-400 mb-1">¿Ya tienes API key? Pégala para recargar (opcional):</label>
+                    <label class="block text-xs font-mono text-slate-400 mb-1" data-i18n="modal_key_lbl">¿Ya tienes API key? Pégala para recargar (opcional):</label>
                     <input type="text" id="existingKeyInput" placeholder="sk_live_..." class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-white text-xs focus:outline-none focus:border-brand">
                 </div>
-                <button id="checkoutSubmit" type="submit" class="w-full bg-brand hover:bg-emerald-400 text-black font-extrabold py-3 rounded-xl text-sm transition disabled:opacity-60">
+                <button id="checkoutSubmit" type="submit" class="w-full bg-brand hover:bg-emerald-400 text-black font-extrabold py-3 rounded-xl text-sm transition disabled:opacity-60" data-i18n="modal_submit_btn">
                     Ir al pago seguro →
                 </button>
             </form>
@@ -324,20 +449,20 @@
     <section id="templates" class="py-20 border-t border-white/5 bg-gradient-to-b from-[#05070e] to-[#070b14]">
         <div class="max-w-4xl mx-auto px-6 text-center">
             <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 font-mono text-xs mb-6">
-                🎁 Recurso Gratuito para Automatizadores
+                <span data-i18n="n8n_badge">🎁 Recurso Gratuito para Automatizadores</span>
             </div>
-            <h2 class="text-3xl md:text-4xl font-extrabold text-white mb-4">
+            <h2 class="text-3xl md:text-4xl font-extrabold text-white mb-4" data-i18n="n8n_title">
                 Descarga la Plantilla Oficial de n8n
             </h2>
-            <p class="text-slate-400 text-sm max-w-2xl mx-auto mb-8 leading-relaxed">
+            <p class="text-slate-400 text-sm max-w-2xl mx-auto mb-8 leading-relaxed" data-i18n="n8n_desc">
                 Importa este flujo en tu instancia de n8n en 5 segundos. Incluye el cron programado a las 9 AM, la llamada a la API de NexusLeadEngine y el formateo automático para WhatsApp o CRM.
             </p>
             <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
-                <a href="/templates/n8n" download="nexus_n8n_lead_workflow.json" class="w-full sm:w-auto bg-brand hover:bg-emerald-400 text-black font-extrabold px-8 py-3.5 rounded-xl transition text-sm flex items-center justify-center gap-2 shadow-xl shadow-brand/20">
+                <a href="/templates/n8n" download="nexus_n8n_lead_workflow.json" class="w-full sm:w-auto bg-brand hover:bg-emerald-400 text-black font-extrabold px-8 py-3.5 rounded-xl transition text-sm flex items-center justify-center gap-2 shadow-xl shadow-brand/20" data-i18n="n8n_btn_download">
                     <span>⬇</span> Descargar Flujo n8n (.JSON)
                 </a>
                 <a href="/docs" target="_blank" class="w-full sm:w-auto bg-white/5 hover:bg-white/10 text-white font-medium border border-white/10 px-6 py-3.5 rounded-xl transition text-xs font-mono">
-                    Ver Especificación OpenAPI ↗
+                    OpenAPI Specification ↗
                 </a>
             </div>
         </div>
@@ -350,36 +475,37 @@
                 <div class="flex items-center gap-2 font-bold text-white text-base mb-4">
                     <span>⚡ NexusLeadEngine.io</span>
                 </div>
-                <p class="leading-relaxed mb-4">
-                    Leads B2B de ticket alto para agencias, con mensaje de apertura listo.
+                <p class="leading-relaxed mb-4" data-i18n="footer_about">
+                    Inteligencia y comercialización de leads B2B de alto ticket para agencias y sistemas de automatización.
                 </p>
                 <div class="text-slate-500 font-mono">
-                    Contacto: hola@nexusleadengine.io
+                    hola@nexusleadengine.io
                 </div>
             </div>
 
             <div>
-                <div class="font-semibold text-white mb-3">API & Documentación</div>
+                <div class="font-semibold text-white mb-3" data-i18n="footer_col_api">API & Recursos</div>
                 <ul class="space-y-2">
-                    <li><a href="/docs" class="hover:text-white transition">Swagger API Docs (/docs)</a></li>
-                    <li><a href="#payload" class="hover:text-white transition">Estructura del Payload JSON</a></li>
-                    <li><a href="#pricing" class="hover:text-white transition">Elige tu pack</a></li>
+                    <li><a href="/docs" class="hover:text-white transition">Swagger API (/docs)</a></li>
+                    <li><a href="#explorer" class="hover:text-white transition" data-i18n="footer_nav_explorer">Explorador de Leads</a></li>
+                    <li><a href="#pricing" class="hover:text-white transition" data-i18n="footer_nav_pricing">Precios & Planes</a></li>
+                    <li><a href="/dashboard" class="hover:text-white transition">Dashboard de Telemetría</a></li>
                 </ul>
             </div>
 
             <div>
-                <div class="font-semibold text-white mb-3">Legal & Cumplimiento</div>
+                <div class="font-semibold text-white mb-3" data-i18n="footer_col_legal">Legal & Cumplimiento</div>
                 <ul class="space-y-2">
-                    <li><a href="#termsModal" onclick="openModal('termsModal')" class="hover:text-white transition underline">Términos de Servicio</a></li>
-                    <li><a href="#privacyModal" onclick="openModal('privacyModal')" class="hover:text-white transition underline">Política de Privacidad</a></li>
-                    <li><a href="#refundModal" onclick="openModal('refundModal')" class="hover:text-white transition underline">Garantía de Reembolso (14 días)</a></li>
+                    <li><a href="#termsModal" onclick="openModal('termsModal')" class="hover:text-white transition underline" data-i18n="footer_terms">Términos del Servicio</a></li>
+                    <li><a href="#privacyModal" onclick="openModal('privacyModal')" class="hover:text-white transition underline" data-i18n="footer_privacy">Política de Privacidad</a></li>
+                    <li><a href="#refundModal" onclick="openModal('refundModal')" class="hover:text-white transition underline" data-i18n="footer_refund">Garantía de Reembolso (14 días)</a></li>
                 </ul>
             </div>
 
             <div>
-                <div class="font-semibold text-white mb-3">Pagos & Facturación</div>
-                <p class="leading-relaxed mb-2">
-                    Pago seguro global procesado por Polar.sh (Merchant of Record) y Stripe. IVA/Sales Tax gestionado automáticamente.
+                <div class="font-semibold text-white mb-3" data-i18n="footer_col_pay">Pagos Globales</div>
+                <p class="leading-relaxed mb-2" data-i18n="footer_pay_desc">
+                    Cobro seguro internacional procesado por Polar.sh (Merchant of Record) y Stripe. Cumplimiento fiscal global automático.
                 </p>
                 <a href="mailto:hola@nexusleadengine.io" class="text-brand hover:underline font-mono">
                     hola@nexusleadengine.io
@@ -388,9 +514,9 @@
         </div>
 
         <div class="max-w-7xl mx-auto px-6 border-t border-white/5 pt-8 flex flex-col md:flex-row items-center justify-between gap-4 text-slate-600">
-            <div>© 2026 NexusLeadEngine.io. Dominio oficial: nexusleadengine.io • Correo: hola@nexusleadengine.io</div>
+            <div>© 2026 NexusLeadEngine.io • nexusleadengine.io • hola@nexusleadengine.io</div>
             <div class="flex items-center gap-6">
-                <span>Hecho para agencias y automatizadores</span>
+                <span data-i18n="footer_tagline">Diseñado para agencias globales en US, UK y Europa</span>
             </div>
         </div>
     </footer>
@@ -398,32 +524,356 @@
     <!-- Legal Modals -->
     <div id="termsModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-6">
         <div class="bg-[#0b0f19] border border-white/10 rounded-2xl max-w-2xl w-full p-8 max-h-[80vh] overflow-y-auto text-slate-300 text-sm">
-            <h3 class="text-xl font-bold text-white mb-4">Términos del Servicio • NexusLeadEngine.io</h3>
-            <p class="mb-4">NexusLeadEngine.io comercializa acceso a inteligencia y auditoría de prospectos B2B en tiempo real mediante APIs y Webhooks. Los créditos se consumen por cada lead calificado entregado con éxito.</p>
-            <p class="mb-4">Para soporte o consultas corporativas, escríbenos a: <strong>hola@nexusleadengine.io</strong>.</p>
+            <h3 class="text-xl font-bold text-white mb-4" data-i18n="terms_h">Términos del Servicio • NexusLeadEngine.io</h3>
+            <p class="mb-4" data-i18n="terms_p1">NexusLeadEngine.io comercializa acceso a inteligencia y auditoría de prospectos B2B en tiempo real mediante APIs y Webhooks. Los créditos prepagados se consumen por cada lead calificado entregado con éxito.</p>
+            <p class="mb-4">Contacto: <strong>hola@nexusleadengine.io</strong>.</p>
             <button onclick="closeModal('termsModal')" class="mt-4 bg-brand text-black font-semibold px-6 py-2 rounded-xl">Cerrar</button>
         </div>
     </div>
 
     <div id="privacyModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-6">
         <div class="bg-[#0b0f19] border border-white/10 rounded-2xl max-w-2xl w-full p-8 max-h-[80vh] overflow-y-auto text-slate-300 text-sm">
-            <h3 class="text-xl font-bold text-white mb-4">Política de Privacidad • NexusLeadEngine.io</h3>
-            <p class="mb-4">En NexusLeadEngine.io protegemos la privacidad de nuestros clientes. Solo recolectamos los datos necesarios para autenticar tu API Key y activar tus créditos (tu email de compra). No almacenamos datos de tarjeta; todas las transacciones son procesadas externamente por Polar.sh y Stripe.</p>
-            <p class="mb-4">Contacto de privacidad: <strong>hola@nexusleadengine.io</strong>.</p>
+            <h3 class="text-xl font-bold text-white mb-4" data-i18n="privacy_h">Política de Privacidad • NexusLeadEngine.io</h3>
+            <p class="mb-4" data-i18n="privacy_p1">En NexusLeadEngine.io protegemos la privacidad de nuestros clientes. Solo recolectamos los datos necesarios para autenticar tu API Key y activar tus créditos (tu email de compra). No almacenamos datos de tarjeta; todas las transacciones son procesadas externamente por Polar.sh (Merchant of Record) y Stripe.</p>
+            <p class="mb-4">Contacto: <strong>hola@nexusleadengine.io</strong>.</p>
             <button onclick="closeModal('privacyModal')" class="mt-4 bg-brand text-black font-semibold px-6 py-2 rounded-xl">Cerrar</button>
         </div>
     </div>
 
     <div id="refundModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-6">
         <div class="bg-[#0b0f19] border border-white/10 rounded-2xl max-w-2xl w-full p-8 max-h-[80vh] overflow-y-auto text-slate-300 text-sm">
-            <h3 class="text-xl font-bold text-white mb-4">Política de Reembolso (14 días)</h3>
-            <p class="mb-4">Ofrecemos una garantía total de reembolso durante los primeros 14 días si no estás conforme con la calidad de los datos y has consumido menos del 20% de tus créditos. Para solicitar un reembolso, escribe a <strong>hola@nexusleadengine.io</strong> indicando el email con el que compraste.</p>
+            <h3 class="text-xl font-bold text-white mb-4" data-i18n="refund_h">Garantía de Reembolso (14 días)</h3>
+            <p class="mb-4" data-i18n="refund_p1">Ofrecemos una garantía total de reembolso durante los primeros 14 días si no estás conforme con la calidad de los datos y has consumido menos del 20% de tus créditos. Para solicitar un reembolso, escribe a <strong>hola@nexusleadengine.io</strong> con tu email de compra.</p>
             <button onclick="closeModal('refundModal')" class="mt-4 bg-brand text-black font-semibold px-6 py-2 rounded-xl">Cerrar</button>
         </div>
     </div>
 
+    <!-- Core Interactive Client-Side Script -->
     <script>
+        let currentCountry = 'US';
+        let currentLang = 'en'; // default English for global high ticket
         let currentPackage = { price: 9, id: 'pack_micro_15', credits: 15 };
+
+        // i18n Translations Dictionary
+        const I18N = {
+            en: {
+                badge_tier1: "Global Tier-1",
+                nav_explorer: "Lead Explorer",
+                nav_features: "How It Works",
+                nav_pricing: "Pricing",
+                nav_n8n: "🎁 Free n8n Flow",
+                nav_telemetry: "Live Telemetry",
+                nav_cta_buy: "Buy Leads ($9 USD)",
+                hero_pill: "⚡ Built for B2B Marketing Agencies & Automators",
+                hero_title: `High-ticket B2B leads for agencies, <br><span class="gradient-text">with tech audit & outreach pre-drafted</span>`,
+                hero_subtitle: "Receive qualified dental clinics, luxury remodelers, and high-ticket service prospects with verified phone, email, and conversion leak diagnostics. Delivered to your CRM, Make, or n8n. Starting at $9 USD, zero subscriptions.",
+                hero_cta_primary: "View Packs from $9 USD",
+                hero_cta_secondary: "Explore Live Leads ↓",
+                metric_1_val: "From $0.24",
+                metric_1_lbl: "per qualified lead",
+                metric_2_val: "Tier-1 Markets",
+                metric_2_lbl: "USA, UK & Spain",
+                metric_3_val: "Make · n8n · GHL",
+                metric_3_lbl: "Ready Webhooks & JSON",
+                metric_4_val: "14 Days",
+                metric_4_lbl: "Money-back guarantee",
+                exp_tag: "Interactive Explorer",
+                exp_title: "Real-Time Prospect Audit Engine",
+                exp_subtitle: "Select a global Tier-1 market to audit verified businesses in real time with conversion leak detection and pre-drafted icebreakers.",
+                exp_select_country: "Country:",
+                exp_btn_refresh: "Audit Next Lead",
+                exp_signals_title: "Technical Audit Signals",
+                exp_loss_title: "⚠️ Estimated Monthly Revenue Leak",
+                exp_hook_title: "Pre-Drafted Outreach Icebreaker:",
+                exp_copy_btn: "Copy Message",
+                price_tag: "Packs & Pricing",
+                price_title: "Pay with Card, Get Your API Key Instantly",
+                price_subtitle: "No recurring subscription. Pay once, your credits never expire, and they are only deducted when a qualified lead is delivered.",
+                p1_badge: "Instant Test",
+                p1_name: "Micro Pack",
+                p1_desc: "Ideal for testing inside Make or n8n in 30 seconds.",
+                p1_unit: "15 Leads ($0.60 ea)",
+                p1_f1: "✓ 15 Qualified Leads",
+                p1_f2: "✓ Webhook & API Key",
+                p1_f3: "✓ Pre-drafted icebreaker included",
+                btn_buy_9: "Get Micro · $9 USD",
+                p2_badge: "Most Accessible",
+                p2_name: "Starter Pack",
+                p2_desc: "Consistent prospecting flow for 1-2 weeks.",
+                p2_unit: "60 Leads ($0.48 ea)",
+                p2_f1: "✓ 60 Qualified Leads",
+                p2_f2: "✓ Pixel & Web Audit Signals",
+                p2_f3: "✓ High-Ticket Local Niches",
+                btn_buy_29: "Get Starter · $29 USD",
+                p3_ribbon: "Most Popular",
+                p3_badge: "Best ROI",
+                p3_name: "Pro Pack",
+                p3_desc: "Steady lead flow for active agencies and sales bots.",
+                p3_unit: "200 Leads ($0.34 ea)",
+                p3_f1: "✓ 200 Qualified Leads",
+                p3_f2: "✓ USA, UK & Spain Coverage",
+                p3_f3: "✓ Real-Time Webhook Streaming",
+                p3_f4: "✓ Priority Webhook Support",
+                btn_buy_69: "Get Pro · $69 USD",
+                p4_badge: "Max Volume",
+                p4_name: "Scale Pack",
+                p4_desc: "Lowest cost per lead for agencies scaling outreach.",
+                p4_unit: "600 Leads ($0.24 ea)",
+                p4_f1: "✓ 600 Qualified Leads",
+                p4_f2: "✓ Maximum Discount (-60%)",
+                p4_f3: "✓ Webhook Continuous Delivery",
+                p4_f4: "✓ Direct Developer Support",
+                btn_buy_149: "Get Scale · $149 USD",
+                modal_title: "Complete Purchase",
+                modal_pack_sel: "Selected Pack:",
+                modal_processor_notice: "Secured by Polar.sh (Merchant of Record) & Stripe. Receive your API key instantly.",
+                modal_email_lbl: "Your Email (for receipt and API key access):",
+                modal_key_lbl: "Have an existing API key? Paste to top up (optional):",
+                modal_submit_btn: "Proceed to Secure Checkout →",
+                n8n_badge: "🎁 Free Automation Resource",
+                n8n_title: "Download the Official n8n Workflow",
+                n8n_desc: "Import this blueprint into your n8n workspace in 5 seconds. Includes scheduled 9 AM trigger, NexusLeadEngine API call, and formatting for WhatsApp, Slack, or CRM.",
+                n8n_btn_download: "⬇ Download n8n Flow (.JSON)",
+                footer_about: "B2B lead intelligence and conversion audit engine designed for growth agencies and autonomous outreach systems.",
+                footer_col_api: "API & Resources",
+                footer_nav_explorer: "Lead Explorer",
+                footer_nav_pricing: "Pricing & Packs",
+                footer_col_legal: "Legal & Compliance",
+                footer_terms: "Terms of Service",
+                footer_privacy: "Privacy Policy",
+                footer_refund: "14-Day Refund Guarantee",
+                footer_col_pay: "Global Billing",
+                footer_pay_desc: "Global compliant transactions powered by Polar.sh (Merchant of Record) and Stripe. Automated VAT / Sales tax handling.",
+                footer_tagline: "Built for global agencies across the US, UK, and Europe",
+                terms_h: "Terms of Service • NexusLeadEngine.io",
+                terms_p1: "NexusLeadEngine.io provides real-time B2B prospect audit intelligence via APIs and Webhooks. Prepaid credits are deducted per qualified prospect successfully delivered.",
+                privacy_h: "Privacy Policy • NexusLeadEngine.io",
+                privacy_p1: "We only collect data necessary to authenticate your API key and activate your credits (your checkout email). We never store payment card data; transactions are processed externally by Polar.sh and Stripe.",
+                refund_h: "14-Day Money-Back Guarantee",
+                refund_p1: "We offer a 100% money-back guarantee for 14 days if you are unsatisfied with lead quality and have consumed less than 20% of your purchased credits. Email hola@nexusleadengine.io with your checkout email."
+            },
+            es: {
+                badge_tier1: "Global Tier-1",
+                nav_explorer: "Explorador de Leads",
+                nav_features: "Cómo Opera",
+                nav_pricing: "Precios",
+                nav_n8n: "🎁 Plantilla n8n",
+                nav_telemetry: "Telemetría",
+                nav_cta_buy: "Comprar Leads ($9 USD)",
+                hero_pill: "⚡ Para agencias de marketing y automatizadores B2B",
+                hero_title: `Leads de ticket alto para agencias, <br><span class="gradient-text">con auditoría técnica y mensaje listo</span>`,
+                hero_subtitle: "Recibe prospectos calificados de clínicas dentales, reformas y servicios con teléfono, email y diagnóstico de fuga de conversión. Llegan directo a tu CRM, Make o n8n. Packs desde $9 USD, sin suscripción.",
+                hero_cta_primary: "Ver packs desde $9 USD",
+                hero_cta_secondary: "Explorar leads en vivo ↓",
+                metric_1_val: "Desde $0.24",
+                metric_1_lbl: "por lead entregado",
+                metric_2_val: "Tier-1 Global",
+                metric_2_lbl: "USA, UK & España",
+                metric_3_val: "Make · n8n · GHL",
+                metric_3_lbl: "Webhooks & Plantillas",
+                metric_4_val: "14 Días",
+                metric_4_lbl: "Garantía de reembolso",
+                exp_tag: "Buscador Interactivo",
+                exp_title: "Auditoría de Prospectos en Tiempo Real",
+                exp_subtitle: "Selecciona un mercado global para auditar prospectos verificados con diagnóstico de fuga de clientes y hook de contacto listo.",
+                exp_select_country: "País:",
+                exp_btn_refresh: "Re-auditar / Siguiente",
+                exp_signals_title: "Hallazgos Técnicos de Auditoría",
+                exp_loss_title: "⚠️ Fuga Financiera Estimada",
+                exp_hook_title: "Mensaje de Apertura Pre-redactado:",
+                exp_copy_btn: "Copiar Mensaje",
+                price_tag: "Planes y Precios",
+                price_title: "Paga con tarjeta, recibe tu API key al instante",
+                price_subtitle: "Sin suscripción ni permanencia. Pagas una vez, tus créditos no caducan y se consumen solo cuando se entrega un lead verificado.",
+                p1_badge: "Prueba Rápida",
+                p1_name: "Pack Micro",
+                p1_desc: "Para probar en Make o n8n en 30 segundos.",
+                p1_unit: "15 Leads ($0.60 c/u)",
+                p1_f1: "✓ 15 Leads Calificados",
+                p1_f2: "✓ Webhook & API Key",
+                p1_f3: "✓ Mensaje de apertura incluido",
+                btn_buy_9: "Comprar pack · $9 USD",
+                p2_badge: "Más Accesible",
+                p2_name: "Pack Starter",
+                p2_desc: "Prospección continua para 1-2 semanas.",
+                p2_unit: "60 Leads ($0.48 c/u)",
+                p2_f1: "✓ 60 Leads Calificados",
+                p2_f2: "✓ Diagnóstico de Pixel & Web",
+                p2_f3: "✓ Nichos de Alto Ticket",
+                btn_buy_29: "Comprar pack · $29 USD",
+                p3_ribbon: "Más elegido",
+                p3_badge: "Mejor Retorno",
+                p3_name: "Pack Pro",
+                p3_desc: "Flujo sostenido para agencias y bots activos.",
+                p3_unit: "200 Leads ($0.34 c/u)",
+                p3_f1: "✓ 200 Leads Calificados",
+                p3_f2: "✓ Cobertura USA, UK & España",
+                p3_f3: "✓ Despacho en tiempo real",
+                p3_f4: "✓ Soporte prioritario por webhook",
+                btn_buy_69: "Comprar pack · $69 USD",
+                p4_badge: "Volumen Máximo",
+                p4_name: "Pack Scale",
+                p4_desc: "Costo mínimo para distribución a escala.",
+                p4_unit: "600 Leads ($0.24 c/u)",
+                p4_f1: "✓ 600 Leads Calificados",
+                p4_f2: "✓ Máximo descuento (-60%)",
+                p4_f3: "✓ Entrega continua por webhook",
+                p4_f4: "✓ Soporte directo con desarrolladores",
+                btn_buy_149: "Comprar pack · $149 USD",
+                modal_title: "Finalizar compra",
+                modal_pack_sel: "Pack seleccionado:",
+                modal_processor_notice: "Pagas con tarjeta (Polar.sh / Stripe) y recibes tu API key al instante.",
+                modal_email_lbl: "Tu email (recibo y soporte):",
+                modal_key_lbl: "¿Ya tienes API key? Pégala para recargar (opcional):",
+                modal_submit_btn: "Ir al pago seguro →",
+                n8n_badge: "🎁 Recurso Gratuito para Automatizadores",
+                n8n_title: "Descarga la Plantilla Oficial de n8n",
+                n8n_desc: "Importa este flujo en tu instancia de n8n en 5 segundos. Incluye el cron programado a las 9 AM, la llamada a la API de NexusLeadEngine y el formateo automático para WhatsApp o CRM.",
+                n8n_btn_download: "⬇ Descargar Flujo n8n (.JSON)",
+                footer_about: "Inteligencia y comercialización de leads B2B de alto ticket para agencias y sistemas de automatización.",
+                footer_col_api: "API & Recursos",
+                footer_nav_explorer: "Explorador de Leads",
+                footer_nav_pricing: "Precios & Planes",
+                footer_col_legal: "Legal & Cumplimiento",
+                footer_terms: "Términos del Servicio",
+                footer_privacy: "Política de Privacidad",
+                footer_refund: "Garantía de Reembolso (14 días)",
+                footer_col_pay: "Pagos Globales",
+                footer_pay_desc: "Cobro seguro internacional procesado por Polar.sh (Merchant of Record) y Stripe. Cumplimiento fiscal global automático.",
+                footer_tagline: "Diseñado para agencias globales en US, UK y Europa",
+                terms_h: "Términos del Servicio • NexusLeadEngine.io",
+                terms_p1: "NexusLeadEngine.io comercializa acceso a inteligencia y auditoría de prospectos B2B en tiempo real mediante APIs y Webhooks. Los créditos prepagados se consumen por cada lead calificado entregado con éxito.",
+                privacy_h: "Política de Privacidad • NexusLeadEngine.io",
+                privacy_p1: "En NexusLeadEngine.io protegemos la privacidad de nuestros clientes. Solo recolectamos los datos necesarios para autenticar tu API Key y activar tus créditos (tu email de compra). No almacenamos datos de tarjeta; todas las transacciones son procesadas externamente por Polar.sh (Merchant of Record) y Stripe.",
+                refund_h: "Garantía de Reembolso (14 días)",
+                refund_p1: "Ofrecemos una garantía total de reembolso durante los primeros 14 días si no estás conforme con la calidad de los datos y has consumido menos del 20% de tus créditos. Para solicitar un reembolso, escribe a hola@nexusleadengine.io con tu email de compra."
+            }
+        };
+
+        function setLanguage(lang) {
+            currentLang = lang;
+            localStorage.setItem('nexus_lang', lang);
+            
+            // Toggle active button style
+            const btnEn = document.getElementById('btnLangEn');
+            const btnEs = document.getElementById('btnLangEs');
+            if (lang === 'en') {
+                btnEn.className = "px-2.5 py-1 rounded-lg transition font-bold text-white bg-white/10";
+                btnEs.className = "px-2.5 py-1 rounded-lg transition text-slate-400 hover:text-white";
+                document.documentElement.lang = "en";
+            } else {
+                btnEs.className = "px-2.5 py-1 rounded-lg transition font-bold text-white bg-white/10";
+                btnEn.className = "px-2.5 py-1 rounded-lg transition text-slate-400 hover:text-white";
+                document.documentElement.lang = "es";
+            }
+
+            // Translate all elements with data-i18n attribute
+            const dict = I18N[lang];
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (dict[key]) {
+                    el.innerHTML = dict[key];
+                }
+            });
+        }
+
+        function selectCountry(countryCode) {
+            currentCountry = countryCode;
+            ['US', 'GB', 'ES'].forEach(c => {
+                const btn = document.getElementById('tab' + c);
+                if (c === countryCode) {
+                    btn.className = "px-3.5 py-1.5 rounded-lg text-xs font-bold transition text-black bg-brand";
+                } else {
+                    btn.className = "px-3.5 py-1.5 rounded-lg text-xs font-medium transition text-slate-400 hover:text-white";
+                }
+            });
+            fetchLeadSample();
+        }
+
+        async function fetchLeadSample() {
+            const spinner = document.getElementById('spinnerLead');
+            spinner.classList.remove('hidden');
+
+            try {
+                const res = await fetch(`/v1/leads/sample?country_code=${currentCountry}`);
+                if (!res.ok) throw new Error('Lead audit failed');
+                const lead = await res.json();
+                renderLead(lead);
+            } catch (err) {
+                console.error("Error fetching lead:", err);
+            } finally {
+                spinner.classList.add('hidden');
+            }
+        }
+
+        function renderLead(lead) {
+            // Visual Card Updates
+            const flag = lead.location.country === 'US' ? '🇺🇸' : (lead.location.country === 'GB' ? '🇬🇧' : '🇪🇸');
+            document.getElementById('cardCountryBadge').textContent = `${flag} ${lead.location.country} · ${lead.location.city}`;
+            document.getElementById('cardNicheBadge').textContent = lead.category;
+            document.getElementById('cardScoreBadge').textContent = `${lead.score} / 100 · ${lead.tier}`;
+            document.getElementById('cardBusinessName').textContent = lead.business_name;
+            document.getElementById('cardPhone').textContent = lead.contact_channels.phone || 'N/A';
+            document.getElementById('cardEmail').textContent = lead.contact_channels.email || 'N/A';
+            
+            const webEl = document.getElementById('cardWebsite');
+            webEl.textContent = lead.contact_channels.website || '#';
+            webEl.href = lead.contact_channels.website || '#';
+
+            // Audit signals
+            const sigPixel = document.getElementById('signalPixel');
+            if (lead.tech_signals.has_meta_pixel) {
+                sigPixel.innerHTML = `<span>✓</span> <span>Meta Pixel Activo</span>`;
+                sigPixel.className = "flex items-center gap-2 text-emerald-300";
+            } else {
+                sigPixel.innerHTML = `<span>✗</span> <span>${currentLang === 'en' ? 'Missing Meta Pixel' : 'Sin Meta Pixel'}</span>`;
+                sigPixel.className = "flex items-center gap-2 text-rose-400";
+            }
+
+            const sigWidget = document.getElementById('signalWidget');
+            if (lead.tech_signals.has_whatsapp_widget) {
+                sigWidget.innerHTML = `<span>✓</span> <span>${currentLang === 'en' ? 'Mobile Widget Active' : 'Widget Activo'}</span>`;
+                sigWidget.className = "flex items-center gap-2 text-emerald-300";
+            } else {
+                sigWidget.innerHTML = `<span>✗</span> <span>${currentLang === 'en' ? 'Missing Booking Widget' : 'Sin Botón WhatsApp'}</span>`;
+                sigWidget.className = "flex items-center gap-2 text-rose-400";
+            }
+
+            document.getElementById('cardLossHypothesis').textContent = lead.bot_action.loss_hypothesis;
+            document.getElementById('cardHookText').textContent = `"${lead.bot_action.pre_drafted_outreach_hook}"`;
+
+            // Syntax-highlighted JSON Code Block
+            const jsonText = JSON.stringify(lead, null, 2);
+            document.getElementById('jsonPreviewBlock').innerHTML = `<code>${syntaxHighlight(jsonText)}</code>`;
+        }
+
+        function syntaxHighlight(json) {
+            json = json.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+            return json.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\\-]?\d+)?)/g, function (match) {
+                let cls = 'text-amber-400';
+                if (/^"/.test(match)) {
+                    if (/:$/.test(match)) {
+                        cls = 'text-brand';
+                    } else {
+                        cls = 'text-cyan-300';
+                    }
+                } else if (/true|false/.test(match)) {
+                    cls = 'text-emerald-400';
+                } else if (/null/.test(match)) {
+                    cls = 'text-slate-500';
+                }
+                return '<span class="' + cls + '">' + match + '</span>';
+            });
+        }
+
+        function copyHookText() {
+            const hook = document.getElementById('cardHookText').innerText.replace(/^"|"$/g, '');
+            navigator.clipboard.writeText(hook);
+            const btn = document.getElementById('btnCopyHook');
+            const original = btn.innerHTML;
+            btn.innerHTML = `✓ ${currentLang === 'en' ? 'Copied!' : '¡Copiado!'}`;
+            setTimeout(() => { btn.innerHTML = original; }, 2000);
+        }
 
         function openModal(id) {
             document.getElementById(id).classList.remove('hidden');
@@ -447,7 +897,7 @@
             const submitBtn = document.getElementById('checkoutSubmit');
 
             resultBox.classList.remove('hidden');
-            resultBox.innerText = 'Preparando pago seguro...';
+            resultBox.innerText = currentLang === 'en' ? 'Preparing secure checkout...' : 'Preparando pago seguro...';
             submitBtn.disabled = true;
 
             try {
@@ -464,15 +914,21 @@
                     return;
                 }
                 const detail = data.detail;
-                const msg = (detail && detail.message) ? detail.message : (typeof detail === 'string' ? detail : 'No se pudo iniciar el pago.');
-                const contact = (detail && detail.contact) ? ` Escríbenos a ${detail.contact} y te activamos tu pack.` : '';
-                resultBox.innerHTML = `<span class="text-rose-400 font-bold">Error:</span> ${msg}${contact}`;
+                const msg = (detail && detail.message) ? detail.message : (typeof detail === 'string' ? detail : 'Payment initialization failed.');
+                resultBox.innerHTML = `<span class="text-rose-400 font-bold">Error:</span> ${msg}`;
             } catch (err) {
-                resultBox.innerHTML = `<span class="text-rose-400 font-bold">Error de red:</span> ${err.message}`;
+                resultBox.innerHTML = `<span class="text-rose-400 font-bold">Network Error:</span> ${err.message}`;
             } finally {
                 submitBtn.disabled = false;
             }
         }
+
+        // Initialize preferred language & first sample lead
+        window.addEventListener('DOMContentLoaded', () => {
+            const savedLang = localStorage.getItem('nexus_lang') || (navigator.language && navigator.language.startsWith('es') ? 'es' : 'en');
+            setLanguage(savedLang);
+            fetchLeadSample();
+        });
     </script>
 </body>
 </html>

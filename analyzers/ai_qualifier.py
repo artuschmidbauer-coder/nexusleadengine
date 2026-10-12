@@ -94,15 +94,26 @@ class AIQualifier:
         # Determine best channel
         best_channel = ChannelType.WHATSAPP if has_phone else (ChannelType.COLD_EMAIL if has_email else ChannelType.PHONE)
 
+        # Detect locale from country
+        is_english = (prospect.country or "US").upper() in ("US", "GB", "CA", "AU", "UK")
+
         # Generate pre-drafted personalized hook for their bot
-        hook = self._generate_bot_hook(prospect, tech, benchmark, pain_points)
+        hook = self._generate_bot_hook(prospect, tech, benchmark, pain_points, is_english=is_english)
 
         # Estimated financial loss
         estimated_ticket = benchmark["ticket_usd"]
-        loss_hypothesis = (
-            f"Al no tener captura rápida por WhatsApp ni retargeting, pierden un estimado de "
-            f"3 a 6 cotizaciones mensuales (aprox. ${estimated_ticket * 3:,.0f} - ${estimated_ticket * 6:,.0f} USD)."
-        )
+        if is_english:
+            loss_hypothesis = (
+                f"Lacking instant mobile conversion triggers causes an estimated leak of "
+                f"3 to 6 high-ticket clients monthly (approx. ${estimated_ticket * 3:,.0f} - ${estimated_ticket * 6:,.0f} USD)."
+            )
+            pitch_angle = f"Deploy automated lead capture & instant booking workflow for {prospect.category}"
+        else:
+            loss_hypothesis = (
+                f"Al no tener captura rápida por WhatsApp ni retargeting, pierden un estimado de "
+                f"3 a 6 cotizaciones mensuales (aprox. ${estimated_ticket * 3:,.0f} - ${estimated_ticket * 6:,.0f} USD)."
+            )
+            pitch_angle = f"Implementar embudo de captación automatizada y atención en WhatsApp para {prospect.category}"
 
         bot_action = BotActionPayload(
             recommended_channel=best_channel,
@@ -110,7 +121,7 @@ class AIQualifier:
             pain_points=pain_points,
             loss_hypothesis=loss_hypothesis,
             pre_drafted_outreach_hook=hook,
-            service_pitch_angle=f"Implementar embudo de captación automatizada y atención en WhatsApp para {prospect.category}"
+            service_pitch_angle=pitch_angle
         )
 
         return EnrichedLead(
@@ -130,10 +141,25 @@ class AIQualifier:
             raw_metadata={"benchmark_applied": benchmark["label"], "reviews_count": reviews, "rating": rating}
         )
 
-    def _generate_bot_hook(self, p: ProspectRaw, t: TechSignal, b: dict, pain_points: List[str]) -> str:
+    def _generate_bot_hook(self, p: ProspectRaw, t: TechSignal, b: dict, pain_points: List[str], is_english: bool = False) -> str:
         """Generates a hyper-personalized icebreaker formatted for the client's automated bot"""
-        reviews_mention = f"con excelentes reseñas ({p.reviews_count} opiniones)" if (p.reviews_count and p.reviews_count > 10) else ""
+        if is_english:
+            reviews_mention = f"with strong reviews ({p.reviews_count} ratings)" if (p.reviews_count and p.reviews_count > 10) else ""
+            if not t.has_whatsapp_widget:
+                return (
+                    f"Hi {p.name} team, I was reviewing your website {reviews_mention}. "
+                    f"Noticed prospective clients searching for {p.category} in {p.city} cannot initiate an instant consultation from mobile. "
+                    f"Over 65% of high-intent patients bounce to competitors if not engaged within 5 minutes. "
+                    f"Would you be open to seeing a 60-second preview of how our automated booking widget captures these leads?"
+                )
+            else:
+                return (
+                    f"Hi {p.name} team, love what you've built in {p.city} for {p.category}. "
+                    f"We run automated website diagnostics for local businesses and noticed strong organic search intent in your area. "
+                    f"Does your team have capacity to handle 10-15 qualified high-ticket consultations this month?"
+                )
 
+        reviews_mention = f"con excelentes reseñas ({p.reviews_count} opiniones)" if (p.reviews_count and p.reviews_count > 10) else ""
         if not t.has_whatsapp_widget:
             return (
                 f"Hola equipo de {p.name}, estuve revisando su sitio web {reviews_mention}. "

@@ -408,9 +408,20 @@ def trigger_scan(
     return new_leads
 
 @app.get("/v1/leads/sample", response_model=EnrichedLead, tags=["Lead Engine"])
-def get_sample_lead():
+def get_sample_lead(country_code: Optional[str] = "US"):
     """Generates an instant sample high-ticket lead to preview payload structure."""
-    prospects = finder.search("implantes dentales", "Madrid", limit=1)
+    cc = (country_code or "US").upper()
+    if cc == "GB":
+        niche, city = "dental implants", "London"
+    elif cc == "ES":
+        niche, city = "implantes dentales", "Madrid"
+    else:
+        niche, city = "dental implants", "Miami"
+        cc = "US"
+
+    prospects = finder.search(niche, city, limit=1, country=cc)
+    if not prospects:
+        prospects = finder.search("dental implants", "Miami", limit=1, country="US")
     if not prospects:
         raise HTTPException(status_code=404, detail="No prospect found")
 
