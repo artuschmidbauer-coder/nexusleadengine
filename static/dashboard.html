@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard de Telemetría | NexusLeadEngine.io</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                        mono: ['"JetBrains Mono"', 'monospace'],
+                    },
+                    colors: {
+                        brand: {
+                            500: '#10b981',
+                            DEFAULT: '#10b981',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-[#05070e] text-slate-200 font-sans antialiased selection:bg-brand selection:text-black">
+
+    <!-- Navbar -->
+    <header class="border-b border-white/5 bg-[#05070e]/80 backdrop-blur-md sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <a href="/" class="flex items-center gap-2">
+                    <span class="w-8 h-8 rounded-lg bg-emerald-500 text-black flex items-center justify-center font-bold text-sm">⚡</span>
+                    <span class="font-extrabold text-white text-lg tracking-tight">Nexus<span class="text-emerald-400">LeadEngine</span></span>
+                </a>
+                <span class="text-xs px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400 font-mono border border-emerald-500/20">Telemetría en Vivo</span>
+            </div>
+            <div class="flex items-center gap-4 text-xs font-mono">
+                <a href="/" class="text-slate-400 hover:text-white transition">Landing Page ↗</a>
+                <a href="/docs" target="_blank" class="text-slate-400 hover:text-emerald-400 transition">Swagger Docs ↗</a>
+                <span id="liveStatusPill" class="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-400">
+                    <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                    Motor Activo
+                </span>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-6 py-10">
+
+        <!-- Top Title -->
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
+            <div>
+                <h1 class="text-2xl md:text-3xl font-extrabold text-white">Panel de Medición y Control de Leads</h1>
+                <p class="text-slate-400 text-xs mt-1">Métricas en tiempo real de prospección, calificación por IA y facturación M2M.</p>
+            </div>
+            <div class="flex items-center gap-3">
+                <button onclick="refreshDashboard()" class="text-xs bg-white/5 hover:bg-white/10 border border-white/10 px-4 py-2 rounded-xl text-slate-300 font-mono transition flex items-center gap-2">
+                    <span>↻</span> Actualizar Datos
+                </button>
+            </div>
+        </div>
+
+        <!-- KPI Grid -->
+        <div class="grid grid-cols-2 md:grid-cols-5 gap-4 mb-10">
+            <!-- Metric 1 -->
+            <div class="p-5 rounded-2xl bg-[#090d16] border border-white/5">
+                <div class="text-[11px] font-mono text-slate-400 uppercase tracking-wider mb-2">Total Prospectos</div>
+                <div id="statTotalScanned" class="text-2xl md:text-3xl font-extrabold text-white font-mono">-</div>
+                <div class="text-[10px] text-slate-500 mt-1">Auditados digitalmente</div>
+            </div>
+
+            <!-- Metric 2 -->
+            <div class="p-5 rounded-2xl bg-[#090d16] border border-white/5">
+                <div class="text-[11px] font-mono text-slate-400 uppercase tracking-wider mb-2">Leads Calificados</div>
+                <div id="statTotalQualified" class="text-2xl md:text-3xl font-extrabold text-emerald-400 font-mono">-</div>
+                <div class="text-[10px] text-slate-500 mt-1">Score &ge; 70 (Ticket Alto)</div>
+            </div>
+
+            <!-- Metric 3 -->
+            <div class="p-5 rounded-2xl bg-[#090d16] border border-white/5">
+                <div class="text-[11px] font-mono text-slate-400 uppercase tracking-wider mb-2">Tasa Calificación</div>
+                <div id="statQualRate" class="text-2xl md:text-3xl font-extrabold text-cyan-400 font-mono">-</div>
+                <div class="text-[10px] text-slate-500 mt-1">% de prospectos viables</div>
+            </div>
+
+            <!-- Metric 4 -->
+            <div class="p-5 rounded-2xl bg-[#090d16] border border-white/5">
+                <div class="text-[11px] font-mono text-slate-400 uppercase tracking-wider mb-2">Ingresos Estimados</div>
+                <div id="statTotalRevenue" class="text-2xl md:text-3xl font-extrabold text-amber-400 font-mono">$0 USD</div>
+                <div class="text-[10px] text-slate-500 mt-1">Cobros vía PayPal/API</div>
+            </div>
+
+            <!-- Metric 5 -->
+            <div class="p-5 rounded-2xl bg-[#090d16] border border-white/5">
+                <div class="text-[11px] font-mono text-slate-400 uppercase tracking-wider mb-2">Créditos Consumidos</div>
+                <div id="statCreditsConsumed" class="text-2xl md:text-3xl font-extrabold text-purple-400 font-mono">-</div>
+                <div class="text-[10px] text-slate-500 mt-1">Leads entregados a bots</div>
+            </div>
+        </div>
+
+        <!-- Trigger Real Scan & Mining Section -->
+        <div class="p-6 rounded-2xl bg-[#090d16] border border-white/10 mb-10">
+            <div class="flex items-center justify-between mb-4">
+                <div>
+                    <h2 class="text-base font-bold text-white flex items-center gap-2">
+                        <span>🛰️</span> Disparador Manual de Rastreo y Calificación
+                    </h2>
+                    <p class="text-xs text-slate-400 mt-0.5">Ejecuta el motor de descubrimiento y auditoría sobre un sector y ciudad en vivo:</p>
+                </div>
+                <span class="text-[10px] font-mono bg-white/5 px-2.5 py-1 rounded text-slate-400">Endpoint: POST /v1/leads/trigger-scan</span>
+            </div>
+
+            <form onsubmit="handleTriggerScan(event)" class="grid grid-cols-1 md:grid-cols-4 gap-4 items-end">
+                <div>
+                    <label class="block text-xs font-mono text-slate-400 mb-1">Nicho / Sector:</label>
+                    <select id="scanNiche" class="w-full bg-[#05070e] border border-white/10 rounded-xl px-3 py-2.5 text-xs text-white focus:outline-none focus:border-emerald-400">
+                        <option value="implantes dentales">Implantes Dentales (Ticket Alto)</option>
+                        <option value="reformas integrales">Reformas Integrales & Interiorismo</option>
+                        <option value="energia solar">Energía Solar & Paneles</option>
+                        <option value="abogados corporativos">Abogados de Empresa / Corporativo</option>
+                        <option value="medicina estetica">Medicina Estética & Cirugía</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-mono text-slate-400 mb-1">Ciudad / Región:</label>
+                    <input type="text" id="scanLocation" value="Madrid" placeholder="ej: Madrid, Barcelona, Miami" class="w-full bg-[#05070e] border border-white/10 rounded-xl px-3 py-2.5 text-xs text-white focus:outline-none focus:border-emerald-400">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-mono text-slate-400 mb-1">Cantidad Máxima de Leads:</label>
+                    <select id="scanLimit" class="w-full bg-[#05070e] border border-white/10 rounded-xl px-3 py-2.5 text-xs text-white focus:outline-none focus:border-emerald-400">
+                        <option value="2">2 Leads (Rápido)</option>
+                        <option value="5" selected>5 Leads (Recomendado)</option>
+                        <option value="10">10 Leads</option>
+                    </select>
+                </div>
+
+                <div>
+                    <button type="submit" id="btnScanSubmit" class="w-full bg-emerald-500 hover:bg-emerald-400 text-black font-extrabold py-2.5 rounded-xl text-xs transition flex items-center justify-center gap-2">
+                        <span>▶</span> Ejecutar Rastreo y Medir
+                    </button>
+                </div>
+            </form>
+            <div id="scanStatusMsg" class="mt-3 text-xs font-mono hidden"></div>
+        </div>
+
+        <!-- Live Activity Stream (Recent Leads Table) -->
+        <div class="rounded-2xl bg-[#090d16] border border-white/5 p-6">
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="text-sm font-bold text-white flex items-center gap-2">
+                    <span>📡</span> Feed en Vivo de Actividad (Últimos Leads Calificados)
+                </h3>
+                <span class="text-[10px] font-mono text-slate-500">Auto-refresh activo</span>
+            </div>
+
+            <div class="overflow-x-auto">
+                <table class="w-full text-left text-xs">
+                    <thead>
+                        <tr class="border-b border-white/5 text-slate-400 font-mono text-[11px]">
+                            <th class="pb-3 font-semibold">Hora</th>
+                            <th class="pb-3 font-semibold">Empresa</th>
+                            <th class="pb-3 font-semibold">Sector & Ciudad</th>
+                            <th class="pb-3 font-semibold">Score IA</th>
+                            <th class="pb-3 font-semibold">Ticket Est.</th>
+                            <th class="pb-3 font-semibold">Canal</th>
+                            <th class="pb-3 font-semibold">Mensaje Generado</th>
+                        </tr>
+                    </thead>
+                    <tbody id="activityTableBody" class="divide-y divide-white/5">
+                        <tr>
+                            <td colspan="7" class="py-8 text-center text-slate-500 font-mono">
+                                Cargando eventos en tiempo real...
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </main>
+
+    <script>
+        async function refreshDashboard() {
+            try {
+                const res = await fetch('/v1/analytics/dashboard');
+                if (!res.ok) return;
+                const data = await res.json();
+
+                document.getElementById('statTotalScanned').innerText = data.total_prospects_scanned || 0;
+                document.getElementById('statTotalQualified').innerText = data.total_qualified_leads || 0;
+                document.getElementById('statQualRate').innerText = (data.qualification_rate_percent || 0) + '%';
+                document.getElementById('statTotalRevenue').innerText = '$' + (data.total_revenue_usd || 0) + ' USD';
+                document.getElementById('statCreditsConsumed').innerText = data.total_credits_consumed || 0;
+
+                renderActivity(data.recent_activity || []);
+            } catch (err) {
+                console.error("Error al refrescar dashboard:", err);
+            }
+        }
+
+        function renderActivity(activities) {
+            const tbody = document.getElementById('activityTableBody');
+            if (activities.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="7" class="py-8 text-center text-slate-500 font-mono">No hay eventos recientes. Dispara un rastreo arriba para comenzar.</td></tr>`;
+                return;
+            }
+
+            tbody.innerHTML = activities.map(item => {
+                if (item.type === 'PAYMENT') {
+                    return `
+                        <tr class="bg-emerald-500/5">
+                            <td class="py-3 font-mono text-slate-400">${item.time_str}</td>
+                            <td colspan="6" class="py-3 text-emerald-400 font-bold font-mono">
+                                ${item.business_name} (${item.payer})
+                            </td>
+                        </tr>
+                    `;
+                }
+
+                const scoreColor = item.score >= 80 ? 'text-emerald-400 bg-emerald-500/10 border-emerald-500/30' : 'text-amber-400 bg-amber-500/10 border-amber-500/30';
+                return `
+                    <tr class="hover:bg-white/[0.02] transition">
+                        <td class="py-3 font-mono text-slate-400">${item.time_str || '-'}</td>
+                        <td class="py-3 font-bold text-white max-w-[200px] truncate">${item.business_name}</td>
+                        <td class="py-3 text-slate-300">${item.category} • <span class="text-slate-500">${item.city}</span></td>
+                        <td class="py-3">
+                            <span class="px-2 py-0.5 rounded text-[10px] font-mono font-bold border ${scoreColor}">
+                                ${item.score}/100
+                            </span>
+                        </td>
+                        <td class="py-3 font-mono text-amber-400 font-semibold">$${item.ticket_estimate_usd ? item.ticket_estimate_usd.toLocaleString() : '-'}</td>
+                        <td class="py-3 font-mono text-slate-300 text-[11px]">${item.channel || 'WHATSAPP'}</td>
+                        <td class="py-3 text-slate-400 text-[11px] max-w-[300px] truncate" title="${item.hook_snippet || ''}">
+                            ${item.hook_snippet || '-'}
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        async function handleTriggerScan(e) {
+            e.preventDefault();
+            const btn = document.getElementById('btnScanSubmit');
+            const statusMsg = document.getElementById('scanStatusMsg');
+            const niche = document.getElementById('scanNiche').value;
+            const location = document.getElementById('scanLocation').value.trim();
+            const limit = parseInt(document.getElementById('scanLimit').value, 10);
+
+            btn.disabled = true;
+            btn.innerHTML = `<span>⏳</span> Rastreando y Evaluando...`;
+            statusMsg.classList.remove('hidden');
+            statusMsg.className = 'mt-3 text-xs font-mono text-cyan-400';
+            statusMsg.innerText = `Buscando negocios en ${location} para ${niche}...`;
+
+            try {
+                const res = await fetch('/v1/leads/trigger-scan', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        niche: niche,
+                        location: location,
+                        max_leads: limit,
+                        min_score: 60,
+                        auto_dispatch_webhooks: false
+                    })
+                });
+
+                const leads = await res.json();
+                if (res.ok) {
+                    statusMsg.className = 'mt-3 text-xs font-mono text-emerald-400';
+                    statusMsg.innerText = `✅ ¡Completado! Se calificaron ${leads.length} leads de alto ticket en ${location}.`;
+                    refreshDashboard();
+                } else {
+                    statusMsg.className = 'mt-3 text-xs font-mono text-rose-400';
+                    statusMsg.innerText = `Error: ${JSON.stringify(leads)}`;
+                }
+            } catch (err) {
+                statusMsg.className = 'mt-3 text-xs font-mono text-rose-400';
+                statusMsg.innerText = `Error de conexión: ${err.message}`;
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = `<span>▶</span> Ejecutar Rastreo y Medir`;
+            }
+        }
+
+        // Initial load and periodic poll every 5 seconds
+        refreshDashboard();
+        setInterval(refreshDashboard, 5000);
+    </script>
+</body>
+</html>
