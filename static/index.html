@@ -300,7 +300,7 @@
             </div>
             <p class="text-xs text-slate-400 mb-6">
                 Pack seleccionado: <span id="modalAmountText" class="text-brand font-bold"></span><br>
-                Pagas con tarjeta en Stripe y al volver a esta página recibes tu API key al instante.
+                Pagas con tarjeta (vía Polar.sh / Stripe) y al volver a esta página recibes tu API key al instante.
             </p>
 
             <form onsubmit="handleCheckoutSubmit(event)" class="space-y-4">
@@ -377,9 +377,9 @@
             </div>
 
             <div>
-                <div class="font-semibold text-white mb-3">Pagos</div>
+                <div class="font-semibold text-white mb-3">Pagos & Facturación</div>
                 <p class="leading-relaxed mb-2">
-                    Pago seguro con tarjeta procesado por Stripe. No guardamos los datos de tu tarjeta.
+                    Pago seguro global procesado por Polar.sh (Merchant of Record) y Stripe. IVA/Sales Tax gestionado automáticamente.
                 </p>
                 <a href="mailto:hola@nexusleadengine.io" class="text-brand hover:underline font-mono">
                     hola@nexusleadengine.io
@@ -408,7 +408,7 @@
     <div id="privacyModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-6">
         <div class="bg-[#0b0f19] border border-white/10 rounded-2xl max-w-2xl w-full p-8 max-h-[80vh] overflow-y-auto text-slate-300 text-sm">
             <h3 class="text-xl font-bold text-white mb-4">Política de Privacidad • NexusLeadEngine.io</h3>
-            <p class="mb-4">En NexusLeadEngine.io protegemos la privacidad de nuestros clientes. Solo recolectamos los datos necesarios para autenticar tu API Key y activar tus créditos (tu email de compra). No almacenamos datos de tarjeta; todas las transacciones son procesadas externamente por Stripe.</p>
+            <p class="mb-4">En NexusLeadEngine.io protegemos la privacidad de nuestros clientes. Solo recolectamos los datos necesarios para autenticar tu API Key y activar tus créditos (tu email de compra). No almacenamos datos de tarjeta; todas las transacciones son procesadas externamente por Polar.sh y Stripe.</p>
             <p class="mb-4">Contacto de privacidad: <strong>hola@nexusleadengine.io</strong>.</p>
             <button onclick="closeModal('privacyModal')" class="mt-4 bg-brand text-black font-semibold px-6 py-2 rounded-xl">Cerrar</button>
         </div>

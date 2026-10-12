@@ -42,8 +42,8 @@ Este kit contiene todo el material listo para copiar, pegar y ejecutar para capt
 ## 🏢 2. Campaña de Prospección Directa (Outbound a Agencias)
 
 Ya tienes generado el archivo con prospectos de agencias listo en tu computadora:
-* **Archivo Excel / CSV:** [`prospecting_campaign_agencies.csv`](file:///Users/artu/.gemini/antigravity/scratch/lead_stream_engine/prospecting_campaign_agencies.csv)
-* **Archivo JSON:** [`prospecting_campaign_agencies.json`](file:///Users/artu/.gemini/antigravity/scratch/lead_stream_engine/prospecting_campaign_agencies.json)
+* **Archivo Excel / CSV:** [`prospecting_campaign_agencies.csv`](file:///Users/artu/.gemini/antigravity/scratch/nexusleadengine/prospecting_campaign_agencies.csv)
+* **Archivo JSON:** [`prospecting_campaign_agencies.json`](file:///Users/artu/.gemini/antigravity/scratch/nexusleadengine/prospecting_campaign_agencies.json)
 
 ### Mensaje estándar para WhatsApp o Email (`hola@nexusleadengine.io`):
 ```text

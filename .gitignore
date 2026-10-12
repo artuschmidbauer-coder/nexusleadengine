@@ -3,5 +3,5 @@ __pycache__/
 *.pyc
 .DS_Store
 .env
-billing_ledger.json
-analytics_data.json
+billing_ledger*.json
+analytics_data*.json

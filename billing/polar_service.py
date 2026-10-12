@@ -9,6 +9,12 @@ from typing import Dict, List, Optional
 from models.schema import CreditPackage, CheckoutResponse
 from .ledger import BillingLedger
 
+try:
+    from dotenv import load_dotenv
+    load_dotenv()
+except ImportError:
+    pass
+
 PACKAGES: Dict[str, CreditPackage] = {
     "pack_micro_15": CreditPackage(
         package_id="pack_micro_15",
@@ -214,3 +220,33 @@ class PolarService:
             "customer_email": order_data.get("customer_email") or order_data.get("user", {}).get("email"),
             "new_balance": account.credits_balance
         }
+
+    def retrieve_and_fulfill(self, session_id: str) -> dict:
+        """
+        Retrieves a custom checkout session from Polar API.
+        If status is confirmed/succeeded, fulfills the order and returns status info.
+        If still open, returns PENDING.
+        """
+        if not self.is_configured:
+            raise RuntimeError("Polar is not configured.")
+
+        headers = {
+            "Authorization": f"Bearer {self.access_token}",
+            "Accept": "application/json"
+        }
+        resp = requests.get(f"{self.api_base}/checkouts/custom/{session_id}", headers=headers, timeout=10)
+        if resp.status_code == 404:
+            raise ValueError(f"Polar checkout session {session_id} not found.")
+        if resp.status_code not in (200, 201):
+            raise RuntimeError(f"Error querying Polar API: {resp.text}")
+
+        data = resp.json()
+        checkout_status = data.get("status")
+
+        if checkout_status in ("open", "incomplete"):
+            return {"status": "PENDING", "session_id": session_id}
+
+        if checkout_status in ("confirmed", "succeeded", "paid"):
+            return self.fulfill_order(data)
+
+        return {"status": "FAILED", "checkout_status": checkout_status}

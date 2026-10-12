@@ -8,11 +8,11 @@ from api.main import app
 def test_api_pipeline():
     client = TestClient(app)
 
-    # 1. Test root
-    resp = client.get("/")
+    # 1. Test status
+    resp = client.get("/v1/status")
     assert resp.status_code == 200
     assert resp.json()["status"] == "online"
-    print("✅ GET /: OK")
+    print("✅ GET /v1/status: OK")
 
     # 2. Test subscribe bot
     sub_payload = {

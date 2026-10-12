@@ -105,3 +105,44 @@ def test_multi_country_scan(client):
     assert len(leads) > 0
     assert leads[0]["location"]["city"] == "Miami"
     assert leads[0]["location"]["country"] == "US"
+
+def test_polar_retrieve_and_fulfill(client, monkeypatch):
+    main.ledger.create_account("cli_buyer_polar")
+    
+    # Mock Polar API response
+    class FakeResponse:
+        def __init__(self, data, status_code=200):
+            self._data = data
+            self.status_code = status_code
+            self.text = json.dumps(data)
+        def json(self):
+            return self._data
+
+    mock_state = {"status": "open"}
+    def fake_get(url, headers=None, timeout=None):
+        return FakeResponse({
+            "id": "polar_sess_123",
+            "status": mock_state["status"],
+            "metadata": {
+                "client_id": "cli_buyer_polar",
+                "package_id": "pack_micro_15"
+            },
+            "customer_email": "buyer@polar.sh"
+        })
+
+    import requests
+    monkeypatch.setattr(requests, "get", fake_get)
+
+    # 1. Open / Pending session
+    r1 = client.get("/v1/billing/session/polar_sess_123")
+    assert r1.status_code == 200
+    assert r1.json()["status"] == "PENDING"
+
+    # 2. Paid / Confirmed session
+    mock_state["status"] = "confirmed"
+    r2 = client.get("/v1/billing/session/polar_sess_123")
+    assert r2.status_code == 200
+    data2 = r2.json()
+    assert data2["status"] == "PAID"
+    assert data2["credits_added"] == 15
+    assert main.ledger.get_by_client_id("cli_buyer_polar").credits_balance == 15

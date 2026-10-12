@@ -1,6 +1,12 @@
 import hmac
 import os
 import uuid
+try:
+    from dotenv import load_dotenv
+    load_dotenv()
+except ImportError:
+    pass
+
 from fastapi import FastAPI, HTTPException, status, Header, Request
 from pydantic import BaseModel, EmailStr
 from typing import List, Dict, Any, Optional
@@ -183,8 +189,11 @@ def get_checkout_result(session_id: str):
     (never trusts the browser), credits it once, and returns the API key.
     """
     try:
-        result = stripe_service.retrieve_and_fulfill(session_id)
-    except PaymentsNotConfigured as e:
+        if polar_service.is_configured and not session_id.startswith("cs_"):
+            result = polar_service.retrieve_and_fulfill(session_id)
+        else:
+            result = stripe_service.retrieve_and_fulfill(session_id)
+    except (PaymentsNotConfigured, RuntimeError, ValueError) as e:
         raise HTTPException(status_code=503, detail=str(e))
     except Exception:
         raise HTTPException(status_code=404, detail="Sesión de pago no encontrada.")
