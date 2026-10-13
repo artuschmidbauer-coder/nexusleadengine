@@ -92,11 +92,11 @@ def test_webhook_credits_once_and_ignores_metadata_credits(client):
     headers = {"stripe-signature": sign(payload)}
     r1 = client.post("/v1/billing/stripe-webhook", content=payload, headers=headers)
     assert r1.status_code == 200 and r1.json()["status"] == "PROCESSED"
-    # credits come from the server catalog (15), not from editable metadata (999999)
-    assert main.ledger.get_by_client_id("cli_abc").credits_balance == 15
+    # credits come from the server catalog (25), not from editable metadata (999999)
+    assert main.ledger.get_by_client_id("cli_abc").credits_balance == 25
     r2 = client.post("/v1/billing/stripe-webhook", content=payload, headers=headers)
     assert r2.json()["status"] == "ALREADY_PROCESSED"
-    assert main.ledger.get_by_client_id("cli_abc").credits_balance == 15
+    assert main.ledger.get_by_client_id("cli_abc").credits_balance == 25
 
 
 def test_unpaid_session_not_credited(client):
@@ -166,9 +166,9 @@ def test_session_endpoint_only_returns_key_when_stripe_says_paid(client, monkeyp
     r = client.get("/v1/billing/session/cs_test_1")
     assert r.json()["status"] == "PAID"
     assert r.json()["api_key"] == main.ledger.get_by_client_id("cli_abc").api_key
-    assert main.ledger.get_by_client_id("cli_abc").credits_balance == 15
+    assert main.ledger.get_by_client_id("cli_abc").credits_balance == 25
     client.get("/v1/billing/session/cs_test_1")  # reload page: must not double credit
-    assert main.ledger.get_by_client_id("cli_abc").credits_balance == 15
+    assert main.ledger.get_by_client_id("cli_abc").credits_balance == 25
 
 
 def test_pages_served(client):

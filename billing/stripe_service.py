@@ -7,11 +7,19 @@ from .ledger import BillingLedger
 
 # Available Ultra-Accessible Credit Packages for NexusLeadEngine
 PACKAGES: Dict[str, CreditPackage] = {
+    "pack_micro_25": CreditPackage(
+        package_id="pack_micro_25",
+        name="Pack Micro (25 Leads Calificados)",
+        credits=25,
+        price_usd=15.0,
+        unit_price_usd=0.60,
+        description="Precio de impulso para probar en 30 segundos. Sin fricción ni preguntas."
+    ),
     "pack_micro_15": CreditPackage(
         package_id="pack_micro_15",
-        name="Pack Micro (15 Leads Calificados)",
-        credits=15,
-        price_usd=9.0,
+        name="Pack Micro (25 Leads Calificados)",
+        credits=25,
+        price_usd=15.0,
         unit_price_usd=0.60,
         description="Precio de impulso para probar en 30 segundos. Sin fricción ni preguntas."
     ),

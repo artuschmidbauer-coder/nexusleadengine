@@ -144,5 +144,5 @@ def test_polar_retrieve_and_fulfill(client, monkeypatch):
     assert r2.status_code == 200
     data2 = r2.json()
     assert data2["status"] == "PAID"
-    assert data2["credits_added"] == 15
-    assert main.ledger.get_by_client_id("cli_buyer_polar").credits_balance == 15
+    assert data2["credits_added"] == 25
+    assert main.ledger.get_by_client_id("cli_buyer_polar").credits_balance == 25

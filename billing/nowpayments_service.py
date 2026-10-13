@@ -15,11 +15,19 @@ except ImportError:
     pass
 
 PACKAGES: Dict[str, CreditPackage] = {
+    "pack_micro_25": CreditPackage(
+        package_id="pack_micro_25",
+        name="Pack Micro (25 Web Diagnostics)",
+        credits=25,
+        price_usd=15.0,
+        unit_price_usd=0.60,
+        description="Ideal for fast testing in Make or n8n. Instant activation."
+    ),
     "pack_micro_15": CreditPackage(
         package_id="pack_micro_15",
-        name="Pack Micro (15 Web Diagnostics)",
-        credits=15,
-        price_usd=9.0,
+        name="Pack Micro (25 Web Diagnostics)",
+        credits=25,
+        price_usd=15.0,
         unit_price_usd=0.60,
         description="Ideal for fast testing in Make or n8n. Instant activation."
     ),
