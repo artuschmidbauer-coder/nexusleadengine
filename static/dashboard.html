@@ -97,7 +97,7 @@
             <div class="p-5 rounded-2xl bg-[#090d16] border border-white/5">
                 <div class="text-[11px] font-mono text-slate-400 uppercase tracking-wider mb-2">Ingresos Totales</div>
                 <div id="statTotalRevenue" class="text-2xl md:text-3xl font-extrabold text-amber-400 font-mono">$0 USD</div>
-                <div class="text-[10px] text-slate-500 mt-1">Cobros vía PayPal/API</div>
+                <div class="text-[10px] text-slate-500 mt-1">Cobros Binance / NOWPayments</div>
             </div>
 
             <!-- Metric 5 -->
@@ -105,6 +105,53 @@
                 <div class="text-[11px] font-mono text-slate-400 uppercase tracking-wider mb-2">Créditos Consumidos</div>
                 <div id="statCreditsConsumed" class="text-2xl md:text-3xl font-extrabold text-purple-400 font-mono">-</div>
                 <div class="text-[10px] text-slate-500 mt-1">Leads entregados a bots</div>
+            </div>
+        </div>
+
+        <!-- Financial Allocation Formula (70% / 20% / 10%) -->
+        <div class="p-6 rounded-2xl bg-gradient-to-r from-[#090d16] via-[#0d1424] to-[#090d16] border border-white/10 mb-10">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4">
+                <div>
+                    <h2 class="text-sm font-bold text-white flex items-center gap-2">
+                        <span>💼</span> Distribución Financiera de Fondos &amp; Utilidades
+                    </h2>
+                    <p class="text-xs text-slate-400 mt-0.5">Fórmula de tesorería acordada: 70% Retiro Binance, 20% Reinversión técnica, 10% Reserva de contingencia.</p>
+                </div>
+                <span class="text-[10px] font-mono bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 px-2.5 py-1 rounded-full">
+                    Regla 70 / 20 / 10 Activa
+                </span>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <!-- 70% Owner Profit -->
+                <div class="p-4 rounded-xl bg-emerald-500/5 border border-emerald-500/20">
+                    <div class="flex items-center justify-between mb-1">
+                        <span class="text-xs font-bold text-emerald-400 font-mono">70% Ganancia Líquida Personal</span>
+                        <span class="text-[10px] uppercase font-mono px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-300">Retiro Binance</span>
+                    </div>
+                    <div id="statOwnerProfit" class="text-2xl font-extrabold text-white font-mono">$0.00 USD</div>
+                    <p class="text-[11px] text-slate-400 mt-1">Tu beneficio neto disponible directamente en tu billetera de Binance.</p>
+                </div>
+
+                <!-- 20% Reinvestment -->
+                <div class="p-4 rounded-xl bg-cyan-500/5 border border-cyan-500/20">
+                    <div class="flex items-center justify-between mb-1">
+                        <span class="text-xs font-bold text-cyan-400 font-mono">20% Reinversión y Expansión</span>
+                        <span class="text-[10px] uppercase font-mono px-1.5 py-0.5 rounded bg-cyan-500/20 text-cyan-300">Infraestructura</span>
+                    </div>
+                    <div id="statReinvestment" class="text-2xl font-extrabold text-white font-mono">$0.00 USD</div>
+                    <p class="text-[11px] text-slate-400 mt-1">Destinado a proxies residenciales, scraping de nuevos países y servidores.</p>
+                </div>
+
+                <!-- 10% Reserves -->
+                <div class="p-4 rounded-xl bg-amber-500/5 border border-amber-500/20">
+                    <div class="flex items-center justify-between mb-1">
+                        <span class="text-xs font-bold text-amber-400 font-mono">10% Fondo de Reserva</span>
+                        <span class="text-[10px] uppercase font-mono px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-300">Contingencias</span>
+                    </div>
+                    <div id="statReserves" class="text-2xl font-extrabold text-white font-mono">$0.00 USD</div>
+                    <p class="text-[11px] text-slate-400 mt-1">Amortiguación de comisiones de red/gas, devoluciones y pruebas de API.</p>
+                </div>
             </div>
         </div>
 
@@ -202,8 +249,13 @@
                 document.getElementById('statTotalScanned').innerText = data.total_prospects_scanned || 0;
                 document.getElementById('statTotalQualified').innerText = data.total_qualified_leads || 0;
                 document.getElementById('statQualRate').innerText = (data.qualification_rate_percent || 0) + '%';
-                document.getElementById('statTotalRevenue').innerText = '$' + (data.total_revenue_usd || 0) + ' USD';
+                document.getElementById('statTotalRevenue').innerText = '$' + (data.total_revenue_usd || 0).toLocaleString() + ' USD';
                 document.getElementById('statCreditsConsumed').innerText = data.total_credits_consumed || 0;
+
+                const fa = data.financial_allocation || {};
+                document.getElementById('statOwnerProfit').innerText = '$' + (fa.owner_profit_70 || 0).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}) + ' USD';
+                document.getElementById('statReinvestment').innerText = '$' + (fa.reinvestment_20 || 0).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}) + ' USD';
+                document.getElementById('statReserves').innerText = '$' + (fa.reserves_10 || 0).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}) + ' USD';
 
                 renderActivity(data.recent_activity || []);
             } catch (err) {

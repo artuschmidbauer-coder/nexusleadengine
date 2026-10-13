@@ -114,6 +114,7 @@ class AnalyticsTracker:
             round((self.total_qualified / self.total_scanned) * 100, 1)
             if self.total_scanned > 0 else 0.0
         )
+        total_rev = round(self.total_revenue_usd, 2)
         return {
             "total_pageviews": self.total_pageviews,
             "unique_visitors_count": len(self.unique_visitors),
@@ -121,7 +122,12 @@ class AnalyticsTracker:
             "total_prospects_scanned": self.total_scanned,
             "total_qualified_leads": self.total_qualified,
             "qualification_rate_percent": qualification_rate,
-            "total_revenue_usd": round(self.total_revenue_usd, 2),
+            "total_revenue_usd": total_rev,
+            "financial_allocation": {
+                "owner_profit_70": round(total_rev * 0.70, 2),
+                "reinvestment_20": round(total_rev * 0.20, 2),
+                "reserves_10": round(total_rev * 0.10, 2)
+            },
             "total_credits_consumed": self.total_credits_consumed,
             "active_clients_count": active_accounts_count,
             "leads_by_niche": self.leads_by_niche,
