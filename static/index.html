@@ -312,7 +312,7 @@
             <div class="text-center max-w-2xl mx-auto mb-16">
                 <span class="text-brand text-xs font-mono font-bold uppercase tracking-widest" data-i18n="price_tag">Planes y Precios</span>
                 <h2 class="text-3xl md:text-5xl font-extrabold text-white mt-2 mb-4" data-i18n="price_title">
-                    Paga con tarjeta, recibe tu API key al instante
+                    Paga con Tarjeta, USDT o Cripto. API Key al Instante.
                 </h2>
                 <p class="text-slate-400 text-sm" data-i18n="price_subtitle">
                     Sin suscripción ni permanencia. Pagas una vez, tus créditos no caducan y se consumen solo cuando se entrega un lead verificado.
@@ -425,7 +425,7 @@
             </div>
             <p class="text-xs text-slate-400 mb-6">
                 <span data-i18n="modal_pack_sel">Pack seleccionado:</span> <span id="modalAmountText" class="text-brand font-bold"></span><br>
-                <span data-i18n="modal_processor_notice">Pagas con tarjeta (Polar.sh / Stripe) y recibes tu API key al instante.</span>
+                <span data-i18n="modal_processor_notice">Pagas con USDT, Binance, Cripto o Tarjeta. Créditos y API key activados al instante.</span>
             </p>
 
             <form onsubmit="handleCheckoutSubmit(event)" class="space-y-4">
@@ -505,7 +505,7 @@
             <div>
                 <div class="font-semibold text-white mb-3" data-i18n="footer_col_pay">Pagos Globales</div>
                 <p class="leading-relaxed mb-2" data-i18n="footer_pay_desc">
-                    Cobro seguro internacional procesado por Polar.sh (Merchant of Record) y Stripe. Cumplimiento fiscal global automático.
+                    Cobro seguro internacional vía NOWPayments. Acepta USDT, Binance Pay, más de 300 criptoactivos o Tarjeta con liquidación directa.
                 </p>
                 <a href="mailto:hola@nexusleadengine.io" class="text-brand hover:underline font-mono">
                     hola@nexusleadengine.io
@@ -534,7 +534,7 @@
     <div id="privacyModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-6">
         <div class="bg-[#0b0f19] border border-white/10 rounded-2xl max-w-2xl w-full p-8 max-h-[80vh] overflow-y-auto text-slate-300 text-sm">
             <h3 class="text-xl font-bold text-white mb-4" data-i18n="privacy_h">Política de Privacidad • NexusLeadEngine.io</h3>
-            <p class="mb-4" data-i18n="privacy_p1">En NexusLeadEngine.io protegemos la privacidad de nuestros clientes. Solo recolectamos los datos necesarios para autenticar tu API Key y activar tus créditos (tu email de compra). No almacenamos datos de tarjeta; todas las transacciones son procesadas externamente por Polar.sh (Merchant of Record) y Stripe.</p>
+            <p class="mb-4" data-i18n="privacy_p1">En NexusLeadEngine.io protegemos la privacidad de nuestros clientes. Solo recolectamos los datos necesarios para autenticar tu API Key y activar tus créditos (tu email de compra). No almacenamos datos de tarjeta ni credenciales financieras; todas las transacciones son procesadas externamente por NOWPayments / Stripe / Polar.</p>
             <p class="mb-4">Contacto: <strong>hola@nexusleadengine.io</strong>.</p>
             <button onclick="closeModal('privacyModal')" class="mt-4 bg-brand text-black font-semibold px-6 py-2 rounded-xl">Cerrar</button>
         </div>
@@ -587,7 +587,7 @@
                 exp_hook_title: "Pre-Drafted Outreach Icebreaker:",
                 exp_copy_btn: "Copy Message",
                 price_tag: "Packs & Pricing",
-                price_title: "Pay with Card, Get Your API Key Instantly",
+                price_title: "Pay with Card, USDT or Crypto. Instant API Key Delivery.",
                 price_subtitle: "No recurring subscription. Pay once, your credits never expire, and they are only deducted when a qualified lead is delivered.",
                 p1_badge: "Instant Test",
                 p1_name: "Micro Pack",
@@ -626,7 +626,7 @@
                 btn_buy_149: "Get Scale · $149 USD",
                 modal_title: "Complete Purchase",
                 modal_pack_sel: "Selected Pack:",
-                modal_processor_notice: "Secured by Polar.sh (Merchant of Record) & Stripe. Receive your API key instantly.",
+                modal_processor_notice: "Pay with USDT, USDC, Binance, or Card. Credits & API key activated automatically.",
                 modal_email_lbl: "Your Email (for receipt and API key access):",
                 modal_key_lbl: "Have an existing API key? Paste to top up (optional):",
                 modal_submit_btn: "Proceed to Secure Checkout →",
@@ -643,12 +643,12 @@
                 footer_privacy: "Privacy Policy",
                 footer_refund: "14-Day Refund Guarantee",
                 footer_col_pay: "Global Billing",
-                footer_pay_desc: "Global compliant transactions powered by Polar.sh (Merchant of Record) and Stripe. Automated VAT / Sales tax handling.",
+                footer_pay_desc: "Global compliant transactions powered by NOWPayments. Pay with USDT, Binance Pay, 300+ cryptos, or Card with instant automated delivery.",
                 footer_tagline: "Built for global agencies across the US, UK, and Europe",
                 terms_h: "Terms of Service • NexusLeadEngine.io",
                 terms_p1: "NexusLeadEngine.io provides real-time B2B prospect audit intelligence via APIs and Webhooks. Prepaid credits are deducted per qualified prospect successfully delivered.",
                 privacy_h: "Privacy Policy • NexusLeadEngine.io",
-                privacy_p1: "We only collect data necessary to authenticate your API key and activate your credits (your checkout email). We never store payment card data; transactions are processed externally by Polar.sh and Stripe.",
+                privacy_p1: "We only collect data necessary to authenticate your API key and activate your credits (your checkout email). We never store payment card or financial credentials; transactions are securely processed by NOWPayments / Stripe / Polar.",
                 refund_h: "14-Day Money-Back Guarantee",
                 refund_p1: "We offer a 100% money-back guarantee for 14 days if you are unsatisfied with lead quality and have consumed less than 20% of your purchased credits. Email hola@nexusleadengine.io with your checkout email."
             },
@@ -683,7 +683,7 @@
                 exp_hook_title: "Mensaje de Apertura Pre-redactado:",
                 exp_copy_btn: "Copiar Mensaje",
                 price_tag: "Planes y Precios",
-                price_title: "Paga con tarjeta, recibe tu API key al instante",
+                price_title: "Paga con Tarjeta, USDT o Cripto. API Key al Instante.",
                 price_subtitle: "Sin suscripción ni permanencia. Pagas una vez, tus créditos no caducan y se consumen solo cuando se entrega un lead verificado.",
                 p1_badge: "Prueba Rápida",
                 p1_name: "Pack Micro",
@@ -722,7 +722,7 @@
                 btn_buy_149: "Comprar pack · $149 USD",
                 modal_title: "Finalizar compra",
                 modal_pack_sel: "Pack seleccionado:",
-                modal_processor_notice: "Pagas con tarjeta (Polar.sh / Stripe) y recibes tu API key al instante.",
+                modal_processor_notice: "Pagas con USDT, Binance, Cripto o Tarjeta. Créditos y API key activados al instante.",
                 modal_email_lbl: "Tu email (recibo y soporte):",
                 modal_key_lbl: "¿Ya tienes API key? Pégala para recargar (opcional):",
                 modal_submit_btn: "Ir al pago seguro →",
@@ -739,12 +739,12 @@
                 footer_privacy: "Política de Privacidad",
                 footer_refund: "Garantía de Reembolso (14 días)",
                 footer_col_pay: "Pagos Globales",
-                footer_pay_desc: "Cobro seguro internacional procesado por Polar.sh (Merchant of Record) y Stripe. Cumplimiento fiscal global automático.",
+                footer_pay_desc: "Cobro seguro internacional vía NOWPayments. Acepta USDT, Binance Pay, más de 300 criptoactivos o Tarjeta con liquidación directa.",
                 footer_tagline: "Diseñado para agencias globales en US, UK y Europa",
                 terms_h: "Términos del Servicio • NexusLeadEngine.io",
                 terms_p1: "NexusLeadEngine.io comercializa acceso a inteligencia y auditoría de prospectos B2B en tiempo real mediante APIs y Webhooks. Los créditos prepagados se consumen por cada lead calificado entregado con éxito.",
                 privacy_h: "Política de Privacidad • NexusLeadEngine.io",
-                privacy_p1: "En NexusLeadEngine.io protegemos la privacidad de nuestros clientes. Solo recolectamos los datos necesarios para autenticar tu API Key y activar tus créditos (tu email de compra). No almacenamos datos de tarjeta; todas las transacciones son procesadas externamente por Polar.sh (Merchant of Record) y Stripe.",
+                privacy_p1: "En NexusLeadEngine.io protegemos la privacidad de nuestros clientes. Solo recolectamos los datos necesarios para autenticar tu API Key y activar tus créditos (tu email de compra). No almacenamos datos de tarjeta ni credenciales financieras; todas las transacciones son procesadas externamente por NOWPayments / Stripe / Polar.",
                 refund_h: "Garantía de Reembolso (14 días)",
                 refund_p1: "Ofrecemos una garantía total de reembolso durante los primeros 14 días si no estás conforme con la calidad de los datos y has consumido menos del 20% de tus créditos. Para solicitar un reembolso, escribe a hola@nexusleadengine.io con tu email de compra."
             }

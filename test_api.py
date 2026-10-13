@@ -3,9 +3,13 @@ import os
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 from fastapi.testclient import TestClient
-from api.main import app
+from api.main import app, ledger
 
 def test_api_pipeline():
+    demo_acc = ledger.get_by_client_id("demo_client")
+    if not demo_acc or demo_acc.credits_balance < 5:
+        ledger.add_credits("demo_client", 20)
+
     client = TestClient(app)
 
     # 1. Test status

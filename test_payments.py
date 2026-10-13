@@ -28,6 +28,7 @@ def client(tmp_path, monkeypatch):
     monkeypatch.setattr(main.stripe_service, "webhook_secret", "whsec_test_secret")
     monkeypatch.setattr(main.stripe_service, "api_key", "")
     monkeypatch.setattr(main.polar_service, "access_token", None)
+    monkeypatch.setattr(main.nowpayments_service, "api_key", None)
     return TestClient(main.app)
 
 

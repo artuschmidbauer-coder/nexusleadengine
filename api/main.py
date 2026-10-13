@@ -28,6 +28,7 @@ from dispatchers.webhook_sender import WebhookDispatcher
 from billing.ledger import BillingLedger
 from billing.stripe_service import StripeService, PACKAGES, PaymentsNotConfigured
 from billing.polar_service import PolarService
+from billing.nowpayments_service import NowPaymentsService
 from billing.guard import get_or_create_account, deduct_credit_for_delivery
 from analytics.tracker import AnalyticsTracker
 
@@ -58,6 +59,7 @@ dispatcher = WebhookDispatcher()
 ledger = BillingLedger()
 stripe_service = StripeService(ledger)
 polar_service = PolarService(ledger)
+nowpayments_service = NowPaymentsService(ledger)
 tracker = AnalyticsTracker()
 
 # In-memory store for recent generated leads
@@ -140,14 +142,15 @@ class BuyRequest(BaseModel):
     package_id: str
     email: EmailStr
     api_key: Optional[str] = None  # present when an existing customer tops up
+    payment_method: Optional[str] = "crypto"  # "crypto" (NOWPayments / Binance) or "card" (Polar / Stripe)
 
 
 @app.post("/v1/billing/buy", tags=["Billing"])
 def buy_credits(req: BuyRequest):
     """
-    Starts a Stripe Checkout for a credit pack.
-    - New customer: a server-generated client id is created (never user-chosen).
-    - Existing customer: pass their api_key to top up the same account.
+    Starts a Checkout for a credit pack.
+    - Default: NOWPayments (USDT / Binance / Crypto + Card)
+    - Fallback: Polar or Stripe
     """
     if req.package_id not in PACKAGES:
         raise HTTPException(status_code=400, detail=f"Paquete inválido. Opciones: {list(PACKAGES.keys())}")
@@ -162,7 +165,19 @@ def buy_credits(req: BuyRequest):
         client_id = f"cli_{uuid.uuid4().hex[:12]}"
 
     try:
-        if polar_service.is_configured:
+        if req.payment_method == "card" and polar_service.is_configured:
+            checkout = polar_service.create_checkout_session(
+                client_id=client_id,
+                package_id=req.package_id,
+                customer_email=str(req.email)
+            )
+        elif nowpayments_service.is_configured:
+            checkout = nowpayments_service.create_invoice(
+                client_id=client_id,
+                package_id=req.package_id,
+                customer_email=str(req.email)
+            )
+        elif polar_service.is_configured:
             checkout = polar_service.create_checkout_session(
                 client_id=client_id,
                 package_id=req.package_id,
@@ -185,11 +200,13 @@ def buy_credits(req: BuyRequest):
 @app.get("/v1/billing/session/{session_id}", tags=["Billing"])
 def get_checkout_result(session_id: str):
     """
-    Called by the success page. Asks Stripe or Polar whether the session was really paid
+    Called by the success page. Asks NOWPayments, Polar, or Stripe whether the session was paid
     (never trusts the browser), credits it once, and returns the API key.
     """
     try:
-        if polar_service.is_configured and not session_id.startswith("cs_"):
+        if session_id.startswith("np_"):
+            result = nowpayments_service.retrieve_and_fulfill(session_id)
+        elif polar_service.is_configured and not session_id.startswith("cs_"):
             result = polar_service.retrieve_and_fulfill(session_id)
         else:
             result = stripe_service.retrieve_and_fulfill(session_id)
@@ -200,18 +217,18 @@ def get_checkout_result(session_id: str):
 
     if result["status"] == "PENDING":
         return {"status": "PENDING", "message": "El pago aún no se ha confirmado."}
-    if result["status"] not in ("PROCESSED", "ALREADY_PROCESSED"):
+    if result["status"] not in ("PROCESSED", "ALREADY_PROCESSED", "PAID"):
         raise HTTPException(status_code=400, detail="Sesión de pago inválida.")
 
     account = ledger.get_by_client_id(result["client_id"])
     if result["status"] == "PROCESSED":
-        tracker.record_revenue(result["price_usd"], result.get("customer_email") or "stripe", result["credits_added"])
+        tracker.record_revenue(result["price_usd"], result.get("customer_email") or "nowpayments_binance", result["credits_added"])
 
     return {
         "status": "PAID",
-        "credits_added": result["credits_added"],
-        "new_balance": account.credits_balance,
-        "api_key": account.api_key,
+        "credits_added": result.get("credits_added", 0),
+        "new_balance": account.credits_balance if account else 0,
+        "api_key": account.api_key if account else "",
     }
 
 
@@ -260,6 +277,37 @@ async def process_polar_webhook(request: Request):
         return result
 
     return {"status": "IGNORED", "event_type": event_type}
+
+
+@app.post("/v1/billing/nowpayments-webhook", tags=["Billing"])
+async def process_nowpayments_webhook(
+    request: Request,
+    x_nowpayments_sig: Optional[str] = Header(None)
+):
+    """
+    NOWPayments Instant Payment Notification (IPN) Receiver.
+    Fires on payment state change (finished/confirmed) to automatically credit customer account in Binance USDT.
+    """
+    raw_body = await request.body()
+    try:
+        nowpayments_service.verify_ipn_signature(raw_body, x_nowpayments_sig)
+    except PermissionError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
+    try:
+        import json
+        payload = json.loads(raw_body.decode("utf-8"))
+    except Exception:
+        raise HTTPException(status_code=400, detail="Invalid JSON payload")
+
+    result = nowpayments_service.fulfill_payment(payload)
+    if result.get("status") == "PROCESSED":
+        tracker.record_revenue(
+            result["price_usd"],
+            payload.get("customer_email") or "nowpayments_crypto",
+            result["credits_added"]
+        )
+    return result
 
 @app.get("/v1/billing/balance", response_model=CreditBalanceResponse, tags=["Billing"])
 def check_balance(
