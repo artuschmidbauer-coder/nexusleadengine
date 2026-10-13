@@ -132,6 +132,66 @@ class NowPaymentsService:
             mode="nowpayments_binance"
         )
 
+    def create_direct_payment(
+        self,
+        client_id: str,
+        package_id: str,
+        pay_currency: str = "usdttrc20",
+        customer_email: Optional[str] = None
+    ) -> Dict[str, Any]:
+        """
+        Creates a direct crypto payment for AI Agents, bots and M2M callers.
+        Returns the exact payment address and amount for autonomous on-chain wallet signing.
+        """
+        package = PACKAGES.get(package_id)
+        if not package:
+            raise ValueError(f"Invalid package: {package_id}. Valid: {list(PACKAGES.keys())}")
+
+        if not self.is_configured:
+            raise RuntimeError("NOWPAYMENTS_API_KEY not configured. Crypto payments unavailable.")
+
+        if not self.ledger.get_by_client_id(client_id):
+            self.ledger.create_account(client_id)
+
+        unique_order_id = f"np__{client_id}__{package_id}__{uuid.uuid4().hex[:8]}"
+        callback_url = f"{PUBLIC_BASE_URL}/v1/billing/nowpayments-webhook"
+
+        headers = {
+            "x-api-key": self.api_key,
+            "Content-Type": "application/json"
+        }
+
+        payload = {
+            "price_amount": package.price_usd,
+            "price_currency": "usd",
+            "pay_currency": pay_currency.lower(),
+            "order_id": unique_order_id,
+            "order_description": f"{package.name} - NexusLeadEngine M2M Agent Buy",
+            "ipn_callback_url": callback_url
+        }
+        if customer_email:
+            payload["customer_email"] = customer_email
+
+        resp = requests.post(f"{self.api_base}/payment", json=payload, headers=headers, timeout=12)
+        if resp.status_code not in (200, 201):
+            raise RuntimeError(f"Error communicating with NOWPayments Payment API ({resp.status_code}): {resp.text}")
+
+        data = resp.json()
+        return {
+            "order_id": unique_order_id,
+            "payment_id": str(data.get("payment_id", "")),
+            "payment_status": data.get("payment_status", "waiting"),
+            "pay_address": data.get("pay_address"),
+            "pay_amount": data.get("pay_amount"),
+            "pay_currency": data.get("pay_currency", pay_currency),
+            "network": data.get("network", "trx"),
+            "price_usd": package.price_usd,
+            "credits_to_add": package.credits,
+            "check_status_url": f"{PUBLIC_BASE_URL}/v1/billing/session/{unique_order_id}",
+            "valid_until": data.get("valid_until"),
+            "instructions": "Transfer exact pay_amount to pay_address on the specified network. Once confirmed, poll check_status_url to retrieve your activated api_key."
+        }
+
     def verify_ipn_signature(self, raw_body: bytes, received_sig: Optional[str]) -> bool:
         """
         Verifies NOWPayments HMAC-SHA512 signature against the IPN secret key.

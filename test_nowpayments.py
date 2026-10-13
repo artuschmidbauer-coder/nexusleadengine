@@ -103,3 +103,38 @@ def test_nowpayments_buy_creates_invoice_session(client, monkeypatch):
     assert data["session_id"].startswith("np_")
     assert data["credits_to_add"] == 60
     assert data["mode"] == "nowpayments_binance"
+
+
+def test_nowpayments_agent_buy_creates_direct_crypto_instructions(client, monkeypatch):
+    class FakePaymentResponse:
+        status_code = 201
+        def json(self):
+            return {
+                "payment_id": "4763998780",
+                "payment_status": "waiting",
+                "pay_address": "TKfJPVjgTgSSDsQdnrLx49pbPTEeCV2m6t",
+                "price_amount": 15,
+                "price_currency": "usd",
+                "pay_amount": 14.945,
+                "pay_currency": "usdttrc20",
+                "network": "trx",
+                "valid_until": "2026-10-20T01:34:37.262Z"
+            }
+
+    import requests
+    def fake_post(url, json=None, headers=None, timeout=None):
+        return FakePaymentResponse()
+
+    monkeypatch.setattr(requests, "post", fake_post)
+
+    r = client.post("/v1/billing/agent-buy", json={"package_id": "pack_micro_25", "pay_currency": "usdttrc20"})
+    assert r.status_code == 200
+    data = r.json()
+    assert data["payment_status"] == "waiting"
+    assert data["pay_address"] == "TKfJPVjgTgSSDsQdnrLx49pbPTEeCV2m6t"
+    assert data["pay_amount"] == 14.945
+    assert data["pay_currency"] == "usdttrc20"
+    assert data["network"] == "trx"
+    assert data["credits_to_add"] == 25
+    assert data["order_id"].startswith("np__cli_agent_")
+    assert "poll check_status_url" in data["instructions"]

@@ -197,6 +197,46 @@ def buy_credits(req: BuyRequest):
     return checkout
 
 
+class AgentBuyRequest(BaseModel):
+    package_id: str = "pack_micro_25"
+    pay_currency: str = "usdttrc20"  # usdttrc20, usdtbsc, btc, eth, sol, trx, ltc
+    email: Optional[EmailStr] = None
+    api_key: Optional[str] = None  # if top-up of existing key
+
+
+@app.post("/v1/billing/agent-buy", tags=["Agentic Commerce / M2M"])
+def agent_buy_credits(req: AgentBuyRequest):
+    """
+    Autonomous Machine-to-Machine (M2M) Checkout for AI Agents, Bots and Smart Wallets.
+    Returns exact crypto deposit address, amount and network instructions for direct on-chain signing.
+    No browser or human interaction required.
+    """
+    if req.package_id not in PACKAGES:
+        raise HTTPException(status_code=400, detail=f"Paquete inválido. Opciones: {list(PACKAGES.keys())}")
+
+    if not nowpayments_service.is_configured:
+        raise HTTPException(status_code=503, detail="NOWPayments M2M Crypto gateway not configured.")
+
+    client_id: Optional[str] = None
+    if req.api_key:
+        existing = ledger.get_by_api_key(req.api_key)
+        if not existing:
+            raise HTTPException(status_code=401, detail="API key inválida.")
+        client_id = existing.client_id
+    else:
+        client_id = f"cli_agent_{uuid.uuid4().hex[:10]}"
+
+    try:
+        return nowpayments_service.create_direct_payment(
+            client_id=client_id,
+            package_id=req.package_id,
+            pay_currency=req.pay_currency,
+            customer_email=str(req.email) if req.email else None
+        )
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error initializing M2M payment: {str(e)}")
+
+
 @app.get("/v1/billing/session/{session_id}", tags=["Billing"])
 def get_checkout_result(session_id: str):
     """
