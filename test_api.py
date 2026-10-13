@@ -61,7 +61,33 @@ def test_api_pipeline():
     assert sample["score"] >= 70
     print(f"✅ GET /v1/leads/sample: OK (Lead ID: {sample['lead_id']})")
 
+    # 6. Test analytics dashboard security (Admin Only)
+    # 6a. Unauthenticated -> 403 Forbidden
+    resp = client.get("/v1/analytics/dashboard")
+    assert resp.status_code == 403
+    print("✅ GET /v1/analytics/dashboard sin token: 403 Forbidden (Bloqueado a clientes)")
+
+    # 6b. Wrong token -> 403 Forbidden
+    resp = client.get("/v1/analytics/dashboard", headers={"x-admin-token": "token_invalido_hacker"})
+    assert resp.status_code == 403
+    print("✅ GET /v1/analytics/dashboard con token inválido: 403 Forbidden")
+
+    # 6c. Valid token in header
+    admin_token = os.getenv("ADMIN_TOKEN", "nexus_sec_admin_992147ae67bc10")
+    resp = client.get("/v1/analytics/dashboard", headers={"x-admin-token": admin_token})
+    assert resp.status_code == 200
+    data = resp.json()
+    assert "financial_allocation" in data
+    assert "owner_profit_70" in data["financial_allocation"]
+    print("✅ GET /v1/analytics/dashboard con x-admin-token válido: 200 OK")
+
+    # 6d. Valid token in query param
+    resp = client.get(f"/v1/analytics/dashboard?token={admin_token}")
+    assert resp.status_code == 200
+    print("✅ GET /v1/analytics/dashboard?token=...: 200 OK")
+
     print("\n🎉 Todas las pruebas de la API han pasado exitosamente.")
 
 if __name__ == "__main__":
     test_api_pipeline()
+

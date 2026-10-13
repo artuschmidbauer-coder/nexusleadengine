@@ -105,8 +105,12 @@ def download_n8n_template():
     raise HTTPException(status_code=404, detail="Template not found")
 
 @app.get("/v1/analytics/dashboard", tags=["Telemetry"])
-def get_analytics_metrics():
-    """Returns live throughput, conversion rates, revenues and activity feed."""
+def get_analytics_metrics(
+    x_admin_token: Optional[str] = Header(None),
+    token: Optional[str] = None
+):
+    """Returns live throughput, conversion rates, revenues and activity feed (Admin Only)."""
+    require_admin(x_admin_token or token)
     return tracker.get_dashboard_metrics(active_accounts_count=len(ledger._accounts))
 
 @app.get("/v1/status")

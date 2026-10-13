@@ -40,9 +40,10 @@
             <div class="flex items-center gap-4 text-xs font-mono">
                 <a href="/" class="text-slate-400 hover:text-white transition">Landing Page ↗</a>
                 <a href="/docs" target="_blank" class="text-slate-400 hover:text-emerald-400 transition">Swagger Docs ↗</a>
+                <button onclick="logoutAdmin()" class="text-slate-400 hover:text-rose-400 transition">Bloquear 🔒</button>
                 <span id="liveStatusPill" class="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-400">
                     <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-                    Motor Activo
+                    Admin Autenticado
                 </span>
             </div>
         </div>
@@ -237,12 +238,116 @@
 
     </main>
 
+    <!-- Admin Auth Modal -->
+    <div id="adminAuthModal" class="fixed inset-0 z-50 bg-[#05070e]/95 backdrop-blur-md flex items-center justify-center p-4 hidden">
+        <div class="bg-[#090d16] border border-white/10 rounded-2xl max-w-md w-full p-6 shadow-2xl relative">
+            <div class="w-12 h-12 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 flex items-center justify-center text-xl mb-4">
+                🔒
+            </div>
+            <h2 class="text-xl font-bold text-white mb-1">Acceso Exclusivo de Administrador</h2>
+            <p class="text-slate-400 text-xs mb-6 leading-relaxed">
+                Este panel contiene métricas confidenciales de facturación, utilidades y la distribución de tesorería (70% Retiro / 20% Reinversión / 10% Reserva). Solo el propietario de NexusLeadEngine puede visualizarlo.
+            </p>
+
+            <form onsubmit="handleAdminLogin(event)" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-mono text-slate-400 mb-1.5">Token de Acceso (ADMIN_TOKEN):</label>
+                    <input type="password" id="adminTokenInput" placeholder="Ingresa tu clave de admin..." required
+                        class="w-full bg-[#05070e] border border-white/10 rounded-xl px-3.5 py-2.5 text-sm text-white font-mono focus:outline-none focus:border-emerald-400 transition">
+                </div>
+                <div id="authErrorMsg" class="text-xs font-mono text-rose-400 hidden"></div>
+                <div class="flex items-center gap-3 pt-2">
+                    <button type="submit" id="btnAuthSubmit"
+                        class="flex-1 bg-emerald-500 hover:bg-emerald-400 text-black font-extrabold py-2.5 rounded-xl text-xs transition">
+                        Desbloquear Panel
+                    </button>
+                    <a href="/" class="px-4 py-2.5 rounded-xl text-xs text-slate-400 hover:text-white bg-white/5 hover:bg-white/10 font-mono transition">
+                        Volver a Inicio
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <script>
+        function getAdminToken() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const urlToken = urlParams.get('token');
+            if (urlToken) {
+                localStorage.setItem('nexus_admin_token', urlToken);
+                const cleanUrl = window.location.protocol + "//" + window.location.host + window.location.pathname;
+                window.history.replaceState({path: cleanUrl}, '', cleanUrl);
+                return urlToken;
+            }
+            return localStorage.getItem('nexus_admin_token') || '';
+        }
+
+        function showAuthModal(show, errorText = '') {
+            const modal = document.getElementById('adminAuthModal');
+            const err = document.getElementById('authErrorMsg');
+            const statusPill = document.getElementById('liveStatusPill');
+
+            if (show) {
+                modal.classList.remove('hidden');
+                if (statusPill) {
+                    statusPill.innerHTML = `<span class="w-2 h-2 rounded-full bg-rose-400"></span> Bloqueado`;
+                    statusPill.className = "flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-rose-500/10 text-rose-400 font-mono text-xs";
+                }
+                if (errorText) {
+                    err.innerText = errorText;
+                    err.classList.remove('hidden');
+                } else {
+                    err.classList.add('hidden');
+                }
+            } else {
+                modal.classList.add('hidden');
+                if (statusPill) {
+                    statusPill.innerHTML = `<span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span> Admin Autenticado`;
+                    statusPill.className = "flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-400 font-mono text-xs";
+                }
+            }
+        }
+
+        async function handleAdminLogin(e) {
+            e.preventDefault();
+            const input = document.getElementById('adminTokenInput').value.trim();
+            if (!input) return;
+            localStorage.setItem('nexus_admin_token', input);
+            const success = await refreshDashboard();
+            if (!success) {
+                localStorage.removeItem('nexus_admin_token');
+                showAuthModal(true, 'Token inválido. Verifica tu ADMIN_TOKEN.');
+            } else {
+                showAuthModal(false);
+            }
+        }
+
+        function logoutAdmin() {
+            localStorage.removeItem('nexus_admin_token');
+            showAuthModal(true, 'Sesión bloqueada.');
+        }
+
         async function refreshDashboard() {
+            const token = getAdminToken();
+            if (!token) {
+                showAuthModal(true);
+                return false;
+            }
+
             try {
-                const res = await fetch('/v1/analytics/dashboard');
-                if (!res.ok) return;
+                const res = await fetch('/v1/analytics/dashboard', {
+                    headers: { 'x-admin-token': token }
+                });
+
+                if (res.status === 401 || res.status === 403) {
+                    showAuthModal(true, 'Token inválido o expirado. Acceso restringido.');
+                    return false;
+                }
+
+                if (!res.ok) return false;
+
                 const data = await res.json();
+                showAuthModal(false);
 
                 document.getElementById('statUniqueVisitors').innerText = data.unique_visitors_count || 0;
                 document.getElementById('statTotalPageviews').innerText = `${data.total_pageviews || 0} vistas de página`;
@@ -258,8 +363,10 @@
                 document.getElementById('statReserves').innerText = '$' + (fa.reserves_10 || 0).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}) + ' USD';
 
                 renderActivity(data.recent_activity || []);
+                return true;
             } catch (err) {
                 console.error("Error al refrescar dashboard:", err);
+                return false;
             }
         }
 
@@ -318,9 +425,13 @@
             statusMsg.innerText = `Buscando negocios en ${location} para ${niche}...`;
 
             try {
+                const token = getAdminToken();
+                const headers = { 'Content-Type': 'application/json' };
+                if (token) headers['x-admin-token'] = token;
+
                 const res = await fetch('/v1/leads/trigger-scan', {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
+                    headers: headers,
                     body: JSON.stringify({
                         niche: niche,
                         location: location,
@@ -348,9 +459,13 @@
             }
         }
 
-        // Initial load and periodic poll every 5 seconds
+        // Initial check and periodic refresh every 6 seconds
         refreshDashboard();
-        setInterval(refreshDashboard, 5000);
+        setInterval(() => {
+            if (getAdminToken()) {
+                refreshDashboard();
+            }
+        }, 6000);
     </script>
 </body>
 </html>
