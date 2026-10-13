@@ -1,0 +1,19 @@
+services:
+  - type: web
+    name: nexusleadengine
+    runtime: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn api.main:app --host 0.0.0.0 --port $PORT
+    plan: free
+    autoDeploy: true
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.8
+      - key: PUBLIC_BASE_URL
+        sync: false
+      - key: NOWPAYMENTS_API_KEY
+        sync: false
+      - key: NOWPAYMENTS_IPN_SECRET
+        sync: false
+      - key: ADMIN_TOKEN
+        generateValue: true
