@@ -208,6 +208,8 @@ class NowPaymentsService:
             }
 
         self.ledger.mark_session_processed(dedup_id)
+        if order_id:
+            self.ledger.mark_session_processed(order_id)
         account = self.ledger.add_credits(client_id, package.credits)
         return {
             "status": "PROCESSED",
@@ -227,14 +229,28 @@ class NowPaymentsService:
         if not session_id.startswith("np_"):
             return {"status": "PENDING"}
 
-        parts = session_id.split("_")
-        client_id = f"{parts[1]}_{parts[2]}" if len(parts) >= 3 and parts[1] == "cli" else (parts[1] if len(parts) >= 2 else None)
-        account = self.ledger.get_by_client_id(client_id) if client_id else None
+        client_id = None
+        package_id = None
+        if session_id.startswith("np__"):
+            parts = session_id.split("__")
+            if len(parts) >= 3:
+                client_id = parts[1]
+                package_id = parts[2]
+        else:
+            parts = session_id.split("_")
+            client_id = f"{parts[1]}_{parts[2]}" if len(parts) >= 3 and parts[1] == "cli" else (parts[1] if len(parts) >= 2 else None)
 
-        if any(self.ledger.is_session_processed(f"np_{k}") for k in [session_id]):
+        if not client_id:
+            return {"status": "PENDING"}
+
+        account = self.ledger.get_by_client_id(client_id)
+        package = PACKAGES.get(package_id or "")
+
+        if self.ledger.is_session_processed(session_id) or (account and account.credits_balance > 0):
             return {
                 "status": "PAID",
                 "client_id": client_id,
+                "credits_added": package.credits if package else 0,
                 "new_balance": account.credits_balance if account else 0,
                 "api_key": account.api_key if account else ""
             }
