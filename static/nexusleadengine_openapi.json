@@ -1,0 +1,1290 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "NexusLeadEngine.io - M2M Lead Intelligence API",
+    "description": "Motor Aut\u00f3nomo de Inteligencia y Comercializaci\u00f3n de Leads B2B para Agentes de IA, Bots y CRMs. Contacto: hola@nexusleadengine.io",
+    "version": "2.0.0"
+  },
+  "paths": {
+    "/v1/analytics/dashboard": {
+      "get": {
+        "tags": [
+          "Telemetry"
+        ],
+        "summary": "Get Analytics Metrics",
+        "description": "Returns live throughput, conversion rates, revenues and activity feed (Admin Only).",
+        "operationId": "get_analytics_metrics_v1_analytics_dashboard_get",
+        "parameters": [
+          {
+            "name": "token",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Token"
+            }
+          },
+          {
+            "name": "x-admin-token",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Admin-Token"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/status": {
+      "get": {
+        "summary": "Root Api Status",
+        "operationId": "root_api_status_v1_status_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/billing/packages": {
+      "get": {
+        "tags": [
+          "Billing"
+        ],
+        "summary": "Get Credit Packages",
+        "description": "Returns available prepaid credit packs for bots and clients.",
+        "operationId": "get_credit_packages_v1_billing_packages_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/CreditPackage"
+                  },
+                  "type": "array",
+                  "title": "Response Get Credit Packages V1 Billing Packages Get"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/billing/buy": {
+      "post": {
+        "tags": [
+          "Billing"
+        ],
+        "summary": "Buy Credits",
+        "description": "Starts a Checkout for a credit pack.\n- Default: NOWPayments (USDT / Binance / Crypto + Card)\n- Fallback: Polar or Stripe",
+        "operationId": "buy_credits_v1_billing_buy_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BuyRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/billing/agent-buy": {
+      "post": {
+        "tags": [
+          "Agentic Commerce / M2M"
+        ],
+        "summary": "Agent Buy Credits",
+        "description": "Autonomous Machine-to-Machine (M2M) Checkout for AI Agents, Bots and Smart Wallets.\nReturns exact crypto deposit address, amount and network instructions for direct on-chain signing.\nNo browser or human interaction required.",
+        "operationId": "agent_buy_credits_v1_billing_agent_buy_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AgentBuyRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/billing/session/{session_id}": {
+      "get": {
+        "tags": [
+          "Billing"
+        ],
+        "summary": "Get Checkout Result",
+        "description": "Called by the success page. Asks NOWPayments, Polar, or Stripe whether the session was paid\n(never trusts the browser), credits it once, and returns the API key.",
+        "operationId": "get_checkout_result_v1_billing_session__session_id__get",
+        "parameters": [
+          {
+            "name": "session_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Session Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/billing/stripe-webhook": {
+      "post": {
+        "tags": [
+          "Billing"
+        ],
+        "summary": "Process Stripe Webhook",
+        "description": "Stripe webhook receiver. The Stripe-Signature header is verified against\nSTRIPE_WEBHOOK_SECRET; unsigned or forged events are rejected with 400.",
+        "operationId": "process_stripe_webhook_v1_billing_stripe_webhook_post",
+        "parameters": [
+          {
+            "name": "stripe-signature",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Stripe-Signature"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/billing/polar-webhook": {
+      "post": {
+        "tags": [
+          "Billing"
+        ],
+        "summary": "Process Polar Webhook",
+        "description": "Polar.sh Standard Webhook Receiver.\nFires on order.created / checkout.updated to automatically credit customer accounts.",
+        "operationId": "process_polar_webhook_v1_billing_polar_webhook_post",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/billing/nowpayments-webhook": {
+      "post": {
+        "tags": [
+          "Billing"
+        ],
+        "summary": "Process Nowpayments Webhook",
+        "description": "NOWPayments Instant Payment Notification (IPN) Receiver.\nFires on payment state change (finished/confirmed) to automatically credit customer account in Binance USDT.",
+        "operationId": "process_nowpayments_webhook_v1_billing_nowpayments_webhook_post",
+        "parameters": [
+          {
+            "name": "x-nowpayments-sig",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Nowpayments-Sig"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/billing/balance": {
+      "get": {
+        "tags": [
+          "Billing"
+        ],
+        "summary": "Check Balance",
+        "description": "Check credit balance, total leads consumed, and account status.",
+        "operationId": "check_balance_v1_billing_balance_get",
+        "parameters": [
+          {
+            "name": "client_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": "demo_client",
+              "title": "Client Id"
+            }
+          },
+          {
+            "name": "x-api-key",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Api-Key"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreditBalanceResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/billing/paypal-activate": {
+      "post": {
+        "tags": [
+          "Billing (admin)"
+        ],
+        "summary": "Activate Paypal Purchase",
+        "description": "ADMIN ONLY. Manual credit activation after the owner has confirmed a PayPal payment\nin their own PayPal account. Requires the X-Admin-Token header (env ADMIN_TOKEN).",
+        "operationId": "activate_paypal_purchase_v1_billing_paypal_activate_post",
+        "parameters": [
+          {
+            "name": "x-admin-token",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Admin-Token"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PayPalActivationRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/billing/topup-dev": {
+      "post": {
+        "tags": [
+          "Billing (admin)"
+        ],
+        "summary": "Topup Development Credits",
+        "description": "ADMIN ONLY. Add credits to a client manually. Requires the X-Admin-Token header.",
+        "operationId": "topup_development_credits_v1_billing_topup_dev_post",
+        "parameters": [
+          {
+            "name": "x-admin-token",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Admin-Token"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TopupDevRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/webhooks/subscribe": {
+      "post": {
+        "tags": [
+          "M2M Delivery"
+        ],
+        "summary": "Subscribe Webhook",
+        "description": "Allows client bots (Make, n8n, GoHighLevel, Zapier) to subscribe their webhook.",
+        "operationId": "subscribe_webhook_v1_webhooks_subscribe_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/WebhookSubscription"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/webhooks/subscribers": {
+      "get": {
+        "tags": [
+          "M2M Delivery"
+        ],
+        "summary": "Get Subscribers",
+        "operationId": "get_subscribers_v1_webhooks_subscribers_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/leads/trigger-scan": {
+      "post": {
+        "tags": [
+          "Lead Engine"
+        ],
+        "summary": "Trigger Scan",
+        "description": "Full Autonomous Pipeline with Metered Credit Deduction:\n1. Authenticates client and validates credit balance.\n2. Discovers prospects in target high-ticket sector.\n3. Runs technical audit & AI scoring.\n4. Deducts 1 credit per qualified lead delivered.\n5. Dispatches M2M payloads to subscribed bots.",
+        "operationId": "trigger_scan_v1_leads_trigger_scan_post",
+        "parameters": [
+          {
+            "name": "x-api-key",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Api-Key"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ScanRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/EnrichedLead"
+                  },
+                  "title": "Response Trigger Scan V1 Leads Trigger Scan Post"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/leads/sample": {
+      "get": {
+        "tags": [
+          "Lead Engine"
+        ],
+        "summary": "Get Sample Lead",
+        "description": "Generates an instant sample high-ticket lead to preview payload structure.",
+        "operationId": "get_sample_lead_v1_leads_sample_get",
+        "parameters": [
+          {
+            "name": "country_code",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": "US",
+              "title": "Country Code"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EnrichedLead"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/dispatch/logs": {
+      "get": {
+        "tags": [
+          "M2M Delivery"
+        ],
+        "summary": "Get Delivery Logs",
+        "operationId": "get_delivery_logs_v1_dispatch_logs_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "AgentBuyRequest": {
+        "properties": {
+          "package_id": {
+            "type": "string",
+            "title": "Package Id",
+            "default": "pack_micro_25"
+          },
+          "pay_currency": {
+            "type": "string",
+            "title": "Pay Currency",
+            "default": "usdttrc20"
+          },
+          "email": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "email"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Email"
+          },
+          "api_key": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Api Key"
+          }
+        },
+        "type": "object",
+        "title": "AgentBuyRequest"
+      },
+      "BotActionPayload": {
+        "properties": {
+          "recommended_channel": {
+            "$ref": "#/components/schemas/ChannelType"
+          },
+          "estimated_ticket_value_usd": {
+            "type": "integer",
+            "title": "Estimated Ticket Value Usd",
+            "description": "Estimated deal size for this client"
+          },
+          "pain_points": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Pain Points"
+          },
+          "loss_hypothesis": {
+            "type": "string",
+            "title": "Loss Hypothesis",
+            "description": "Estimated revenue lost by client due to missing automations"
+          },
+          "pre_drafted_outreach_hook": {
+            "type": "string",
+            "title": "Pre Drafted Outreach Hook",
+            "description": "Personalized icebreaker text ready for bot sending"
+          },
+          "service_pitch_angle": {
+            "type": "string",
+            "title": "Service Pitch Angle",
+            "description": "The exact solution angle to present"
+          }
+        },
+        "type": "object",
+        "required": [
+          "recommended_channel",
+          "estimated_ticket_value_usd",
+          "pain_points",
+          "loss_hypothesis",
+          "pre_drafted_outreach_hook",
+          "service_pitch_angle"
+        ],
+        "title": "BotActionPayload",
+        "description": "The machine payload: exact intelligence for the client's automated bot"
+      },
+      "BuyRequest": {
+        "properties": {
+          "package_id": {
+            "type": "string",
+            "title": "Package Id"
+          },
+          "email": {
+            "type": "string",
+            "format": "email",
+            "title": "Email"
+          },
+          "api_key": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Api Key"
+          },
+          "payment_method": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Payment Method",
+            "default": "crypto"
+          }
+        },
+        "type": "object",
+        "required": [
+          "package_id",
+          "email"
+        ],
+        "title": "BuyRequest"
+      },
+      "ChannelType": {
+        "type": "string",
+        "enum": [
+          "WHATSAPP",
+          "COLD_EMAIL",
+          "PHONE",
+          "API_AUTO_BOOK"
+        ],
+        "title": "ChannelType"
+      },
+      "CreditBalanceResponse": {
+        "properties": {
+          "client_id": {
+            "type": "string",
+            "title": "Client Id"
+          },
+          "api_key_masked": {
+            "type": "string",
+            "title": "Api Key Masked"
+          },
+          "credits_balance": {
+            "type": "integer",
+            "title": "Credits Balance"
+          },
+          "total_consumed": {
+            "type": "integer",
+            "title": "Total Consumed"
+          },
+          "total_purchased": {
+            "type": "integer",
+            "title": "Total Purchased"
+          },
+          "status": {
+            "type": "string",
+            "title": "Status"
+          }
+        },
+        "type": "object",
+        "required": [
+          "client_id",
+          "api_key_masked",
+          "credits_balance",
+          "total_consumed",
+          "total_purchased",
+          "status"
+        ],
+        "title": "CreditBalanceResponse"
+      },
+      "CreditPackage": {
+        "properties": {
+          "package_id": {
+            "type": "string",
+            "title": "Package Id"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "credits": {
+            "type": "integer",
+            "title": "Credits"
+          },
+          "price_usd": {
+            "type": "number",
+            "title": "Price Usd"
+          },
+          "unit_price_usd": {
+            "type": "number",
+            "title": "Unit Price Usd"
+          },
+          "description": {
+            "type": "string",
+            "title": "Description"
+          }
+        },
+        "type": "object",
+        "required": [
+          "package_id",
+          "name",
+          "credits",
+          "price_usd",
+          "unit_price_usd",
+          "description"
+        ],
+        "title": "CreditPackage"
+      },
+      "EnrichedLead": {
+        "properties": {
+          "lead_id": {
+            "type": "string",
+            "title": "Lead Id"
+          },
+          "timestamp_utc": {
+            "type": "integer",
+            "title": "Timestamp Utc"
+          },
+          "score": {
+            "type": "integer",
+            "maximum": 100.0,
+            "minimum": 0.0,
+            "title": "Score",
+            "description": "Overall Lead Quality Score"
+          },
+          "tier": {
+            "$ref": "#/components/schemas/LeadScoreTier"
+          },
+          "business_name": {
+            "type": "string",
+            "title": "Business Name"
+          },
+          "category": {
+            "type": "string",
+            "title": "Category"
+          },
+          "location": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "type": "object",
+            "title": "Location"
+          },
+          "contact_channels": {
+            "additionalProperties": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "type": "object",
+            "title": "Contact Channels"
+          },
+          "tech_signals": {
+            "$ref": "#/components/schemas/TechSignal"
+          },
+          "bot_action": {
+            "$ref": "#/components/schemas/BotActionPayload"
+          },
+          "raw_metadata": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Raw Metadata"
+          }
+        },
+        "type": "object",
+        "required": [
+          "score",
+          "tier",
+          "business_name",
+          "category",
+          "location",
+          "contact_channels",
+          "tech_signals",
+          "bot_action"
+        ],
+        "title": "EnrichedLead",
+        "description": "The final product delivered M2M (Machine to Machine)"
+      },
+      "HTTPValidationError": {
+        "properties": {
+          "detail": {
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            },
+            "type": "array",
+            "title": "Detail"
+          }
+        },
+        "type": "object",
+        "title": "HTTPValidationError"
+      },
+      "LeadScoreTier": {
+        "type": "string",
+        "enum": [
+          "ULTRA_HIGH",
+          "HIGH",
+          "MEDIUM",
+          "DISQUALIFIED"
+        ],
+        "title": "LeadScoreTier"
+      },
+      "PayPalActivationRequest": {
+        "properties": {
+          "client_id": {
+            "type": "string",
+            "title": "Client Id",
+            "description": "Nombre o ID del bot/cliente que usar\u00e1 la API"
+          },
+          "payer_email": {
+            "type": "string",
+            "title": "Payer Email",
+            "description": "Correo con el que realizaste el pago en PayPal"
+          },
+          "package_id": {
+            "type": "string",
+            "title": "Package Id",
+            "description": "ID del paquete adquirido",
+            "default": "pack_micro_15"
+          },
+          "transaction_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Transaction Id",
+            "description": "ID o comprobante de transacci\u00f3n de PayPal"
+          }
+        },
+        "type": "object",
+        "required": [
+          "client_id",
+          "payer_email"
+        ],
+        "title": "PayPalActivationRequest"
+      },
+      "ScanRequest": {
+        "properties": {
+          "niche": {
+            "type": "string",
+            "title": "Niche",
+            "description": "Target industry or high-ticket service",
+            "default": "dental implants"
+          },
+          "location": {
+            "type": "string",
+            "title": "Location",
+            "description": "City, state, or metropolitan area",
+            "default": "Miami"
+          },
+          "country_code": {
+            "type": "string",
+            "title": "Country Code",
+            "description": "Two-letter ISO country code (e.g., US, GB, CA, AU, ES)",
+            "default": "US"
+          },
+          "max_leads": {
+            "type": "integer",
+            "maximum": 50.0,
+            "minimum": 1.0,
+            "title": "Max Leads",
+            "default": 5
+          },
+          "min_score": {
+            "type": "integer",
+            "maximum": 100.0,
+            "minimum": 0.0,
+            "title": "Min Score",
+            "default": 60
+          },
+          "auto_dispatch_webhooks": {
+            "type": "boolean",
+            "title": "Auto Dispatch Webhooks",
+            "default": true
+          }
+        },
+        "type": "object",
+        "title": "ScanRequest",
+        "description": "Parameters to trigger an autonomous prospecting run"
+      },
+      "TechSignal": {
+        "properties": {
+          "has_ssl": {
+            "type": "boolean",
+            "title": "Has Ssl",
+            "default": false
+          },
+          "has_meta_pixel": {
+            "type": "boolean",
+            "title": "Has Meta Pixel",
+            "default": false
+          },
+          "has_google_tag": {
+            "type": "boolean",
+            "title": "Has Google Tag",
+            "default": false
+          },
+          "has_whatsapp_widget": {
+            "type": "boolean",
+            "title": "Has Whatsapp Widget",
+            "default": false
+          },
+          "has_contact_form": {
+            "type": "boolean",
+            "title": "Has Contact Form",
+            "default": false
+          },
+          "is_mobile_friendly": {
+            "type": "boolean",
+            "title": "Is Mobile Friendly",
+            "default": true
+          },
+          "page_load_seconds": {
+            "type": "number",
+            "title": "Page Load Seconds",
+            "default": 0.0
+          },
+          "detected_cms": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Detected Cms"
+          },
+          "social_profiles": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Social Profiles"
+          }
+        },
+        "type": "object",
+        "title": "TechSignal",
+        "description": "Signals detected by visiting the prospect's digital footprint"
+      },
+      "TopupDevRequest": {
+        "properties": {
+          "client_id": {
+            "type": "string",
+            "title": "Client Id"
+          },
+          "credits_to_add": {
+            "type": "integer",
+            "title": "Credits To Add",
+            "default": 50
+          }
+        },
+        "type": "object",
+        "required": [
+          "client_id"
+        ],
+        "title": "TopupDevRequest"
+      },
+      "ValidationError": {
+        "properties": {
+          "loc": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "type": "array",
+            "title": "Location"
+          },
+          "msg": {
+            "type": "string",
+            "title": "Message"
+          },
+          "type": {
+            "type": "string",
+            "title": "Error Type"
+          },
+          "input": {
+            "title": "Input"
+          },
+          "ctx": {
+            "type": "object",
+            "title": "Context"
+          }
+        },
+        "type": "object",
+        "required": [
+          "loc",
+          "msg",
+          "type"
+        ],
+        "title": "ValidationError"
+      },
+      "WebhookSubscription": {
+        "properties": {
+          "client_id": {
+            "type": "string",
+            "title": "Client Id"
+          },
+          "endpoint_url": {
+            "type": "string",
+            "title": "Endpoint Url"
+          },
+          "secret_key": {
+            "type": "string",
+            "title": "Secret Key"
+          },
+          "target_niches": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Target Niches"
+          },
+          "min_score_threshold": {
+            "type": "integer",
+            "title": "Min Score Threshold",
+            "default": 70
+          },
+          "is_active": {
+            "type": "boolean",
+            "title": "Is Active",
+            "default": true
+          }
+        },
+        "type": "object",
+        "required": [
+          "client_id",
+          "endpoint_url",
+          "secret_key"
+        ],
+        "title": "WebhookSubscription",
+        "description": "Client bot registers its endpoint to receive live lead streaming"
+      }
+    }
+  },
+  "servers": [
+    {
+      "url": "https://nexusleadengine.io",
+      "description": "Production Server"
+    }
+  ]
+}

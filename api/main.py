@@ -39,11 +39,28 @@ def require_admin(token: Optional[str]) -> None:
     if not expected or not token or not hmac.compare_digest(token, expected):
         raise HTTPException(status_code=403, detail="Acceso restringido.")
 
+from fastapi.openapi.utils import get_openapi
+
 app = FastAPI(
     title="NexusLeadEngine.io - M2M Lead Intelligence API",
     description="Motor Autónomo de Inteligencia y Comercialización de Leads B2B para Agentes de IA, Bots y CRMs. Contacto: hola@nexusleadengine.io",
     version="2.0.0"
 )
+
+def custom_openapi():
+    if app.openapi_schema:
+        return app.openapi_schema
+    openapi_schema = get_openapi(
+        title=app.title,
+        version=app.version,
+        description=app.description,
+        routes=app.routes,
+    )
+    openapi_schema["servers"] = [{"url": "https://nexusleadengine.io", "description": "Production Server"}]
+    app.openapi_schema = openapi_schema
+    return app.openapi_schema
+
+app.openapi = custom_openapi
 
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
@@ -119,6 +136,14 @@ def get_sitemap_xml():
     if os.path.exists(sitemap_file):
         return FileResponse(sitemap_file, media_type="application/xml")
     raise HTTPException(status_code=404, detail="sitemap.xml not found")
+
+@app.get("/download-openapi", include_in_schema=False)
+def download_openapi_file():
+    """Direct attachment download of the OpenAPI 3.0 specification for RapidAPI."""
+    openapi_file = os.path.join(STATIC_DIR, "nexusleadengine_openapi.json")
+    if os.path.exists(openapi_file):
+        return FileResponse(openapi_file, media_type="application/json", filename="nexusleadengine_openapi.json")
+    raise HTTPException(status_code=404, detail="OpenAPI file not found")
 
 @app.get("/v1/analytics/dashboard", tags=["Telemetry"])
 def get_analytics_metrics(
