@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+Allow: /templates/n8n
+Allow: /docs
+Disallow: /dashboard
+Disallow: /v1/analytics/
+
+Sitemap: https://nexusleadengine.io/sitemap.xml

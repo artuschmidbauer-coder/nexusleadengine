@@ -104,6 +104,22 @@ def download_n8n_template():
         return FileResponse(template_path, media_type="application/json", filename="nexus_n8n_lead_workflow.json")
     raise HTTPException(status_code=404, detail="Template not found")
 
+@app.get("/robots.txt", include_in_schema=False)
+def get_robots_txt():
+    """Serve robots.txt for search engines (Google, Bing)."""
+    robots_file = os.path.join(STATIC_DIR, "robots.txt")
+    if os.path.exists(robots_file):
+        return FileResponse(robots_file, media_type="text/plain")
+    raise HTTPException(status_code=404, detail="robots.txt not found")
+
+@app.get("/sitemap.xml", include_in_schema=False)
+def get_sitemap_xml():
+    """Serve XML sitemap for search engine indexing."""
+    sitemap_file = os.path.join(STATIC_DIR, "sitemap.xml")
+    if os.path.exists(sitemap_file):
+        return FileResponse(sitemap_file, media_type="application/xml")
+    raise HTTPException(status_code=404, detail="sitemap.xml not found")
+
 @app.get("/v1/analytics/dashboard", tags=["Telemetry"])
 def get_analytics_metrics(
     x_admin_token: Optional[str] = Header(None),
