@@ -1,55 +1,85 @@
-# NexusLeadEngine.io ⚡
-### Motor Autónomo de Inteligencia y Comercialización de Leads B2B (Agent-to-Agent / M2M)
+# Nexus Lead Engine ⚡
+### Plataforma B2B de Inteligencia Técnica, Auditoría de Conversión y Monetización de Leads
 
-- **Dominio Oficial:** [nexusleadengine.io](https://nexusleadengine.io)
-- **Email de Contacto:** `hola@nexusleadengine.io`
-- **Pasarela Rápida PayPal:** [paypal.me/NexusLeadEngine](https://www.paypal.com/paypalme/NexusLeadEngine)
-
----
-
-## 🎯 Visión Unificada
-**NexusLeadEngine.io** convierte la prospección de clientes de alto ticket en un servicio puramente programático (Lead-as-an-API). Sus clientes son sistemas automatizados (bots de WhatsApp, flujos de Make.com, n8n y agentes de GoHighLevel) que compran y consumen oportunidades calificadas en tiempo real sin requerir reuniones ni fricción humana.
+- **Sitio Web Oficial:** [https://nexusleadengine.io](https://nexusleadengine.io)
+- **Repositorio GitHub:** [artuschmidbauer-coder/nexusleadengine](https://github.com/artuschmidbauer-coder/nexusleadengine)
+- **Email Corporativo:** `hola@nexusleadengine.io` / `auracomercial387@gmail.com`
+- **Ubicación del Proyecto Local:** `/Users/artu/Desktop/Nexus`
 
 ---
 
-## 💰 Precios Ultra Económicos ("No-Brainer Pricing")
+## 🎯 Visión y Modelo del Negocio
 
-Precios diseñados para que los bots y agencias compren por impulso sin tener que consultar:
-
-| Paquete | Leads Calificados | Precio Total | Precio / Lead | Caso de Uso | Enlace de Pago Directo |
-|---|---|---|---|---|---|
-| **Pack Micro** | 15 leads | **$9 USD** | $0.60 | Prueba en 30s sin pensarlo | [Pagar $9 USD](https://www.paypal.com/paypalme/NexusLeadEngine/9USD) |
-| **Pack Starter** | 60 leads | **$29 USD** | $0.48 | Flujos semanales en Make/n8n | [Pagar $29 USD](https://www.paypal.com/paypalme/NexusLeadEngine/29USD) |
-| **Pack Pro** | 200 leads | **$69 USD** | $0.34 | Bots y agencias activas | [Pagar $69 USD](https://www.paypal.com/paypalme/NexusLeadEngine/69USD) |
-| **Pack Scale** | 600 leads | **$149 USD** | $0.24 | Máximo volumen (-60% descuento) | [Pagar $149 USD](https://www.paypal.com/paypalme/NexusLeadEngine/149USD) |
+**Nexus Lead Engine** es una plataforma automatizada que ayuda a agencias de marketing, consultores y empresas de software a conseguir clientes B2B calificados mediante:
+1. **Auditoría Técnica en Tiempo Real:** Detección automática de fugas de conversión en sitios web (falta de Pixel de Meta/Google, lentitud, falta de widget de reserva).
+2. **Generación de Mensajes de Prospección (Outreach Hooks):** Redacción hiper-personalizada en inglés nativo (para EE.UU. y Reino Unido) y español (para España y Latinoamérica).
+3. **API & Servidor MCP:** Consumo programático directo para automatizadores de Make.com, n8n, GoHighLevel y agentes autónomos.
+4. **Pasarelas de Pago Multi-canal:**
+   - **Polar.sh** (Merchant of Record / Stripe Connect Express): Facturación internacional y cobro con tarjeta 100% legal hacia Argentina.
+   - **NOWPayments / Binance Pay:** Cobros directos en criptomonedas (USDT/USDC/BTC) acreditados en billetera.
 
 ---
 
-## 🚀 Cómo Ejecutar el Proyecto
+## 📚 Documentación Central del Proyecto
 
+Toda la estrategia, auditorías y manuales del proyecto se encuentran centralizados en [`docs/`](docs/):
+
+* 📊 **[Auditoría Técnica y Proyecciones de Negocio](docs/auditoria_y_proyecciones.md):** Dictamen de seguridad (SSRF, Auth Bypass mitigados), legalidad (CAN-SPAM, RGPD, MoR) y proyecciones a 3, 6 y 12 meses.
+* 📋 **[Manual Operativo de la Empresa](docs/manual_operativo.md):** Estructura de gobernanza financiera para el CFO (regla 70% ganancia / 20% fondo IA con aprobación / 10% reserva) y cartera de prospectos.
+* 📦 **[Propuesta de Paquetes Comerciales](docs/propuesta_paquetes.md):** Escalera de valor ($290 USD Starter, $590 USD Growth, $1,500 USD Enterprise).
+* ⚖️ **[Dictamen Fundacional del Consejo](docs/dictamen_consejo.md):** Elección del modelo de negocio de costo $0 inicial con consenso multi-IA.
+* 🚀 **[Kit de Lanzamiento para Comunidades (n8n / Reddit)](LAUNCH_KIT.md):** Plantillas de publicación listas para atraer tráfico orgánico.
+* 🔌 **[Guía del Servidor MCP](MCP_GUIDE.md):** Protocolo para conectar la API de Nexus a Cursor, Windsurf o Claude Desktop.
+
+---
+
+## 💰 Catálogo de Precios (Packs de Créditos)
+
+| Paquete | Leads / Auditorías | Precio USD | Costo por Lead | Enfoque |
+|---|---|---|---|---|
+| **Pack Micro** | 15 leads | **$9 USD** | $0.60 | Prueba inmediata en 30s |
+| **Pack Starter** | 60 leads | **$29 USD** | $0.48 | Flujos semanales en Make/n8n |
+| **Pack Pro** | 200 leads | **$69 USD** | $0.34 | Agencias activas |
+| **Pack Scale** | 600 leads | **$149 USD** | $0.24 | Máximo volumen (-60% descuento) |
+
+---
+
+## 🚀 Comandos Rápidos de Desarrollo y Pruebas
+
+Ejecuta todos los comandos desde la raíz de este directorio (`/Users/artu/Desktop/Nexus`):
+
+### 1. Iniciar el Servidor API y la Landing Page
 ```bash
-cd /Users/artu/.gemini/antigravity/scratch/lead_stream_engine
-
-# 1. Correr la demostración en terminal:
-./.venv/bin/python3 run_demo.py
-
-# 2. Iniciar el servidor API y la Landing Page:
 ./start_server.sh
 ```
+* **Landing Page:** [http://localhost:8000](http://localhost:8000)
+* **Documentación Interactiva Swagger:** [http://localhost:8000/docs](http://localhost:8000/docs)
+* **Dashboard Administrativo:** [http://localhost:8000/static/dashboard.html](http://localhost:8000/static/dashboard.html)
 
-- **Landing Page en Vivo:** `http://localhost:8000/`
-- **Documentación Interactiva Swagger:** `http://localhost:8000/docs`
+### 2. Ejecutar la Suite de Pruebas Automatizadas
+```bash
+# Probar endpoints de API y autenticación:
+./.venv/bin/python3 test_api.py
+
+# Probar flujo de pagos y webhooks:
+./.venv/bin/python3 test_payments.py
+./.venv/bin/python3 test_polar.py
+./.venv/bin/python3 test_nowpayments.py
+```
+
+### 3. Iniciar el Servidor MCP Local
+```bash
+./.venv/bin/python3 mcp_server.py
+```
 
 ---
 
-## 📡 Endpoints Principales
+## 🏗️ Infraestructura y Despliegue en Producción
 
-| Método | Endpoint | Descripción |
-|---|---|---|
-| `GET` | `/` | Landing Page moderna lista para producción. |
-| `GET` | `/v1/billing/packages` | Consulta los paquetes de precios ultra económicos. |
-| `POST` | `/v1/billing/paypal-activate` | Activa créditos y genera la API Key tras pagar en PayPal.me. |
-| `POST` | `/v1/billing/create-checkout` | Genera sesión de pago directo. |
-| `GET` | `/v1/billing/balance` | Consulta saldo y consumo por API Key. |
-| `POST` | `/v1/webhooks/subscribe` | Registra el bot receptor para streaming en tiempo real. |
-| `POST` | `/v1/leads/trigger-scan` | Dispara prospección y deduce 1 crédito por lead calificado. |
+* **Hosting:** Render (`render.yaml` y `Procfile` incluidos).
+* **Contenedor:** `Dockerfile` basado en Python 3.14 / Debian Bookworm.
+* **Dominio & DNS:** Gestionado con Porkbun y certificado SSL automático en Render.
+* **Control de Versiones:** Git sincronizado con la rama `main` de GitHub.
+
+> [!TIP]
+> **Flujo de Trabajo:** De ahora en más, todo el desarrollo, modificaciones del frontend y nuevos módulos se trabajan directamente en esta carpeta (`/Users/artu/Desktop/Nexus`) para mantener el proyecto 100% cohesionado y con control de versiones.
