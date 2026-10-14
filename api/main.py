@@ -154,6 +154,10 @@ def get_analytics_metrics(
     require_admin(x_admin_token or token)
     return tracker.get_dashboard_metrics(active_accounts_count=len(ledger._accounts))
 
+@app.get("/ping", include_in_schema=False)
+def health_ping():
+    return {"status": "ok", "service": "NexusLeadEngine"}
+
 @app.get("/v1/status")
 def root_api_status():
     return {
