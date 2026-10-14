@@ -145,6 +145,22 @@ def download_openapi_file():
         return FileResponse(openapi_file, media_type="application/json", filename="nexusleadengine_openapi.json")
     raise HTTPException(status_code=404, detail="OpenAPI file not found")
 
+@app.get("/favicon.ico", include_in_schema=False)
+def get_favicon_ico():
+    return FileResponse(os.path.join(STATIC_DIR, "favicon.ico"))
+
+@app.get("/favicon.png", include_in_schema=False)
+def get_favicon_png():
+    return FileResponse(os.path.join(STATIC_DIR, "favicon.png"))
+
+@app.get("/logo.png", include_in_schema=False)
+def get_logo_png():
+    return FileResponse(os.path.join(STATIC_DIR, "logo.png"))
+
+@app.get("/logo_500.png", include_in_schema=False)
+def get_logo_500():
+    return FileResponse(os.path.join(STATIC_DIR, "logo_500.png"))
+
 @app.get("/v1/analytics/dashboard", tags=["Telemetry"])
 def get_analytics_metrics(
     x_admin_token: Optional[str] = Header(None),
