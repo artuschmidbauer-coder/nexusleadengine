@@ -71,3 +71,29 @@ def test_n8n_lead_capture():
     assert data["status"] == "ok"
     assert "download_url" in data
 
+def test_council_endpoints():
+    from unittest.mock import patch
+    client = TestClient(app)
+    mock_report = {
+        "status": "COMPLETED",
+        "telemetry_summary": {
+            "pageviews": 100,
+            "unique_visitors": 20,
+            "captured_leads": 5,
+            "total_revenue_usd": 150.0,
+            "conversion_rate_pct": 25.0
+        },
+        "diagnosis": ["Test diagnostic signal"]
+    }
+    with patch("council_audit_loop.run_council_audit", return_value=mock_report):
+        resp = client.get("/v1/council/report")
+        assert resp.status_code == 200
+        data = resp.json()
+        assert "telemetry_summary" in data
+
+        resp_post = client.post("/v1/council/audit")
+        assert resp_post.status_code == 200
+        assert resp_post.json()["status"] == "ok"
+
+
+

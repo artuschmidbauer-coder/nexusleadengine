@@ -157,6 +157,28 @@
             </div>
         </div>
 
+        <!-- AI Council Autonomous Audit & CRO Section -->
+        <div class="p-6 rounded-2xl bg-[#090d16] border border-cyan-500/20 shadow-lg shadow-cyan-500/5 mb-10">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
+                <div>
+                    <h2 class="text-base font-bold text-white flex items-center gap-2">
+                        <span>🏛️</span> Consejo de IA • Auditoría Autónoma & Optimización CRO
+                    </h2>
+                    <p class="text-xs text-slate-400 mt-0.5">Diagnóstico periódico multi-modelo (DeepSeek-R1 / Qwen2.5-Coder) sobre conversión, ventas y adquisición de tráfico.</p>
+                </div>
+                <div class="flex items-center gap-2">
+                    <span id="councilAuditDate" class="text-[10px] font-mono bg-white/5 border border-white/10 px-2.5 py-1 rounded text-cyan-400">Cargando reporte...</span>
+                    <button onclick="triggerLiveCouncilAudit()" id="btnTriggerCouncil" class="text-xs bg-cyan-500/10 hover:bg-cyan-500/20 text-cyan-300 border border-cyan-500/30 px-3 py-1.5 rounded-xl font-mono transition flex items-center gap-1.5 cursor-pointer">
+                        <span>⚡</span> Ejecutar Auditoría en Vivo
+                    </button>
+                </div>
+            </div>
+
+            <div id="councilReportBox" class="bg-black/40 border border-white/5 rounded-xl p-4 text-xs text-slate-300 font-mono whitespace-pre-wrap leading-relaxed max-h-72 overflow-y-auto">
+                Cargando dictamen del Consejo de IA...
+            </div>
+        </div>
+
         <!-- Trigger Real Scan & Mining Section -->
         <div class="p-6 rounded-2xl bg-[#090d16] border border-white/10 mb-10">
             <div class="flex items-center justify-between mb-4">
@@ -460,8 +482,54 @@
             }
         }
 
+        async function fetchCouncilReport() {
+            try {
+                const res = await fetch('/v1/council/report');
+                if (!res.ok) return;
+                const data = await res.json();
+                const dateEl = document.getElementById('councilAuditDate');
+                const boxEl = document.getElementById('councilReportBox');
+                if (dateEl) {
+                    dateEl.innerText = `Auditor: ${data.model_used || 'IA'} • ${data.date_str || 'Reciente'}`;
+                }
+                if (boxEl) {
+                    if (data.ai_verdict) {
+                        boxEl.innerText = data.ai_verdict;
+                    } else if (data.diagnosis) {
+                        let text = "📊 DIAGNÓSTICO DEL CONSEJO:\n";
+                        data.diagnosis.forEach(d => text += `• ${d}\n`);
+                        text += "\n🚀 ACCIONES INMEDIATAS:\n";
+                        (data.actionable_directives || []).forEach((a, i) => text += `${i+1}. ${a}\n`);
+                        boxEl.innerText = text;
+                    }
+                }
+            } catch (err) {
+                console.error("Error al cargar reporte del consejo:", err);
+            }
+        }
+
+        async function triggerLiveCouncilAudit() {
+            const btn = document.getElementById('btnTriggerCouncil');
+            btn.disabled = true;
+            btn.innerHTML = `<span>⏳</span> Auditando con DeepSeek-R1...`;
+            try {
+                await fetch('/v1/council/audit', { method: 'POST' });
+                const boxEl = document.getElementById('councilReportBox');
+                if (boxEl) boxEl.innerText = "⚡ Auditoría iniciada en segundo plano con el Consejo de IA. Los resultados se actualizarán en breve...";
+                setTimeout(() => {
+                    fetchCouncilReport();
+                    btn.disabled = false;
+                    btn.innerHTML = `<span>⚡</span> Ejecutar Auditoría en Vivo`;
+                }, 5000);
+            } catch (e) {
+                btn.disabled = false;
+                btn.innerHTML = `<span>⚡</span> Ejecutar Auditoría en Vivo`;
+            }
+        }
+
         // Initial check and periodic refresh every 6 seconds
         refreshDashboard();
+        fetchCouncilReport();
         setInterval(() => {
             if (getAdminToken()) {
                 refreshDashboard();

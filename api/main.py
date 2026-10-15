@@ -7,7 +7,7 @@ try:
 except ImportError:
     pass
 
-from fastapi import FastAPI, HTTPException, status, Header, Request
+from fastapi import FastAPI, HTTPException, status, Header, Request, BackgroundTasks
 from pydantic import BaseModel, EmailStr
 from typing import List, Dict, Any, Optional
 from models.schema import (
@@ -121,6 +121,26 @@ def capture_n8n_lead(req: N8nCaptureRequest):
     """Captures interested agency email before downloading the free n8n blueprint."""
     tracker.record_captured_prospect(req.email)
     return {"status": "ok", "message": "Email registered successfully", "download_url": "/templates/n8n"}
+
+@app.get("/v1/council/report", tags=["Council Telemetry"])
+def get_council_report():
+    """Retrieve the latest autonomous AI Council audit report."""
+    report_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "analytics", "council_report.json")
+    if os.path.exists(report_file):
+        try:
+            with open(report_file, "r", encoding="utf-8") as f:
+                return json.load(f)
+        except Exception:
+            pass
+    from council_audit_loop import run_council_audit
+    return run_council_audit()
+
+@app.post("/v1/council/audit", tags=["Council Telemetry"])
+def trigger_council_audit(background_tasks: BackgroundTasks):
+    """Trigger a new autonomous AI Council audit cycle in background."""
+    from council_audit_loop import run_council_audit
+    background_tasks.add_task(run_council_audit)
+    return {"status": "ok", "message": "Council audit triggered in background"}
 
 @app.get("/templates/n8n", include_in_schema=False)
 def download_n8n_template():
