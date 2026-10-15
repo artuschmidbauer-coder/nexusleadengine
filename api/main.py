@@ -7,12 +7,14 @@ try:
 except ImportError:
     pass
 
+from urllib.parse import urlparse
 from fastapi import FastAPI, HTTPException, status, Header, Request, BackgroundTasks
 from pydantic import BaseModel, EmailStr
 from typing import List, Dict, Any, Optional
 from models.schema import (
     ScanRequest,
     EnrichedLead,
+    ProspectRaw,
     WebhookSubscription,
     CreditPackage,
     CreateCheckoutRequest,
@@ -22,7 +24,7 @@ from models.schema import (
     PayPalActivationRequest,
 )
 from collectors.business_finder import BusinessFinder
-from analyzers.web_auditor import WebAuditor
+from analyzers.web_auditor import WebAuditor, is_safe_public_url
 from analyzers.ai_qualifier import AIQualifier
 from dispatchers.webhook_sender import WebhookDispatcher
 from billing.ledger import BillingLedger
@@ -629,6 +631,41 @@ def get_sample_lead(country_code: Optional[str] = "US", niche_id: Optional[str] 
 
     tech = auditor.audit(prospects[0].website)
     return qualifier.qualify(prospects[0], tech)
+
+class AuditUrlRequest(BaseModel):
+    url: str
+    niche: Optional[str] = "dental"
+    country_code: Optional[str] = "US"
+
+@app.post("/v1/leads/audit-url", response_model=EnrichedLead, tags=["Lead Engine"])
+def audit_custom_url(req: AuditUrlRequest):
+    """Audits any custom business website in real time, detecting conversion leaks and drafting pitch."""
+    raw_url = req.url.strip()
+    if not raw_url.startswith(("http://", "https://")):
+        raw_url = f"https://{raw_url}"
+
+    if not is_safe_public_url(raw_url):
+        raise HTTPException(status_code=400, detail="URL no válida o restringida para auditoría.")
+
+    parsed = urlparse(raw_url)
+    domain_part = (parsed.hostname or "business").replace("www.", "").split(".")[0].replace("-", " ").title()
+
+    # Real HTTP technical scan
+    tech = auditor.audit(raw_url)
+
+    prospect = ProspectRaw(
+        name=domain_part,
+        category=req.niche or "servicios",
+        city="Web",
+        country=(req.country_code or "US").upper(),
+        website=raw_url,
+        phone=None,
+        email=None,
+        rating=4.7,
+        reviews_count=24
+    )
+
+    return qualifier.qualify(prospect, tech)
 
 @app.get("/v1/dispatch/logs", tags=["M2M Delivery"])
 def get_delivery_logs():

@@ -95,5 +95,23 @@ def test_council_endpoints():
         assert resp_post.status_code == 200
         assert resp_post.json()["status"] == "ok"
 
+def test_audit_custom_url():
+    client = TestClient(app)
+    # Test valid safe public URL
+    resp = client.post("/v1/leads/audit-url", json={"url": "https://www.clinicaferrusbratos.com", "niche": "dental"})
+    assert resp.status_code == 200
+    data = resp.json()
+    assert "score" in data
+    assert "tech_signals" in data
+    assert "bot_action" in data
+    assert "pain_points" in data["bot_action"]
+    assert "pre_drafted_outreach_hook" in data["bot_action"]
+
+    # Test SSRF blocked
+    resp_bad = client.post("/v1/leads/audit-url", json={"url": "http://127.0.0.1:8000/internal"})
+    assert resp_bad.status_code == 400
+
+
+
 
 

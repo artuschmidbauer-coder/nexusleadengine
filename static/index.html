@@ -244,6 +244,23 @@
                 </div>
             </div>
 
+            <!-- Custom URL Audit Sandbox Bar -->
+            <div class="max-w-5xl mx-auto mb-8 bg-[#090d16] border border-cyan-500/30 rounded-2xl p-4 shadow-xl shadow-cyan-500/5">
+                <form onsubmit="handleCustomUrlAudit(event)" class="flex flex-col sm:flex-row items-center gap-3">
+                    <div class="flex items-center gap-2 text-xs font-mono text-cyan-400 whitespace-nowrap pl-2">
+                        <span>⚡</span> <span data-i18n="audit_custom_lbl">O audita CUALQUIER web en vivo:</span>
+                    </div>
+                    <div class="relative flex-1 w-full">
+                        <input type="text" id="customUrlInput" required placeholder="ej: https://clinica-dental-ejemplo.com o tuweb.com" class="w-full bg-black/50 border border-white/10 rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-cyan-400 font-mono">
+                    </div>
+                    <button type="submit" id="btnCustomAudit" class="w-full sm:w-auto bg-cyan-500 hover:bg-cyan-400 text-black font-extrabold text-xs px-6 py-2.5 rounded-xl transition flex items-center justify-center gap-2 shadow-lg shadow-cyan-500/20 whitespace-nowrap cursor-pointer">
+                        <span id="spinnerCustom" class="hidden animate-spin">↻</span>
+                        <span data-i18n="audit_custom_btn">Auditar Web Gratis ↗</span>
+                    </button>
+                </form>
+                <div id="customAuditStatus" class="mt-2 text-[11px] font-mono text-slate-400 hidden pl-2"></div>
+            </div>
+
             <!-- 2-Column Display: Visual Intelligence Card + JSON Payload -->
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
                 
@@ -314,9 +331,14 @@
                     <div>
                         <div class="flex items-center justify-between mb-2">
                             <span class="text-xs font-mono text-slate-400" data-i18n="exp_hook_title">Mensaje de Apertura Pre-redactado:</span>
-                            <button onclick="copyHookText()" id="btnCopyHook" class="text-[11px] font-mono text-brand hover:underline flex items-center gap-1">
-                                📋 <span data-i18n="exp_copy_btn">Copiar Mensaje</span>
-                            </button>
+                            <div class="flex items-center gap-2">
+                                <a id="btnDirectWhatsApp" href="#" target="_blank" class="text-[11px] font-mono text-emerald-400 hover:text-emerald-300 flex items-center gap-1 bg-emerald-500/10 border border-emerald-500/20 px-2 py-0.5 rounded transition">
+                                    <span>📲</span> WhatsApp Web
+                                </a>
+                                <button onclick="copyHookText()" id="btnCopyHook" class="text-[11px] font-mono text-brand hover:underline flex items-center gap-1">
+                                    📋 <span data-i18n="exp_copy_btn">Copiar Mensaje</span>
+                                </button>
+                            </div>
                         </div>
                         <div id="cardHookText" class="p-3.5 rounded-xl bg-white/5 border border-white/10 text-xs text-emerald-300 font-sans leading-relaxed italic">
                             "Hi Biscayne Dental & Implant Center team, I was reviewing your website with strong reviews (142 ratings). Noticed prospective clients searching for dental implants in Miami cannot initiate an instant consultation from mobile..."
@@ -372,6 +394,86 @@
                 <p class="text-slate-400 text-sm" data-i18n="price_subtitle">
                     Sin suscripción ni permanencia. Pagas una vez, tus créditos no caducan y se consumen solo cuando se entrega un lead verificado.
                 </p>
+            </div>
+
+            <!-- Agency ROI Calculator Widget -->
+            <div class="max-w-4xl mx-auto mb-16 p-6 md:p-8 rounded-2xl bg-[#090e1a] border border-cyan-500/20 shadow-2xl relative overflow-hidden">
+                <div class="absolute -top-24 -right-24 w-64 h-64 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none"></div>
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6 pb-6 border-b border-white/10">
+                    <div>
+                        <div class="flex items-center gap-2 text-cyan-400 font-mono text-xs font-bold uppercase tracking-wider mb-1">
+                            <span>📈</span> <span data-i18n="roi_title">Calculadora de Retorno (ROI) para Agencias</span>
+                        </div>
+                        <p class="text-xs text-slate-400" data-i18n="roi_subtitle">Calcula cuánto facturas cerrando solo 1 cliente con los hooks de auditoría técnica</p>
+                    </div>
+                    <div class="text-right">
+                        <span class="text-[10px] font-mono uppercase bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 px-3 py-1 rounded-full font-bold">
+                            Zero Risk • 14-Day Guarantee
+                        </span>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+                    <!-- Sliders & Inputs (7 cols) -->
+                    <div class="lg:col-span-7 space-y-5">
+                        <div>
+                            <div class="flex justify-between text-xs font-mono mb-1.5">
+                                <span class="text-slate-300" data-i18n="roi_clients_lbl">Fee mensual / Valor por cliente cerrado:</span>
+                                <span id="roiRetainerDisplay" class="text-brand font-bold">$600</span>
+                            </div>
+                            <input type="range" id="roiRetainerInput" min="200" max="3000" step="50" value="600" oninput="updateRoiCalc()" class="w-full accent-emerald-400 bg-white/10 rounded-lg h-2 cursor-pointer">
+                            <div class="flex justify-between text-[10px] font-mono text-slate-500 mt-1">
+                                <span>$200 USD</span>
+                                <span>$1,500 USD</span>
+                                <span>$3,000 USD</span>
+                            </div>
+                        </div>
+
+                        <div>
+                            <div class="flex justify-between text-xs font-mono mb-1.5">
+                                <span class="text-slate-300" data-i18n="roi_pack_lbl">Pack Nexus seleccionado:</span>
+                            </div>
+                            <select id="roiPackSelect" onchange="updateRoiCalc()" class="w-full bg-black/60 border border-white/15 rounded-xl px-3 py-2 text-xs font-mono text-white focus:outline-none focus:border-cyan-400">
+                                <option value="0">Micro Pack ($15 USD · 25 Leads)</option>
+                                <option value="1" selected>Starter Pack ($29 USD · 60 Leads)</option>
+                                <option value="2">Pro Pack ($69 USD · 200 Leads)</option>
+                                <option value="3">Scale Pack ($149 USD · 600 Leads)</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <div class="flex justify-between text-xs font-mono mb-1.5">
+                                <span class="text-slate-300" data-i18n="roi_close_rate_lbl">Tasa de conversión estimada (con hook de auditoría):</span>
+                                <span id="roiCloseRateDisplay" class="text-cyan-400 font-bold">3%</span>
+                            </div>
+                            <input type="range" id="roiCloseRateInput" min="1" max="8" step="1" value="3" oninput="updateRoiCalc()" class="w-full accent-cyan-400 bg-white/10 rounded-lg h-2 cursor-pointer">
+                            <div class="flex justify-between text-[10px] font-mono text-slate-500 mt-1">
+                                <span>1% (Conservador)</span>
+                                <span>3% (Promedio frío)</span>
+                                <span>8% (Agresivo)</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Outcome Display Box (5 cols) -->
+                    <div class="lg:col-span-5 bg-black/40 border border-white/10 rounded-xl p-5 text-center flex flex-col justify-between h-full">
+                        <div>
+                            <span class="text-[10px] font-mono uppercase tracking-wider text-slate-400" data-i18n="roi_net_est">Facturación Estimada de tu Agencia:</span>
+                            <div id="roiRevenueVal" class="text-3xl md:text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-cyan-400 my-2">
+                                $1,080 USD
+                            </div>
+                            <div class="text-xs font-mono text-slate-400">
+                                Clientes estimados: <span id="roiClientsVal" class="text-white font-bold">1.8 clientes</span>
+                            </div>
+                        </div>
+                        <div class="mt-4 pt-4 border-t border-white/10">
+                            <span class="text-[10px] font-mono uppercase tracking-wider text-slate-400" data-i18n="roi_profit_est">Retorno Neto (ROI):</span>
+                            <div id="roiProfitVal" class="text-sm font-mono font-bold text-emerald-400 mt-1">
+                                +37x (+$1,051 USD)
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
@@ -864,7 +966,16 @@
                 comp_row_crypto_cl: "❌ Credit Card Only",
                 comp_row_crypto_sc: "❌ Credit Card Only",
                 comp_row_min: "Minimum Cost to Start",
-                comp_row_min_nexus: "$15 USD (25 leads)"
+                comp_row_min_nexus: "$15 USD (25 leads)",
+                audit_custom_lbl: "Or run a LIVE audit on ANY business URL:",
+                audit_custom_btn: "Audit Live Website ↗",
+                roi_title: "Agency ROI Calculator",
+                roi_subtitle: "Estimate your revenue by closing just 1 client with Nexus audit hooks",
+                roi_clients_lbl: "Monthly Retainer / Value per client closed:",
+                roi_pack_lbl: "Nexus Pack selected:",
+                roi_close_rate_lbl: "Estimated conversion rate (with audit hook):",
+                roi_net_est: "Estimated Agency Revenue:",
+                roi_profit_est: "Net Return (ROI):"
             },
             es: {
                 badge_tier1: "Global Tier-1",
@@ -1009,7 +1120,16 @@
                 comp_row_crypto_cl: "❌ Solo Tarjeta bancaria",
                 comp_row_crypto_sc: "❌ Solo Tarjeta bancaria",
                 comp_row_min: "Costo Mínimo para Comenzar",
-                comp_row_min_nexus: "$15 USD (25 leads)"
+                comp_row_min_nexus: "$15 USD (25 leads)",
+                audit_custom_lbl: "O audita CUALQUIER web en vivo:",
+                audit_custom_btn: "Auditar Web Gratis ↗",
+                roi_title: "Calculadora de Retorno (ROI) para Agencias",
+                roi_subtitle: "Calcula cuánto facturas cerrando solo 1 cliente con los hooks de auditoría técnica",
+                roi_clients_lbl: "Fee mensual / Valor por cliente cerrado:",
+                roi_pack_lbl: "Pack Nexus seleccionado:",
+                roi_close_rate_lbl: "Tasa de conversión estimada (con hook de auditoría):",
+                roi_net_est: "Facturación Estimada de tu Agencia:",
+                roi_profit_est: "Retorno Neto (ROI):"
             }
         };
 
@@ -1125,6 +1245,20 @@
 
             document.getElementById('cardLossHypothesis').textContent = lead.bot_action.loss_hypothesis;
             document.getElementById('cardHookText').textContent = `"${lead.bot_action.pre_drafted_outreach_hook}"`;
+
+            // WhatsApp Direct Action Button
+            const waBtn = document.getElementById('btnDirectWhatsApp');
+            if (waBtn) {
+                const cleanPhone = (lead.contact_channels.phone || '').replace(/[^0-9]/g, '');
+                const encodedMsg = encodeURIComponent(lead.bot_action.pre_drafted_outreach_hook || '');
+                if (cleanPhone && cleanPhone.length >= 8) {
+                    waBtn.href = `https://wa.me/${cleanPhone}?text=${encodedMsg}`;
+                    waBtn.title = `Abrir WhatsApp con ${lead.contact_channels.phone}`;
+                } else {
+                    waBtn.href = `https://wa.me/?text=${encodedMsg}`;
+                    waBtn.title = "Compartir hook en WhatsApp";
+                }
+            }
 
             // Syntax-highlighted JSON Code Block
             const jsonText = JSON.stringify(lead, null, 2);
@@ -1245,11 +1379,81 @@
             }
         }
 
+        async function handleCustomUrlAudit(e) {
+            e.preventDefault();
+            const input = document.getElementById('customUrlInput');
+            const btn = document.getElementById('btnCustomAudit');
+            const spinner = document.getElementById('spinnerCustom');
+            const status = document.getElementById('customAuditStatus');
+            const url = input.value.trim();
+            if (!url) return;
+
+            spinner.classList.remove('hidden');
+            btn.disabled = true;
+            status.classList.remove('hidden');
+            status.textContent = currentLang === 'en' ? 'Scanning website signals, SSL, Pixel & WhatsApp in real time...' : 'Escaneando en vivo señales web, SSL, Pixel y WhatsApp...';
+            status.className = "mt-2 text-[11px] font-mono text-cyan-400 pl-2";
+
+            try {
+                const res = await fetch('/v1/leads/audit-url', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ url: url, niche: currentNiche, country_code: currentCountry })
+                });
+                if (!res.ok) {
+                    const errData = await res.json().catch(() => ({}));
+                    throw new Error(errData.detail || 'Audit request failed');
+                }
+                const lead = await res.json();
+                renderLead(lead);
+                status.textContent = currentLang === 'en' ? '✓ Audit completed successfully! See breakdown below.' : '✓ ¡Auditoría completada con éxito! Revisa el desglose abajo.';
+                status.className = "mt-2 text-[11px] font-mono text-emerald-400 pl-2";
+                setTimeout(() => { status.classList.add('hidden'); }, 4000);
+            } catch (err) {
+                status.textContent = `${currentLang === 'en' ? 'Error' : 'Error'}: ${err.message}`;
+                status.className = "mt-2 text-[11px] font-mono text-rose-400 pl-2";
+            } finally {
+                spinner.classList.add('hidden');
+                btn.disabled = false;
+            }
+        }
+
+        function updateRoiCalc() {
+            const retainer = parseFloat(document.getElementById('roiRetainerInput')?.value || 600);
+            const packIndex = parseInt(document.getElementById('roiPackSelect')?.value || 1);
+            const closeRate = parseFloat(document.getElementById('roiCloseRateInput')?.value || 3) / 100;
+            
+            const packs = [
+                { name: "Micro", leads: 25, cost: 15 },
+                { name: "Starter", leads: 60, cost: 29 },
+                { name: "Pro", leads: 200, cost: 69 },
+                { name: "Scale", leads: 600, cost: 149 }
+            ];
+            const sel = packs[packIndex] || packs[1];
+            const closedClients = Math.max(0.5, (sel.leads * closeRate)).toFixed(1);
+            const revenue = Math.round(closedClients * retainer);
+            const netProfit = revenue - sel.cost;
+            const roiX = (revenue / sel.cost).toFixed(0);
+
+            const elRev = document.getElementById('roiRevenueVal');
+            const elClients = document.getElementById('roiClientsVal');
+            const elProfit = document.getElementById('roiProfitVal');
+            const elRetainerTxt = document.getElementById('roiRetainerDisplay');
+            const elCloseTxt = document.getElementById('roiCloseRateDisplay');
+
+            if (elRev) elRev.textContent = `$${revenue.toLocaleString()} USD`;
+            if (elClients) elClients.textContent = `${closedClients} ${currentLang === 'en' ? 'clients' : 'clientes'}`;
+            if (elProfit) elProfit.textContent = `+${roiX}x (${netProfit > 0 ? '+' : ''}$${netProfit.toLocaleString()} USD)`;
+            if (elRetainerTxt) elRetainerTxt.textContent = `$${retainer}`;
+            if (elCloseTxt) elCloseTxt.textContent = `${(closeRate * 100).toFixed(0)}%`;
+        }
+
         // Initialize preferred language & first sample lead
         window.addEventListener('DOMContentLoaded', () => {
             const savedLang = localStorage.getItem('nexus_lang') || (navigator.language && navigator.language.startsWith('es') ? 'es' : 'en');
             setLanguage(savedLang);
             fetchLeadSample();
+            updateRoiCalc();
         });
     </script>
 </body>
