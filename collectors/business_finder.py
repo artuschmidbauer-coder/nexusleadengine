@@ -21,18 +21,6 @@ SEED_BUSINESSES = [
         "reviews_count": 142,
     },
     {
-        "name": "Manhattan Aesthetic Medicine & Laser",
-        "category": "medspa aesthetic medicine",
-        "city": "New York",
-        "country": "US",
-        "website": "https://manhattan-aesthetic-medspa.com",
-        "phone": "+1 (212) 555-0189",
-        "email": "appointments@manhattan-aesthetic-medspa.com",
-        "address": "575 5th Ave, New York, NY 10017",
-        "rating": 4.8,
-        "reviews_count": 210,
-    },
-    {
         "name": "Apex Premier Roofing & Remodeling",
         "category": "roofing home remodeling",
         "city": "Dallas",
@@ -45,16 +33,28 @@ SEED_BUSINESSES = [
         "reviews_count": 98,
     },
     {
-        "name": "Beverly Hills Cosmetic Dentistry",
-        "category": "dental implants cosmetic",
-        "city": "Los Angeles",
+        "name": "Solaria SunPower & Commercial Energy",
+        "category": "solar energy systems",
+        "city": "Phoenix",
         "country": "US",
-        "website": "https://beverlyhills-cosmeticdental.com",
-        "phone": "+1 (310) 555-0177",
-        "email": "care@beverlyhills-cosmeticdental.com",
-        "address": "9400 Wilshire Blvd, Beverly Hills, CA 90212",
+        "website": "https://solaria-sunpower.com",
+        "phone": "+1 (602) 555-0166",
+        "email": "solutions@solaria-sunpower.com",
+        "address": "2500 N Central Ave, Phoenix, AZ 85004",
+        "rating": 4.8,
+        "reviews_count": 115,
+    },
+    {
+        "name": "Manhattan Corporate & IP Law Partners",
+        "category": "corporate commercial law",
+        "city": "New York",
+        "country": "US",
+        "website": "https://manhattan-corplaw.com",
+        "phone": "+1 (212) 555-0189",
+        "email": "partners@manhattan-corplaw.com",
+        "address": "575 5th Ave, New York, NY 10017",
         "rating": 4.9,
-        "reviews_count": 185,
+        "reviews_count": 86,
     },
     # --- UNITED KINGDOM (High-Ticket UK Market) ---
     {
@@ -81,6 +81,30 @@ SEED_BUSINESSES = [
         "rating": 4.8,
         "reviews_count": 64,
     },
+    {
+        "name": "Cambridge EcoSolar & Battery Solutions",
+        "category": "solar energy installations",
+        "city": "Cambridge",
+        "country": "GB",
+        "website": "https://cambridge-ecosolar.co.uk",
+        "phone": "+44 12 2394 6101",
+        "email": "surveys@cambridge-ecosolar.co.uk",
+        "address": "Milton Rd, Cambridge CB4 1ST",
+        "rating": 4.7,
+        "reviews_count": 52,
+    },
+    {
+        "name": "Sterling & Cross Commercial Barristers",
+        "category": "commercial corporate law",
+        "city": "London",
+        "country": "GB",
+        "website": "https://sterlingcross-law.co.uk",
+        "phone": "+44 20 7946 0522",
+        "email": "clerks@sterlingcross-law.co.uk",
+        "address": "Lincoln's Inn Fields, London WC2A 3ED",
+        "rating": 4.9,
+        "reviews_count": 41,
+    },
     # --- SPAIN (Mercado España / Europa) ---
     {
         "name": "Clínica Dental Dr. Velásquez - Implantes & Estética",
@@ -105,6 +129,18 @@ SEED_BUSINESSES = [
         "address": "Paseo de la Castellana, 114, 28046 Madrid",
         "rating": 4.6,
         "reviews_count": 32,
+    },
+    {
+        "name": "SolNova Energía & Baterías Solares",
+        "category": "energia solar fotovoltaica",
+        "city": "Sevilla",
+        "country": "ES",
+        "website": "https://solnova-energia.es",
+        "phone": "+34 954 112 288",
+        "email": "estudios@solnova-energia.es",
+        "address": "Av. de la Constitución, 18, 41004 Sevilla",
+        "rating": 4.8,
+        "reviews_count": 49,
     },
     {
         "name": "García & Asociados Abogados de Empresa",
@@ -148,23 +184,33 @@ class BusinessFinder:
         loc_norm = location.lower().strip()
         country_norm = country.upper().strip()
 
-        matched = []
-        for item in SEED_BUSINESSES:
-            cat_match = any(word in item["category"].lower() or word in item["name"].lower() for word in niche_norm.split())
-            loc_match = loc_norm in item["city"].lower() or not loc_norm
-            country_match = (item["country"] == country_norm) if country_norm else True
+        def score(item):
+            s = 0
+            cat_lower = item["category"].lower()
+            name_lower = item["name"].lower()
+            city_lower = item["city"].lower()
 
-            if (cat_match or loc_match) and country_match:
-                matched.append(ProspectRaw(**item))
+            for word in niche_norm.split():
+                if len(word) > 2:
+                    if word in cat_lower:
+                        s += 4
+                    elif word in name_lower:
+                        s += 2
+            if loc_norm and loc_norm in city_lower:
+                s += 3
+            return s
 
-        # Fallback if specific country filter was empty
-        if not matched:
-            for item in SEED_BUSINESSES:
-                cat_match = any(word in item["category"].lower() or word in item["name"].lower() for word in niche_norm.split())
-                if cat_match:
-                    matched.append(ProspectRaw(**item))
+        candidates = [item for item in SEED_BUSINESSES if not country_norm or item["country"] == country_norm]
+        if not candidates:
+            candidates = list(SEED_BUSINESSES)
 
-        # Only return genuine matching entries; never synthesize fake businesses
+        scored = [(score(item), item) for item in candidates]
+        scored.sort(key=lambda x: x[0], reverse=True)
+
+        matched = [ProspectRaw(**item) for pts, item in scored if pts > 0]
+        if not matched and candidates:
+            matched = [ProspectRaw(**candidates[0])]
+
         return matched[:limit]
 
     def _live_web_search(self, niche: str, location: str, limit: int) -> List[ProspectRaw]:

@@ -561,18 +561,38 @@ def trigger_scan(
     return new_leads
 
 @app.get("/v1/leads/sample", response_model=EnrichedLead, tags=["Lead Engine"])
-def get_sample_lead(country_code: Optional[str] = "US"):
+def get_sample_lead(country_code: Optional[str] = "US", niche_id: Optional[str] = "dental"):
     """Generates an instant sample high-ticket lead to preview payload structure."""
     cc = (country_code or "US").upper()
-    if cc == "GB":
-        niche, city = "dental implants", "London"
-    elif cc == "ES":
-        niche, city = "implantes dentales", "Madrid"
-    else:
-        niche, city = "dental implants", "Miami"
-        cc = "US"
+    nid = (niche_id or "dental").lower()
 
-    prospects = finder.search(niche, city, limit=1, country=cc)
+    niche_mapping = {
+        "dental": {
+            "US": ("dental implants", "Miami"),
+            "GB": ("dental implants", "London"),
+            "ES": ("implantes dentales", "Madrid"),
+        },
+        "remodeling": {
+            "US": ("roofing home remodeling", "Dallas"),
+            "GB": ("home renovation interior design", "London"),
+            "ES": ("reformas integrales", "Madrid"),
+        },
+        "solar": {
+            "US": ("solar energy systems", "Phoenix"),
+            "GB": ("solar energy installations", "Cambridge"),
+            "ES": ("energia solar fotovoltaica", "Sevilla"),
+        },
+        "legal": {
+            "US": ("corporate commercial law", "New York"),
+            "GB": ("commercial corporate law", "London"),
+            "ES": ("abogados derecho corporativo", "Barcelona"),
+        }
+    }
+
+    selected_niche = niche_mapping.get(nid, niche_mapping["dental"])
+    target_term, city = selected_niche.get(cc, selected_niche.get("US", ("dental implants", "Miami")))
+
+    prospects = finder.search(target_term, city, limit=1, country=cc)
     if not prospects:
         prospects = finder.search("dental implants", "Miami", limit=1, country="US")
     if not prospects:
