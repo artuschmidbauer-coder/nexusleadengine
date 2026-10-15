@@ -27,34 +27,50 @@ class AnalyticsTracker:
             try:
                 with open(self.file_path, "r", encoding="utf-8") as f:
                     data = json.load(f)
-                    self.total_pageviews = data.get("total_pageviews", 0)
-                    self.unique_visitors = data.get("unique_visitors", [])
-                    self.total_scans = data.get("total_scans", 0)
-                    self.total_scanned = data.get("total_scanned", 0)
-                    self.total_qualified = data.get("total_qualified", 0)
-                    self.total_credits_consumed = data.get("total_credits_consumed", 0)
-                    self.total_revenue_usd = data.get("total_revenue_usd", 0.0)
-                    self.leads_by_niche = data.get("leads_by_niche", {})
-                    self.recent_activity = data.get("recent_activity", [])
+                    if not isinstance(data, dict):
+                        data = {}
+
+                    # Defensively parse and sanitize each metric
+                    self.total_pageviews = max(0, int(data.get("total_pageviews", 0))) if isinstance(data.get("total_pageviews"), (int, float)) else 0
+                    visitors = data.get("unique_visitors", [])
+                    self.unique_visitors = [v for v in visitors if isinstance(v, str)] if isinstance(visitors, list) else []
+                    self.total_scans = max(0, int(data.get("total_scans", 0))) if isinstance(data.get("total_scans"), (int, float)) else 0
+                    self.total_scanned = max(0, int(data.get("total_scanned", 0))) if isinstance(data.get("total_scanned"), (int, float)) else 0
+                    self.total_qualified = max(0, int(data.get("total_qualified", 0))) if isinstance(data.get("total_qualified"), (int, float)) else 0
+                    self.total_credits_consumed = max(0, int(data.get("total_credits_consumed", 0))) if isinstance(data.get("total_credits_consumed"), (int, float)) else 0
+                    self.total_revenue_usd = max(0.0, float(data.get("total_revenue_usd", 0.0))) if isinstance(data.get("total_revenue_usd"), (int, float)) else 0.0
+
+                    niches = data.get("leads_by_niche", {})
+                    self.leads_by_niche = {str(k): int(v) for k, v in niches.items() if isinstance(v, (int, float))} if isinstance(niches, dict) else {}
+
+                    activity = data.get("recent_activity", [])
+                    self.recent_activity = [a for a in activity if isinstance(a, dict)] if isinstance(activity, list) else []
             except Exception as e:
-                print(f"Error loading analytics: {e}")
+                print(f"Error loading analytics (using safe defaults): {e}")
 
     def _save(self):
+        temp_file = f"{self.file_path}.tmp.{os.getpid()}"
         try:
-            with open(self.file_path, "w", encoding="utf-8") as f:
-                data = {
-                    "total_pageviews": self.total_pageviews,
-                    "unique_visitors": self.unique_visitors[-500:],
-                    "total_scans": self.total_scans,
-                    "total_scanned": self.total_scanned,
-                    "total_qualified": self.total_qualified,
-                    "total_credits_consumed": self.total_credits_consumed,
-                    "total_revenue_usd": self.total_revenue_usd,
-                    "leads_by_niche": self.leads_by_niche,
-                    "recent_activity": self.recent_activity[:50]
-                }
+            data = {
+                "total_pageviews": self.total_pageviews,
+                "unique_visitors": self.unique_visitors[-500:],
+                "total_scans": self.total_scans,
+                "total_scanned": self.total_scanned,
+                "total_qualified": self.total_qualified,
+                "total_credits_consumed": self.total_credits_consumed,
+                "total_revenue_usd": self.total_revenue_usd,
+                "leads_by_niche": self.leads_by_niche,
+                "recent_activity": self.recent_activity[:50]
+            }
+            with open(temp_file, "w", encoding="utf-8") as f:
                 json.dump(data, f, indent=2)
+            os.replace(temp_file, self.file_path)
         except Exception as e:
+            if os.path.exists(temp_file):
+                try:
+                    os.remove(temp_file)
+                except Exception:
+                    pass
             print(f"Error saving analytics: {e}")
 
     def record_visit(self, ip_hash: str, path: str = "/"):
