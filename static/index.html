@@ -100,6 +100,7 @@
                 <a href="#explorer" class="hover:text-white transition" data-i18n="nav_explorer">Explorador de Leads</a>
                 <a href="#features" class="hover:text-white transition" data-i18n="nav_features">Cómo Opera</a>
                 <a href="#pricing" class="hover:text-white transition" data-i18n="nav_pricing">Precios</a>
+                <a href="#comparison" class="hover:text-white transition" data-i18n="nav_compare">Vs Competencia</a>
                 <a href="#templates" class="text-cyan-400 hover:text-white transition text-xs font-semibold" data-i18n="nav_n8n">🎁 Plantilla n8n</a>
                 <a href="/docs" target="_blank" class="hover:text-brand transition flex items-center gap-1 font-mono text-xs">
                     Swagger API ↗
@@ -499,6 +500,89 @@
         </div>
     </div>
 
+    <!-- COMPETITOR BENCHMARK & TECH MOAT SECTION -->
+    <section id="comparison" class="py-20 border-t border-white/5 bg-[#03060f]">
+        <div class="max-w-6xl mx-auto px-6">
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand/10 border border-brand/20 text-brand font-mono text-xs mb-4">
+                    <span data-i18n="comp_badge">⚖️ Análisis Competitivo & Moat Tecnológico</span>
+                </div>
+                <h2 class="text-3xl md:text-4xl font-extrabold text-white mb-4" data-i18n="comp_title">
+                    Diseñado para Bots y Agencias. Sin las trampas de la competencia.
+                </h2>
+                <p class="text-slate-400 text-sm" data-i18n="comp_subtitle">
+                    Compara cómo resolvemos la prospección frente a herramientas tradicionales con contratos cerrados y suscripciones mensuales infladas:
+                </p>
+            </div>
+
+            <!-- Comparison Table Container -->
+            <div class="overflow-x-auto rounded-2xl border border-white/10 bg-[#070b14] shadow-2xl">
+                <table class="w-full text-left text-xs border-collapse">
+                    <thead>
+                        <tr class="border-b border-white/10 text-slate-400 font-mono text-[11px] bg-white/[0.02]">
+                            <th class="p-4 md:p-5 font-bold text-white" data-i18n="comp_col_cap">Capacidad / Modelo</th>
+                            <th class="p-4 md:p-5 font-bold text-brand bg-brand/5 border-x border-brand/20" data-i18n="comp_col_nexus">⚡ NexusLeadEngine.io</th>
+                            <th class="p-4 md:p-5 font-semibold text-slate-300">Apollo.io</th>
+                            <th class="p-4 md:p-5 font-semibold text-slate-300">Clay.com</th>
+                            <th class="p-4 md:p-5 font-semibold text-slate-300">Apify / Scrapers</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-white/5 text-slate-300">
+                        <tr class="hover:bg-white/[0.02] transition">
+                            <td class="p-4 md:p-5 font-medium text-white" data-i18n="comp_row_sub">Suscripción fija mensual</td>
+                            <td class="p-4 md:p-5 font-mono font-bold text-emerald-400 bg-brand/5 border-x border-brand/20" data-i18n="comp_row_sub_nexus">❌ $0 / Cero suscripción</td>
+                            <td class="p-4 md:p-5 text-rose-400" data-i18n="comp_row_sub_ap">Desde $49/mes</td>
+                            <td class="p-4 md:p-5 text-rose-400" data-i18n="comp_row_sub_cl">Desde $149/mes</td>
+                            <td class="p-4 md:p-5 text-slate-400" data-i18n="comp_row_sub_sc">Pay as you go</td>
+                        </tr>
+                        <tr class="hover:bg-white/[0.02] transition">
+                            <td class="p-4 md:p-5 font-medium text-white" data-i18n="comp_row_exp">Caducidad de créditos</td>
+                            <td class="p-4 md:p-5 font-mono font-bold text-emerald-400 bg-brand/5 border-x border-brand/20" data-i18n="comp_row_exp_nexus">❌ NUNCA vencen</td>
+                            <td class="p-4 md:p-5 text-rose-400" data-i18n="comp_row_exp_ap">Vencen cada 30 días</td>
+                            <td class="p-4 md:p-5 text-rose-400" data-i18n="comp_row_exp_cl">Vencen cada mes</td>
+                            <td class="p-4 md:p-5 text-slate-400" data-i18n="comp_row_exp_sc">Según plan</td>
+                        </tr>
+                        <tr class="hover:bg-white/[0.02] transition">
+                            <td class="p-4 md:p-5 font-medium text-white" data-i18n="comp_row_audit">Auditoría Técnica Web en 1 Llamada</td>
+                            <td class="p-4 md:p-5 font-mono font-bold text-emerald-400 bg-brand/5 border-x border-brand/20" data-i18n="comp_row_audit_nexus">✅ Sí (Pixel, WhatsApp, SSL, Fuga $)</td>
+                            <td class="p-4 md:p-5 text-slate-500" data-i18n="comp_row_audit_ap">❌ No disponible</td>
+                            <td class="p-4 md:p-5 text-amber-400" data-i18n="comp_row_audit_cl">⚠️ Requiere múltiples créditos</td>
+                            <td class="p-4 md:p-5 text-slate-500" data-i18n="comp_row_audit_sc">❌ Data cruda sin auditar</td>
+                        </tr>
+                        <tr class="hover:bg-white/[0.02] transition">
+                            <td class="p-4 md:p-5 font-medium text-white" data-i18n="comp_row_hook">Mensaje Comercial Pre-redactado por IA</td>
+                            <td class="p-4 md:p-5 font-mono font-bold text-emerald-400 bg-brand/5 border-x border-brand/20" data-i18n="comp_row_hook_nexus">✅ Hook de WhatsApp incluido</td>
+                            <td class="p-4 md:p-5 text-slate-500" data-i18n="comp_row_hook_ap">❌ No disponible</td>
+                            <td class="p-4 md:p-5 text-amber-400" data-i18n="comp_row_hook_cl">⚠️ Configuración compleja</td>
+                            <td class="p-4 md:p-5 text-slate-500" data-i18n="comp_row_hook_sc">❌ No disponible</td>
+                        </tr>
+                        <tr class="hover:bg-white/[0.02] transition">
+                            <td class="p-4 md:p-5 font-medium text-white" data-i18n="comp_row_bot">Nativo para Bots (MCP + OpenAPI)</td>
+                            <td class="p-4 md:p-5 font-mono font-bold text-emerald-400 bg-brand/5 border-x border-brand/20" data-i18n="comp_row_bot_nexus">✅ Servidor MCP + REST Webhooks</td>
+                            <td class="p-4 md:p-5 text-rose-400" data-i18n="comp_row_bot_ap">❌ Rate limits agresivos</td>
+                            <td class="p-4 md:p-5 text-slate-500" data-i18n="comp_row_bot_cl">❌ No pensado para bots</td>
+                            <td class="p-4 md:p-5 text-amber-400" data-i18n="comp_row_bot_sc">⚠️ Requiere wrappers extra</td>
+                        </tr>
+                        <tr class="hover:bg-white/[0.02] transition">
+                            <td class="p-4 md:p-5 font-medium text-white" data-i18n="comp_row_crypto">Pagos M2M Cripto (USDT / Binance)</td>
+                            <td class="p-4 md:p-5 font-mono font-bold text-emerald-400 bg-brand/5 border-x border-brand/20" data-i18n="comp_row_crypto_nexus">✅ Sí (Cripto + Tarjeta)</td>
+                            <td class="p-4 md:p-5 text-slate-500" data-i18n="comp_row_crypto_ap">❌ Solo Tarjeta</td>
+                            <td class="p-4 md:p-5 text-slate-500" data-i18n="comp_row_crypto_cl">❌ Solo Tarjeta</td>
+                            <td class="p-4 md:p-5 text-slate-500" data-i18n="comp_row_crypto_sc">❌ Solo Tarjeta</td>
+                        </tr>
+                        <tr class="hover:bg-white/[0.02] transition bg-brand/[0.03]">
+                            <td class="p-4 md:p-5 font-bold text-white" data-i18n="comp_row_min">Costo Mínimo para Comenzar</td>
+                            <td class="p-4 md:p-5 font-mono font-extrabold text-brand text-sm bg-brand/10 border-x border-brand/20" data-i18n="comp_row_min_nexus">$15 USD (25 leads)</td>
+                            <td class="p-4 md:p-5 font-mono text-slate-400">$49 USD/mes</td>
+                            <td class="p-4 md:p-5 font-mono text-slate-400">$149 USD/mes</td>
+                            <td class="p-4 md:p-5 font-mono text-slate-400">$49 USD/mes</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
     <!-- Free n8n Blueprint Banner -->
     <section id="templates" class="py-20 border-t border-white/5 bg-gradient-to-b from-[#05070e] to-[#070b14]">
         <div class="max-w-4xl mx-auto px-6 text-center">
@@ -742,7 +826,45 @@
                 privacy_h: "Privacy Policy • NexusLeadEngine.io",
                 privacy_p1: "We only collect data necessary to authenticate your API key and activate your credits (your checkout email). We never store payment card or financial credentials; transactions are securely processed by NOWPayments / Stripe / Polar.",
                 refund_h: "14-Day Money-Back Guarantee",
-                refund_p1: "We offer a 100% money-back guarantee for 14 days if you are unsatisfied with lead quality and have consumed less than 20% of your purchased credits. Email hola@nexusleadengine.io with your checkout email."
+                refund_p1: "We offer a 100% money-back guarantee for 14 days if you are unsatisfied with lead quality and have consumed less than 20% of your purchased credits. Email hola@nexusleadengine.io with your checkout email.",
+                nav_compare: "Vs Competitors",
+                comp_badge: "⚖️ Competitive Benchmark & Tech Moat",
+                comp_title: "Engineered for Bots & Agencies. Zero Subscription Traps.",
+                comp_subtitle: "Compare how we deliver qualified leads vs. legacy platforms with rigid contracts and expiring credits:",
+                comp_col_cap: "Capability / Model",
+                comp_col_nexus: "⚡ NexusLeadEngine.io",
+                comp_row_sub: "Monthly subscription",
+                comp_row_sub_nexus: "❌ $0 / Zero subscription",
+                comp_row_sub_ap: "From $49/mo",
+                comp_row_sub_cl: "From $149/mo",
+                comp_row_sub_sc: "Pay as you go",
+                comp_row_exp: "Credit expiration",
+                comp_row_exp_nexus: "❌ NEVER expire",
+                comp_row_exp_ap: "Expires every 30 days",
+                comp_row_exp_cl: "Expires every month",
+                comp_row_exp_sc: "Per plan rules",
+                comp_row_audit: "Full Web Tech Audit in 1 Call",
+                comp_row_audit_nexus: "✅ Included (Pixel, WhatsApp, SSL, Leak $)",
+                comp_row_audit_ap: "❌ Basic data only",
+                comp_row_audit_cl: "⚠️ Multiple credit tiers",
+                comp_row_audit_sc: "❌ Raw unverified scrape",
+                comp_row_hook: "Pre-Drafted AI Icebreaker",
+                comp_row_hook_nexus: "✅ Ready WhatsApp / Email Hook",
+                comp_row_hook_ap: "❌ None",
+                comp_row_hook_cl: "⚠️ Complex prompt setup",
+                comp_row_hook_sc: "❌ None",
+                comp_row_bot: "Native for Bots (MCP + OpenAPI)",
+                comp_row_bot_nexus: "✅ MCP Server + REST Streams",
+                comp_row_bot_ap: "❌ Aggressive rate limits",
+                comp_row_bot_cl: "❌ Not built for AI agents",
+                comp_row_bot_sc: "⚠️ Requires custom scrapers",
+                comp_row_crypto: "M2M Crypto Checkout (USDT/Binance)",
+                comp_row_crypto_nexus: "✅ Instant Card & Crypto",
+                comp_row_crypto_ap: "❌ Credit Card Only",
+                comp_row_crypto_cl: "❌ Credit Card Only",
+                comp_row_crypto_sc: "❌ Credit Card Only",
+                comp_row_min: "Minimum Cost to Start",
+                comp_row_min_nexus: "$15 USD (25 leads)"
             },
             es: {
                 badge_tier1: "Global Tier-1",
@@ -849,7 +971,45 @@
                 privacy_h: "Política de Privacidad • NexusLeadEngine.io",
                 privacy_p1: "En NexusLeadEngine.io protegemos la privacidad de nuestros clientes. Solo recolectamos los datos necesarios para autenticar tu API Key y activar tus créditos (tu email de compra). No almacenamos datos de tarjeta ni credenciales financieras; todas las transacciones son procesadas externamente por NOWPayments / Stripe / Polar.",
                 refund_h: "Garantía de Reembolso (14 días)",
-                refund_p1: "Ofrecemos una garantía total de reembolso durante los primeros 14 días si no estás conforme con la calidad de los datos y has consumido menos del 20% de tus créditos. Para solicitar un reembolso, escribe a hola@nexusleadengine.io con tu email de compra."
+                refund_p1: "Ofrecemos una garantía total de reembolso durante los primeros 14 días si no estás conforme con la calidad de los datos y has consumido menos del 20% de tus créditos. Para solicitar un reembolso, escribe a hola@nexusleadengine.io con tu email de compra.",
+                nav_compare: "Vs Competencia",
+                comp_badge: "⚖️ Análisis Competitivo & Moat Tecnológico",
+                comp_title: "Diseñado para Bots y Agencias. Sin las trampas de la competencia.",
+                comp_subtitle: "Compara cómo resolvemos la prospección frente a herramientas tradicionales con contratos cerrados y suscripciones mensuales infladas:",
+                comp_col_cap: "Capacidad / Modelo",
+                comp_col_nexus: "⚡ NexusLeadEngine.io",
+                comp_row_sub: "Suscripción fija mensual",
+                comp_row_sub_nexus: "❌ $0 / Cero suscripción",
+                comp_row_sub_ap: "Desde $49/mes",
+                comp_row_sub_cl: "Desde $149/mes",
+                comp_row_sub_sc: "Pay as you go",
+                comp_row_exp: "Caducidad de créditos",
+                comp_row_exp_nexus: "❌ NUNCA vencen",
+                comp_row_exp_ap: "Vencen cada 30 días",
+                comp_row_exp_cl: "Vencen cada mes",
+                comp_row_exp_sc: "Según plan",
+                comp_row_audit: "Auditoría Técnica Web en 1 Llamada",
+                comp_row_audit_nexus: "✅ Sí (Pixel, WhatsApp, SSL, Fuga $)",
+                comp_row_audit_ap: "❌ Solo data básica",
+                comp_row_audit_cl: "⚠️ Requiere múltiples créditos",
+                comp_row_audit_sc: "❌ Data cruda sin auditar",
+                comp_row_hook: "Mensaje Comercial Pre-redactado por IA",
+                comp_row_hook_nexus: "✅ Hook de WhatsApp listo",
+                comp_row_hook_ap: "❌ No disponible",
+                comp_row_hook_cl: "⚠️ Configuración compleja",
+                comp_row_hook_sc: "❌ No disponible",
+                comp_row_bot: "Nativo para Bots (MCP + OpenAPI)",
+                comp_row_bot_nexus: "✅ Servidor MCP + REST Webhooks",
+                comp_row_bot_ap: "❌ Rate limits agresivos",
+                comp_row_bot_cl: "❌ No pensado para bots",
+                comp_row_bot_sc: "⚠️ Requiere wrappers extra",
+                comp_row_crypto: "Pagos M2M Cripto (USDT / Binance)",
+                comp_row_crypto_nexus: "✅ Sí (Cripto + Tarjeta)",
+                comp_row_crypto_ap: "❌ Solo Tarjeta bancaria",
+                comp_row_crypto_cl: "❌ Solo Tarjeta bancaria",
+                comp_row_crypto_sc: "❌ Solo Tarjeta bancaria",
+                comp_row_min: "Costo Mínimo para Comenzar",
+                comp_row_min_nexus: "$15 USD (25 leads)"
             }
         };
 
