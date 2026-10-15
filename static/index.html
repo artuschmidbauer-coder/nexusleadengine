@@ -170,6 +170,19 @@
         </div>
     </section>
 
+    <!-- Supported Integrations & Tool Ecosystem Bar -->
+    <div class="border-y border-white/5 bg-[#03050a] py-6">
+        <div class="max-w-6xl mx-auto px-6 flex flex-wrap items-center justify-center gap-6 md:gap-12 text-xs font-mono text-slate-500 uppercase tracking-wider">
+            <span class="text-slate-400 font-semibold text-[11px]" data-i18n="eco_title">Conecta en 1 clic con tu stack:</span>
+            <span class="flex items-center gap-1.5 hover:text-white transition"><span class="text-brand">⚡</span> n8n</span>
+            <span class="flex items-center gap-1.5 hover:text-white transition"><span class="text-purple-400">🟣</span> Make.com</span>
+            <span class="flex items-center gap-1.5 hover:text-white transition"><span class="text-amber-400">⚡</span> Zapier</span>
+            <span class="flex items-center gap-1.5 hover:text-white transition"><span class="text-blue-400">🔵</span> GoHighLevel</span>
+            <span class="flex items-center gap-1.5 hover:text-white transition"><span class="text-rose-400">🔴</span> Airtable</span>
+            <span class="flex items-center gap-1.5 hover:text-white transition"><span class="text-emerald-400">🟢</span> HubSpot</span>
+        </div>
+    </div>
+
     <!-- LIVE INTERACTIVE LEAD EXPLORER -->
     <section id="explorer" class="py-20 border-t border-white/5 bg-[#070b14]">
         <div class="max-w-6xl mx-auto px-6">
@@ -499,15 +512,41 @@
                 Importa este flujo en tu instancia de n8n en 5 segundos. Incluye el cron programado a las 9 AM, la llamada a la API de NexusLeadEngine y el formateo automático para WhatsApp o CRM.
             </p>
             <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
-                <a href="/templates/n8n" download="nexus_n8n_lead_workflow.json" class="w-full sm:w-auto bg-brand hover:bg-emerald-400 text-black font-extrabold px-8 py-3.5 rounded-xl transition text-sm flex items-center justify-center gap-2 shadow-xl shadow-brand/20" data-i18n="n8n_btn_download">
+                <button onclick="openModal('n8nModal')" class="w-full sm:w-auto bg-brand hover:bg-emerald-400 text-black font-extrabold px-8 py-3.5 rounded-xl transition text-sm flex items-center justify-center gap-2 shadow-xl shadow-brand/20 cursor-pointer" data-i18n="n8n_btn_download">
                     <span>⬇</span> Descargar Flujo n8n (.JSON)
-                </a>
+                </button>
                 <a href="/docs" target="_blank" class="w-full sm:w-auto bg-white/5 hover:bg-white/10 text-white font-medium border border-white/10 px-6 py-3.5 rounded-xl transition text-xs font-mono">
                     OpenAPI Specification ↗
                 </a>
             </div>
         </div>
     </section>
+
+    <!-- N8N Free Blueprint Lead Capture Modal -->
+    <div id="n8nModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-6">
+        <div class="bg-[#0b0f19] border border-white/10 rounded-2xl max-w-md w-full p-8 text-slate-300 text-sm shadow-2xl relative">
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                    <span>🎁</span> <span data-i18n="n8n_modal_h">Descargar Flujo n8n</span>
+                </h3>
+                <button onclick="closeModal('n8nModal')" class="text-slate-500 hover:text-white text-xl">&times;</button>
+            </div>
+            <p class="text-xs text-slate-400 mb-6" data-i18n="n8n_modal_p">
+                Ingresa el correo corporativo de tu agencia para descargar el blueprint oficial listo para importar en n8n:
+            </p>
+
+            <form onsubmit="handleN8nCapture(event)" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-mono text-slate-400 mb-1" data-i18n="n8n_modal_email">Tu correo de agencia:</label>
+                    <input type="email" id="n8nEmailInput" required placeholder="director@agency.com" class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-white text-xs focus:outline-none focus:border-brand">
+                </div>
+                <button id="n8nSubmitBtn" type="submit" class="w-full bg-brand hover:bg-emerald-400 text-black font-extrabold py-3 rounded-xl text-sm transition flex items-center justify-center gap-2" data-i18n="n8n_modal_btn">
+                    <span>⬇</span> Descargar Blueprint JSON
+                </button>
+            </form>
+            <div id="n8nResult" class="mt-4 hidden p-3 rounded-xl bg-white/5 text-xs font-mono text-center"></div>
+        </div>
+    </div>
 
     <!-- Footer & Legal Compliance -->
     <footer class="border-t border-white/5 py-16 bg-[#04060c] text-slate-400 text-xs">
@@ -682,6 +721,11 @@
                 n8n_title: "Download the Official n8n Workflow",
                 n8n_desc: "Import this blueprint into your n8n workspace in 5 seconds. Includes scheduled 9 AM trigger, NexusLeadEngine API call, and formatting for WhatsApp, Slack, or CRM.",
                 n8n_btn_download: "⬇ Download n8n Flow (.JSON)",
+                eco_title: "Connect in 1 click with your stack:",
+                n8n_modal_h: "Download Free n8n Blueprint",
+                n8n_modal_p: "Enter your agency email to download the blueprint and receive trial credits:",
+                n8n_modal_email: "Your agency email:",
+                n8n_modal_btn: "Download Blueprint JSON",
                 footer_about: "B2B lead intelligence and conversion audit engine designed for growth agencies and autonomous outreach systems.",
                 footer_col_api: "API & Resources",
                 footer_nav_explorer: "Lead Explorer",
@@ -784,6 +828,11 @@
                 n8n_title: "Descarga la Plantilla Oficial de n8n",
                 n8n_desc: "Importa este flujo en tu instancia de n8n en 5 segundos. Incluye el cron programado a las 9 AM, la llamada a la API de NexusLeadEngine y el formateo automático para WhatsApp o CRM.",
                 n8n_btn_download: "⬇ Descargar Flujo n8n (.JSON)",
+                eco_title: "Conecta en 1 clic con tu stack:",
+                n8n_modal_h: "Descargar Plantilla Oficial n8n",
+                n8n_modal_p: "Ingresa el correo corporativo de tu agencia para descargar el blueprint oficial:",
+                n8n_modal_email: "Tu correo de agencia:",
+                n8n_modal_btn: "Descargar Blueprint JSON",
                 footer_about: "Inteligencia y comercialización de leads B2B de alto ticket para agencias y sistemas de automatización.",
                 footer_col_api: "API & Recursos",
                 footer_nav_explorer: "Explorador de Leads",
@@ -995,6 +1044,44 @@
                 resultBox.innerHTML = `<span class="text-rose-400 font-bold">Network Error:</span> ${err.message}`;
             } finally {
                 submitBtn.disabled = false;
+            }
+        }
+
+        async function handleN8nCapture(e) {
+            e.preventDefault();
+            const email = document.getElementById('n8nEmailInput').value.trim();
+            const btn = document.getElementById('n8nSubmitBtn');
+            const resultBox = document.getElementById('n8nResult');
+
+            resultBox.classList.remove('hidden');
+            resultBox.innerText = currentLang === 'en' ? 'Preparing download...' : 'Preparando descarga...';
+            btn.disabled = true;
+
+            try {
+                await fetch('/v1/leads/capture-n8n', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email: email })
+                });
+
+                // Trigger file download
+                const link = document.createElement('a');
+                link.href = '/templates/n8n';
+                link.download = 'nexus_n8n_lead_workflow.json';
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+
+                resultBox.innerHTML = `<span class="text-emerald-400 font-bold">${currentLang === 'en' ? '✓ Download started! Check your downloads folder.' : '✓ ¡Descarga iniciada! Revisa tus descargas.'}</span>`;
+                setTimeout(() => {
+                    closeModal('n8nModal');
+                    resultBox.classList.add('hidden');
+                    btn.disabled = false;
+                }, 2000);
+            } catch (err) {
+                window.location.href = '/templates/n8n';
+                closeModal('n8nModal');
+                btn.disabled = false;
             }
         }
 

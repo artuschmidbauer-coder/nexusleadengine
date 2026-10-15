@@ -13,6 +13,7 @@ class AnalyticsTracker:
         self.file_path = file_path
         self.total_pageviews: int = 0
         self.unique_visitors: List[str] = []
+        self.captured_prospects: List[str] = []
         self.total_scans: int = 0
         self.total_scanned: int = 0
         self.total_qualified: int = 0
@@ -34,6 +35,8 @@ class AnalyticsTracker:
                     self.total_pageviews = max(0, int(data.get("total_pageviews", 0))) if isinstance(data.get("total_pageviews"), (int, float)) else 0
                     visitors = data.get("unique_visitors", [])
                     self.unique_visitors = [v for v in visitors if isinstance(v, str)] if isinstance(visitors, list) else []
+                    captured = data.get("captured_prospects", [])
+                    self.captured_prospects = [e for e in captured if isinstance(e, str)] if isinstance(captured, list) else []
                     self.total_scans = max(0, int(data.get("total_scans", 0))) if isinstance(data.get("total_scans"), (int, float)) else 0
                     self.total_scanned = max(0, int(data.get("total_scanned", 0))) if isinstance(data.get("total_scanned"), (int, float)) else 0
                     self.total_qualified = max(0, int(data.get("total_qualified", 0))) if isinstance(data.get("total_qualified"), (int, float)) else 0
@@ -54,6 +57,7 @@ class AnalyticsTracker:
             data = {
                 "total_pageviews": self.total_pageviews,
                 "unique_visitors": self.unique_visitors[-500:],
+                "captured_prospects": self.captured_prospects[-500:],
                 "total_scans": self.total_scans,
                 "total_scanned": self.total_scanned,
                 "total_qualified": self.total_qualified,
@@ -125,6 +129,24 @@ class AnalyticsTracker:
         self.recent_activity = self.recent_activity[:50]
         self._save()
 
+    def record_captured_prospect(self, email: str):
+        cleaned = email.strip().lower()
+        if cleaned and cleaned not in self.captured_prospects:
+            self.captured_prospects.append(cleaned)
+            event = {
+                "timestamp": int(time.time()),
+                "time_str": time.strftime("%H:%M:%S", time.localtime()),
+                "type": "LEAD_MAGNET",
+                "business_name": f"🎁 Blueprint n8n: {cleaned}",
+                "category": "Inbound Agency",
+                "city": "Web",
+                "score": 90,
+                "tier": "PROSPECT"
+            }
+            self.recent_activity.insert(0, event)
+            self.recent_activity = self.recent_activity[:50]
+            self._save()
+
     def get_dashboard_metrics(self, active_accounts_count: int = 1) -> Dict[str, Any]:
         qualification_rate = (
             round((self.total_qualified / self.total_scanned) * 100, 1)
@@ -134,6 +156,7 @@ class AnalyticsTracker:
         return {
             "total_pageviews": self.total_pageviews,
             "unique_visitors_count": len(self.unique_visitors),
+            "captured_prospects_count": len(self.captured_prospects),
             "total_scans": self.total_scans,
             "total_prospects_scanned": self.total_scanned,
             "total_qualified_leads": self.total_qualified,

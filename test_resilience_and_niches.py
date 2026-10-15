@@ -62,3 +62,12 @@ def test_sample_lead_all_niches():
             assert "business_name" in data
             assert "category" in data
             assert data["location"]["country"] == country
+
+def test_n8n_lead_capture():
+    client = TestClient(app)
+    resp = client.post("/v1/leads/capture-n8n", json={"email": "prospect_agency@growthstack.com"})
+    assert resp.status_code == 200
+    data = resp.json()
+    assert data["status"] == "ok"
+    assert "download_url" in data
+

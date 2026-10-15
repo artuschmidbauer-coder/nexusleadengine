@@ -113,6 +113,15 @@ def billing_cancel():
     from fastapi.responses import RedirectResponse
     return RedirectResponse(url="/#pricing")
 
+class N8nCaptureRequest(BaseModel):
+    email: EmailStr
+
+@app.post("/v1/leads/capture-n8n", tags=["Lead Generation"])
+def capture_n8n_lead(req: N8nCaptureRequest):
+    """Captures interested agency email before downloading the free n8n blueprint."""
+    tracker.record_captured_prospect(req.email)
+    return {"status": "ok", "message": "Email registered successfully", "download_url": "/templates/n8n"}
+
 @app.get("/templates/n8n", include_in_schema=False)
 def download_n8n_template():
     """Download the ready-to-import n8n lead automation workflow."""
