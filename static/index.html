@@ -258,7 +258,12 @@
                         <span data-i18n="audit_custom_btn">Auditar Web Gratis ↗</span>
                     </button>
                 </form>
-                <div id="customAuditStatus" class="mt-2 text-[11px] font-mono text-slate-400 hidden pl-2"></div>
+                <div class="flex items-center gap-3">
+                    <div id="customAuditStatus" class="mt-2 text-[11px] font-mono text-slate-400 hidden pl-2"></div>
+                    <button type="button" id="btnShareAudit" onclick="copyShareableAuditUrl()" class="hidden mt-2 text-[11px] font-mono text-cyan-400 hover:text-cyan-300 underline inline-flex items-center gap-1 cursor-pointer">
+                        <span>🔗</span> <span id="lblShareAudit" data-i18n="audit_share_btn">Copiar Enlace Directo de esta Auditoría</span>
+                    </button>
+                </div>
             </div>
 
             <!-- 2-Column Display: Visual Intelligence Card + JSON Payload -->
@@ -975,7 +980,9 @@
                 roi_pack_lbl: "Nexus Pack selected:",
                 roi_close_rate_lbl: "Estimated conversion rate (with audit hook):",
                 roi_net_est: "Estimated Agency Revenue:",
-                roi_profit_est: "Net Return (ROI):"
+                roi_profit_est: "Net Return (ROI):",
+                audit_share_btn: "Copy Direct Link to this Audit Report",
+                audit_share_copied: "✓ Copied shareable link!"
             },
             es: {
                 badge_tier1: "Global Tier-1",
@@ -1129,7 +1136,9 @@
                 roi_pack_lbl: "Pack Nexus seleccionado:",
                 roi_close_rate_lbl: "Tasa de conversión estimada (con hook de auditoría):",
                 roi_net_est: "Facturación Estimada de tu Agencia:",
-                roi_profit_est: "Retorno Neto (ROI):"
+                roi_profit_est: "Retorno Neto (ROI):",
+                audit_share_btn: "Copiar Enlace Directo a este Informe",
+                audit_share_copied: "✓ ¡Enlace copiado al portapapeles!"
             }
         };
 
@@ -1406,9 +1415,13 @@
                 }
                 const lead = await res.json();
                 renderLead(lead);
+                lastAuditedUrl = url;
+                const shareBtn = document.getElementById('btnShareAudit');
+                if (shareBtn) shareBtn.classList.remove('hidden');
+
                 status.textContent = currentLang === 'en' ? '✓ Audit completed successfully! See breakdown below.' : '✓ ¡Auditoría completada con éxito! Revisa el desglose abajo.';
                 status.className = "mt-2 text-[11px] font-mono text-emerald-400 pl-2";
-                setTimeout(() => { status.classList.add('hidden'); }, 4000);
+                setTimeout(() => { status.classList.add('hidden'); }, 5000);
             } catch (err) {
                 status.textContent = `${currentLang === 'en' ? 'Error' : 'Error'}: ${err.message}`;
                 status.className = "mt-2 text-[11px] font-mono text-rose-400 pl-2";
@@ -1416,6 +1429,78 @@
                 spinner.classList.add('hidden');
                 btn.disabled = false;
             }
+        }
+
+        let lastAuditedUrl = '';
+        function copyShareableAuditUrl() {
+            if (!lastAuditedUrl) return;
+            const fullShareUrl = `${window.location.origin}/?audit=${encodeURIComponent(lastAuditedUrl)}`;
+            navigator.clipboard.writeText(fullShareUrl);
+            const lbl = document.getElementById('lblShareAudit');
+            const original = lbl.innerText;
+            lbl.innerText = currentLang === 'en' ? '✓ Copied shareable link!' : '✓ ¡Enlace copiado!';
+            setTimeout(() => { lbl.innerText = original; }, 2500);
+        }
+
+        const SOCIAL_PROOF_EVENTS = [
+            { title: "⚡ Auditoría Web en Vivo", desc: "Clínica Dental en Madrid analizada", time: "hace 2 min", icon: "⚡" },
+            { title: "🎁 Recurso Descargado", desc: "Flujo oficial n8n descargado por agencia en Barcelona", time: "hace 5 min", icon: "🎁" },
+            { title: "💎 Nuevo Pack Activado", desc: "Pack Starter ($29 USD) pagado con USDT", time: "hace 11 min", icon: "💎" },
+            { title: "⚡ Auditoría Web en Vivo", desc: "Empresa de Reformas en Miami analizada", time: "hace 16 min", icon: "⚡" },
+            { title: "🚀 Webhook Conectado", desc: "Agencia en Londres vinculó su instancia de Make", time: "hace 24 min", icon: "🚀" }
+        ];
+        let toastIdx = 0;
+        let toastDismissed = false;
+
+        function dismissSocialProof() {
+            toastDismissed = true;
+            const toast = document.getElementById('socialProofToast');
+            if (toast) {
+                toast.classList.add('translate-y-24', 'opacity-0');
+                toast.classList.remove('translate-y-0', 'opacity-100');
+            }
+        }
+
+        function initSocialProof() {
+            if (toastDismissed) return;
+            const toast = document.getElementById('socialProofToast');
+            if (!toast) return;
+
+            function cycleToast() {
+                if (toastDismissed) return;
+                const ev = SOCIAL_PROOF_EVENTS[toastIdx % SOCIAL_PROOF_EVENTS.length];
+                toastIdx++;
+                document.getElementById('toastIcon').innerText = ev.icon;
+                document.getElementById('toastTitle').innerText = ev.title;
+                document.getElementById('toastDesc').innerText = ev.desc;
+                document.getElementById('toastTime').innerText = ev.time;
+
+                toast.classList.remove('translate-y-24', 'opacity-0', 'pointer-events-none');
+                toast.classList.add('translate-y-0', 'opacity-100');
+
+                setTimeout(() => {
+                    if (!toastDismissed) {
+                        toast.classList.add('translate-y-24', 'opacity-0', 'pointer-events-none');
+                        toast.classList.remove('translate-y-0', 'opacity-100');
+                    }
+                }, 5000);
+            }
+
+            setTimeout(() => {
+                cycleToast();
+                setInterval(cycleToast, 14000);
+            }, 3000);
+        }
+
+        let exitIntentTriggered = false;
+        function initExitIntent() {
+            document.addEventListener('mouseleave', (e) => {
+                if (e.clientY <= 5 && !exitIntentTriggered && !sessionStorage.getItem('nexus_exit_shown')) {
+                    exitIntentTriggered = true;
+                    sessionStorage.setItem('nexus_exit_shown', 'true');
+                    openModal('n8nModal');
+                }
+            });
         }
 
         function updateRoiCalc() {
@@ -1454,7 +1539,34 @@
             setLanguage(savedLang);
             fetchLeadSample();
             updateRoiCalc();
+            initSocialProof();
+            initExitIntent();
+
+            // Check for direct shareable audit URL param (?audit=example.com)
+            const urlParams = new URLSearchParams(window.location.search);
+            const auditParam = urlParams.get('audit');
+            if (auditParam) {
+                const input = document.getElementById('customUrlInput');
+                if (input) {
+                    input.value = auditParam;
+                    input.scrollIntoView({ behavior: 'smooth' });
+                    setTimeout(() => {
+                        handleCustomUrlAudit(new Event('submit'));
+                    }, 500);
+                }
+            }
         });
     </script>
+
+    <!-- Social Proof Toast Notification -->
+    <div id="socialProofToast" class="fixed bottom-5 left-5 z-40 bg-[#0d1322] border border-cyan-500/30 rounded-2xl p-3.5 shadow-2xl flex items-center gap-3 max-w-sm transition-all duration-500 transform translate-y-24 opacity-0 pointer-events-none">
+        <div class="w-9 h-9 rounded-xl bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center text-lg flex-shrink-0" id="toastIcon">⚡</div>
+        <div class="flex-1 min-w-0 pointer-events-auto">
+            <div class="text-[11px] font-bold text-white truncate" id="toastTitle">Auditoría web en vivo</div>
+            <div class="text-[10px] text-slate-400 truncate" id="toastDesc">Clínica dental en Madrid analizada</div>
+            <div class="text-[9px] font-mono text-cyan-400 mt-0.5" id="toastTime">hace 3 minutos</div>
+        </div>
+        <button onclick="dismissSocialProof()" class="text-slate-500 hover:text-white text-xs p-1 pointer-events-auto">&times;</button>
+    </div>
 </body>
 </html>

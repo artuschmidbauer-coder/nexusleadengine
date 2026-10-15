@@ -670,3 +670,36 @@ def audit_custom_url(req: AuditUrlRequest):
 @app.get("/v1/dispatch/logs", tags=["M2M Delivery"])
 def get_delivery_logs():
     return {"deliveries": dispatcher.get_logs()}
+
+@app.get("/.well-known/ai-plugin.json", include_in_schema=False)
+def serve_ai_plugin_manifest():
+    """Manifest for ChatGPT, LangChain, and autonomous web agents."""
+    return {
+        "schema_version": "v1",
+        "name_for_model": "nexus_lead_engine",
+        "name_for_human": "NexusLeadEngine B2B Audit",
+        "description_for_model": "Audit business websites in real-time to detect missing Meta pixels, missing WhatsApp widgets, SSL certificates, and draft high-converting B2B outreach sales hooks.",
+        "description_for_human": "Real-time B2B lead intelligence and website conversion audit engine.",
+        "auth": {"type": "none"},
+        "api": {"type": "openapi", "url": "https://nexusleadengine.io/openapi.json"},
+        "logo_url": "https://nexusleadengine.io/static/logo_500.png",
+        "contact_email": "hola@nexusleadengine.io",
+        "legal_info_url": "https://nexusleadengine.io/#pricing"
+    }
+
+@app.get("/.well-known/mcp.json", include_in_schema=False)
+def serve_mcp_manifest():
+    """Model Context Protocol (MCP) server descriptor for Cursor, Claude Desktop, and Agentic frameworks."""
+    return {
+        "schema_version": "2024-11-05",
+        "name": "nexus-lead-engine-mcp",
+        "description": "Autonomous lead intelligence, live website technical audit, and B2B cold outreach engine.",
+        "endpoints": {
+            "audit_url": "https://nexusleadengine.io/v1/leads/audit-url",
+            "sample_lead": "https://nexusleadengine.io/v1/leads/sample",
+            "pricing": "https://nexusleadengine.io/v1/billing/packages"
+        },
+        "transport": "stdio/http",
+        "contact": "hola@nexusleadengine.io"
+    }
+

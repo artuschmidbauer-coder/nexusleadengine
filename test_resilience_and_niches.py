@@ -111,6 +111,17 @@ def test_audit_custom_url():
     resp_bad = client.post("/v1/leads/audit-url", json={"url": "http://127.0.0.1:8000/internal"})
     assert resp_bad.status_code == 400
 
+def test_agent_discovery_manifests():
+    client = TestClient(app)
+    resp_ai = client.get("/.well-known/ai-plugin.json")
+    assert resp_ai.status_code == 200
+    assert resp_ai.json()["name_for_model"] == "nexus_lead_engine"
+
+    resp_mcp = client.get("/.well-known/mcp.json")
+    assert resp_mcp.status_code == 200
+    assert resp_mcp.json()["name"] == "nexus-lead-engine-mcp"
+
+
 
 
 
